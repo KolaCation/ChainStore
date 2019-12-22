@@ -13,7 +13,7 @@ namespace ChainStore.Infrastructure.InfrastructureData
             if(id.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(id));
             if(propertyName==null) throw new ArgumentNullException(nameof(propertyName));
             if(tableName==null) throw new ArgumentNullException(nameof(tableName));
-            if(tableName==null) throw new ArgumentNullException(nameof(idColumnName));
+            if(idColumnName==null) throw new ArgumentNullException(nameof(idColumnName));
             var con = new SqlConnection("server=(localdb)\\MSSQLLocalDB;database=ChainStoreDB;Trusted_Connection=true");
             var cm = new SqlCommand($"SELECT * FROM {tableName} WHERE {idColumnName} = @Id", con);
             con.Open();
