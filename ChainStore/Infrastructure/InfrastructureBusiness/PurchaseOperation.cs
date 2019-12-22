@@ -16,20 +16,18 @@ namespace ChainStore.Infrastructure.InfrastructureBusiness
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IStoreRepository _storeRepository;
         private readonly IBookRepository _bookRepository;
-        private readonly PropertyGetter<int> _intGetter;
-        private readonly PropertyGetter<double> _doubleGetter;
+        private readonly PropertyGetter _propertyGetter;
 
         public PurchaseOperation(IClientRepository clientRepository, IProductRepository productRepository,
             IPurchaseRepository purchaseRepository, IStoreRepository storeRepository, IBookRepository bookRepository,
-            PropertyGetter<int> intGetter, PropertyGetter<double> doubleGetter)
+            PropertyGetter propertyGetter)
         {
             _clientRepository = clientRepository;
             _productRepository = productRepository;
             _purchaseRepository = purchaseRepository;
             _storeRepository = storeRepository;
             _bookRepository = bookRepository;
-            _intGetter = intGetter;
-            _doubleGetter = doubleGetter;
+            _propertyGetter = propertyGetter;
         }
 
         public void Perform(Guid clientId, Guid productId, bool useCashBack, bool usePoints)
@@ -45,8 +43,8 @@ namespace ChainStore.Infrastructure.InfrastructureBusiness
                     _bookRepository.DeleteBook(bookToDel.BookId);
                 var priceToCompareWith = product.Price -
                                          product.Price *
-                                         _intGetter.GetProperty(client.ClientId, "DiscountPercent") / 100;
-                var clientCashBack = _doubleGetter.GetProperty(client.ClientId, "CashBack");
+                                         _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId) / 100;
+                var clientCashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
 
                 if (usePoints)
                 {

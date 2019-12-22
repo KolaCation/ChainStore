@@ -20,21 +20,19 @@ namespace ChainStore.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPurchaseOperation _purchaseOperation;
         private readonly IClientRepository _clientRepository;
-        private readonly PropertyGetter<int> _intGetter;
-        private readonly PropertyGetter<double> _doubleGetter;
+        private readonly PropertyGetter _propertyGetter;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
         public PurchaseController(IProductRepository productRepository,
             UserManager<ApplicationUser> userManager, IPurchaseOperation purchaseOperation,
-            IClientRepository clientRepository, PropertyGetter<int> intGetter, PropertyGetter<double> doubleGetter)
+            IClientRepository clientRepository, PropertyGetter propertyGetter)
         {
             _productRepository = productRepository;
             _userManager = userManager;
             _purchaseOperation = purchaseOperation;
             _clientRepository = clientRepository;
-            _intGetter = intGetter;
-            _doubleGetter = doubleGetter;
+            _propertyGetter = propertyGetter;
         }
 
         [HttpGet]
@@ -57,10 +55,10 @@ namespace ChainStore.Controllers
                     ClientId = client.ClientId,
                     Balance = client.Balance,
                     Product = productToBuy,
-                    CashBack = _doubleGetter.GetProperty(client.ClientId, "CashBack"),
-                    CashBackPercent = _intGetter.GetProperty(client.ClientId, "CashBackPercent"),
-                    DiscountPercent = _intGetter.GetProperty(client.ClientId, "DiscountPercent"),
-                    Points = _doubleGetter.GetProperty(client.ClientId, "Points")
+                    CashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId),
+                    CashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId),
+                    DiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId),
+                    Points = _propertyGetter.GetProperty<double>("dbo.Clients", "Points",  "ClientId", client.ClientId)
                 };
                 return View(productClientViewModel);
             }
@@ -75,17 +73,17 @@ namespace ChainStore.Controllers
             var product = _productRepository.GetProduct(productClientViewModel.ProductId);
             if (client == null || product == null) return RedirectToAction(IndexAction, DefaultController);
             string message;
-            var productDiscount = _intGetter.GetProperty(client.ClientId, "DiscountPercent");
+            var productDiscount = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId);
             var priceToCompareWith = product.Price - product.Price * productDiscount / 100;
-            var clientPoints = _doubleGetter.GetProperty(client.ClientId, "Points");
-            var clientCashBack = _doubleGetter.GetProperty(client.ClientId, "CashBack");
+            var clientPoints = _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", client.ClientId);
+            var clientCashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
             var productClientViewModelToReturnIfNotSucceed = new ProductClientViewModel
             {
                 ClientId = client.ClientId,
                 Balance = client.Balance,
                 Product = product,
                 CashBack = clientCashBack,
-                CashBackPercent = _intGetter.GetProperty(client.ClientId, "CashBackPercent"),
+                CashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId),
                 DiscountPercent = productDiscount,
                 Points = clientPoints,
                 UseCashBack = productClientViewModel.UseCashBack,

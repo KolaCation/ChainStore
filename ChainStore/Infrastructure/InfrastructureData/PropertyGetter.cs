@@ -6,16 +6,18 @@ using Microsoft.Data.SqlClient;
 
 namespace ChainStore.Infrastructure.InfrastructureData
 {
-    public sealed class PropertyGetter<T>
+    public sealed class PropertyGetter
     {
-        public T GetProperty(Guid clientId, string propertyName)
+        public T GetProperty<T>(string tableName, string propertyName, string idColumnName, Guid id)
         {
-            if(clientId.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(clientId));
+            if(id.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(id));
             if(propertyName==null) throw new ArgumentNullException(nameof(propertyName));
+            if(tableName==null) throw new ArgumentNullException(nameof(tableName));
+            if(tableName==null) throw new ArgumentNullException(nameof(idColumnName));
             var con = new SqlConnection("server=(localdb)\\MSSQLLocalDB;database=ChainStoreDB;Trusted_Connection=true");
-            var cm = new SqlCommand("SELECT * FROM dbo.Clients WHERE ClientId = @ClientId", con);
+            var cm = new SqlCommand($"SELECT * FROM {tableName} WHERE {idColumnName} = @Id", con);
             con.Open();
-            var param = new SqlParameter("@ClientId", clientId);
+            var param = new SqlParameter("@Id", id);
             cm.Parameters.Add(param);
             var dr = cm.ExecuteReader();
             T data;
@@ -30,6 +32,10 @@ namespace ChainStore.Infrastructure.InfrastructureData
             catch (InvalidCastException)
             {
                 data = default;
+            }
+            finally
+            {
+                dr.Close();
             }
             con.Close();
             return data;

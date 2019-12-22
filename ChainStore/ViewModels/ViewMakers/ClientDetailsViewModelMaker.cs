@@ -10,15 +10,12 @@ namespace ChainStore.ViewModels.ViewMakers
     public class ClientDetailsViewModelMaker
     {
         private readonly MyDbContext _context;
-        private readonly PropertyGetter<int> _intGetter;
-        private readonly PropertyGetter<double> _doubleGetter;
+        private readonly PropertyGetter _propertyGetter;
 
-        public ClientDetailsViewModelMaker(MyDbContext context, PropertyGetter<int> intGetter,
-            PropertyGetter<double> doubleGetter)
+        public ClientDetailsViewModelMaker(MyDbContext context, PropertyGetter propertyGetter)
         {
             _context = context;
-            _intGetter = intGetter;
-            _doubleGetter = doubleGetter;
+            _propertyGetter = propertyGetter;
         }
 
         public ClientDetailsViewModel MakeClientDetailsViewModel(Guid clientId)
@@ -52,10 +49,10 @@ namespace ChainStore.ViewModels.ViewMakers
             }
 
             var client = new List<Client> {checkClientForNull};
-            var clCashBack = _doubleGetter.GetProperty(checkClientForNull.ClientId, "CashBack");
-            var clCashBackPercent = _intGetter.GetProperty(checkClientForNull.ClientId, "CashBackPercent");
-            var clDiscountPercent = _intGetter.GetProperty(checkClientForNull.ClientId, "DiscountPercent");
-            var clPoints = _doubleGetter.GetProperty(checkClientForNull.ClientId, "Points");
+            var clCashBack =  _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", checkClientForNull.ClientId);
+            var clCashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", checkClientForNull.ClientId);
+            var clDiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", checkClientForNull.ClientId);
+            var clPoints = _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", checkClientForNull.ClientId);
 
             var clientDetailedInfo = (from cl in client
                 join purchase in purchases on cl.ClientId equals purchase.ClientId into purchasesList

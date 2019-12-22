@@ -40,8 +40,7 @@ namespace ChainStore
             services.AddScoped<IPurchaseOperation, PurchaseOperation>();
             services.AddScoped<IReservationOperation, BookOperation>();
             services.AddTransient<ProductsGroupsViewMaker>();
-            services.AddScoped<PropertyGetter<double>>();
-            services.AddScoped<PropertyGetter<int>>();
+            services.AddScoped<PropertyGetter>();
             services.AddScoped<ClientUpdater>();
         }
 
