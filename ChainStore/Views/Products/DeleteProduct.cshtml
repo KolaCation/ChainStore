@@ -1,0 +1,12 @@
+﻿@model DeleteProductViewModel
+@{
+    ViewBag.Title = "Delete Product";
+}
+<form asp-controller="Products" asp-action="DeleteProduct" method="post">
+    <input type="hidden" asp-for="ProductId" value="@Model.Product.ProductId" />
+    <input type="hidden" asp-for="CategoryId" value="@Model.Product.Category.CategoryId" />
+    <h4 class="text-danger card-text mt-3">Delete '@Model.Product.Name'? (Category @Model.Product.Category.CategoryName)</h4>
+    <a asp-controller="Stores" asp-action="Index" class="btn btn-primary m-1">Back</a>
+    <button type="submit" class="btn btn-danger m-1">Delete</button>
+</form>
+

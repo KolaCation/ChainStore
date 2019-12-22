@@ -1,0 +1,90 @@
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Stores" asp-action="Index">
+                    <img src="~/images/Logo.png" height="30" width="30" asp-append-version="true" />
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsiveNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsiveNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a asp-controller="Stores" asp-action="Index" class="nav-link">Stores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Malls" asp-action="Index" class="nav-link">Malls</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Products" asp-action="Index" class="nav-link">Products</a>
+                        </li>
+
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Malls" asp-action="CreateMall" class="nav-link">Create Mall</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Stores" asp-action="CreateStore" class="nav-link">Create Store</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: auto">
+                                        @User.Identity.Name
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        @{ var r = await UserManager.FindByNameAsync(User.Identity.Name);}
+                                        <a class="dropdown-item" asp-action="ClientDetails" asp-controller="Client" asp-route-id="@r.ClientId">My account</a>
+                                        <div class="dropdown-divider"></div>
+                                        <form method="post" asp-action="Logout" asp-controller="Account">
+                                            <button type="submit" class="dropdown-item">Logout</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Login" class="nav-link">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Register" class="nav-link">Register</a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+
+
+            </div>
+        </nav>
+        <div class="container">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

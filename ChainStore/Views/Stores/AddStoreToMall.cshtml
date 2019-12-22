@@ -1,0 +1,28 @@
+﻿@model MallStoresViewModel
+@{
+    ViewBag.Title = "Add Store To Mall";
+}
+    <form asp-action="AddStoreToMall" asp-controller="Stores" method="post" class="mt-3">
+        <input type="hidden" value="@Model.MallId" name="mallId" />
+        <ul class="list-group">
+            @if (Model.StoresToAdd.Count() != 0)
+            {
+                foreach (var store in Model.StoresToAdd)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <p class="card-text mt-3 col-sm-auto">
+                            @store.Name (location : @store.Location)
+                        </p>
+                        <input type="checkbox" autocomplete="off" name="storesToAdd" value="@store.StoreId" style="width: 1.25rem; height: 1.25rem;">
+                    </li>
+                }
+
+            }
+            else
+            {
+                <li class="list-group-item"><p class="card-text">No stores to add</p></li>
+            }
+        </ul>
+        <a asp-action="Index" asp-controller="Stores" class="btn-primary btn m-1">Back</a>
+        <input class="btn btn-primary m-1" type="submit" value="Submit" />
+    </form>

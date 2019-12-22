@@ -1,0 +1,109 @@
+﻿@model IReadOnlyCollection<Store>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ProductsGroupsViewMaker ProductsGroupsViewMaker
+@{
+    ViewBag.Title = "Stores";
+}
+
+<form asp-controller="Stores" asp-action="Index">
+    <div class="d-flex justify-content-center m-2">
+        <p class="card-text mr-2">Store Name: </p>
+        <input class="form-control col-2 mr-2" type="text" name="searchString" placeholder="name...">
+        <input class="btn btn-primary ml-2" type="submit" value="Search" />
+    </div>
+</form>
+<div class="row justify-content-start m-3">
+    @foreach (var store in Model)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5  class="card-header"><a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.StoreId" style="text-decoration: none">@store.Name</a></h5>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <a asp-action="EditStore" asp-controller="Stores" asp-route-id="@store.StoreId" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
+                        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@store.StoreId" class="btn btn-danger mb-2 mt-2" style="width:  auto">Remove</a>
+                    }
+                    @if (store.MallId != null)
+                    {
+                        <h6 class="card-title mb-2 mt-2 text-muted">In @store.Mall.Name on @store.Mall.Location</h6>
+                        <h6 class="card-title mb-2 mt-2 text-muted">Click <a asp-action="MallDetails" asp-route-id="@store.MallId" asp-controller="Malls">here</a> to see other stores in @store.Mall.Name</h6>
+                    }
+                    else
+                    {
+                        <h6 class="card-title mb-2 mt-2 text-muted">Location: @store.Location</h6>
+                    }
+                    <h6 class="card-text text-left">Categories: </h6>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <a asp-action="AddCategoryToStore" asp-controller="Categories" asp-route-id="@store.StoreId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Category</a>
+                        
+                    }
+
+                <div class="accordion" id="accordion">
+                    @if (store.Categories.Count != 0)
+                    {
+                        foreach (var category in store.Categories)
+                        {
+                            <h4 class="card-title mt-2 mb-2" id="@category.CategoryId.ToString()">
+                        <button class="btn btn-info" style="width: 100%" type="button"
+                                data-toggle="collapse"
+                                data-target="#@category.CategoryName"
+                                aria-expanded="False"
+                                aria-controls="@category.CategoryName">
+
+                            See @category.CategoryName's
+                        </button>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <a asp-action="AddProduct" asp-controller="Products" asp-route-id="@category.CategoryId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Product</a>
+                            <a asp-action="DeleteCategory" asp-controller="Categories" asp-route-id="@category.CategoryId" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove Category</a>
+                        }
+                    </h4>
+
+                            <div id="@category.CategoryName" class="collapse" aria-labelledby="@category.CategoryId.ToString()" data-parent="#accordion">
+                                <ul class="list-group">
+                                    @{ var productsGroups = ProductsGroupsViewMaker.MakeProductsGroupsFromCategory(category); }
+                                    @if (productsGroups.Count != 0)
+                                    {
+                                        foreach (var groupOfProducts in productsGroups.Where(groupOfProducts => groupOfProducts.Count() != 0))
+                                        {
+                                            <li class="row list-group-item d-flex justify-content-between align-items-center ">
+                                                <p class="col-12 col-sm-auto col-md-12 card-text mt-3">
+                                                    @groupOfProducts.Key : @groupOfProducts.First().Price UAH (@groupOfProducts.Count())
+                                                </p>
+                                                <div class="row col-12 col-sm-auto col-md-12">
+                                                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                                                    {
+                                                        <a asp-action="ReplenishProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().ProductId" class=" col-6 btn btn-primary" style="width: auto">Replenish Product</a>
+                                                        <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().ProductId" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="PurchaseOperation" asp-controller="Purchase" asp-route-id="@groupOfProducts.First().ProductId" class="col-6 btn btn-primary">Buy</a>
+                                                        <a asp-action="BookOperation" asp-controller="Book" asp-route-id="@groupOfProducts.First().ProductId" class="col-6 btn btn-success">Book</a>
+                                                    }
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item">
+                                            <p class="text-center card-text">No products in this category yet</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="card-text">No categories yet</p>
+                    }
+                </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

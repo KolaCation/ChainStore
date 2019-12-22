@@ -1,0 +1,50 @@
+﻿@model IReadOnlyCollection<Mall>
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewBag.Title = "Malls";
+}
+
+    <form asp-controller="Malls" asp-action="Index">
+        <div class="d-flex justify-content-center m-2">
+            <p class="card-text mr-2">Mall Name: </p>
+            <input class="form-control col-2 mr-2" type="text" name="searchString" placeholder="name...">
+            <input class="btn btn-primary ml-2" type="submit" value="Search" />
+        </div>
+    </form>
+<div class="mt-3">
+    @foreach (var mall in Model)
+    {
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-header">@mall.Name</h5>
+                <h6 class="card-title mb-2 mt-2 text-muted">Mall location: @mall.Location</h6>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <a asp-action="EditMall" asp-controller="Malls" asp-route-id="@mall.MallId" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
+                    <a asp-action="DeleteMall" asp-controller="Malls" asp-route-id="@mall.MallId" class="btn btn-danger mb-2 mt-2" style="width: auto">Delete</a>
+                }
+
+                <h6 class="card-text text-left">Stores: </h6>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <a asp-action="AddStoreToMall" asp-controller="Stores" asp-route-id="@mall.MallId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Store</a>
+                }
+                <div class="list-group">
+                    @if (mall.Stores.Count != 0)
+                    {
+                        foreach (var store in mall.Stores)
+                        {
+                            <a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.StoreId" class="list-group-item list-group-item-action">@store.Name</a>
+                        }
+                    }
+                    else
+                    {
+                        <div class="list-group-item">
+                            <p class="card-text text-center">No stores yet</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
