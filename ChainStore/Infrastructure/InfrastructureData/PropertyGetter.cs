@@ -11,7 +11,7 @@ namespace ChainStore.Infrastructure.InfrastructureData
     {
         private readonly IConfiguration _configuration;
 
-        public  PropertyGetter(IConfiguration configuration)
+        public PropertyGetter(IConfiguration configuration)
         {
             _configuration = configuration;
         }

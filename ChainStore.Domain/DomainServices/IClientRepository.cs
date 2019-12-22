@@ -11,6 +11,5 @@ namespace ChainStore.Domain.DomainServices
         void AddClient(Client client);
         void UpdateClient(Client client);
         void DeleteClient(Guid clientId);
-        double GetTotalSumOfClient(Guid clientId);
     }
 }

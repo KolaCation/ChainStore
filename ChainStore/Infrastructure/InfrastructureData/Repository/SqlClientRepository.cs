@@ -62,15 +62,5 @@ namespace ChainStore.Infrastructure.InfrastructureData.Repository
             enState.State = EntityState.Deleted;
             _context.SaveChanges();
         }
-
-        public double GetTotalSumOfClient(Guid clientId)
-        {
-
-            if (clientId.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(clientId));
-            double sumToReturn = 0;
-            var purchaseList = _context.Purchases.Where(p => p.ClientId.Equals(clientId)).ToList();
-            if (purchaseList.Count != 0) sumToReturn = purchaseList.Sum(purchase => _context.Products.Find(purchase.ProductId).Price);
-            return sumToReturn;
-        }
     }
 }
