@@ -111,13 +111,13 @@ namespace ChainStore.Controllers
                 return View(productClientViewModelToReturnIfNotSucceed);
             }
 
-            /*if (!productClientViewModel.UsePoints && !productClientViewModel.UseCashBack &&
+            if (!productClientViewModel.UsePoints && !productClientViewModel.UseCashBack &&
                 productClientViewModel.Balance < priceToCompareWith)
             {
                 message = "Not Enough Money";
                 ModelState.AddModelError(string.Empty, message);
                 return View(productClientViewModelToReturnIfNotSucceed);
-            }*/
+            }
             
             _purchaseOperation.Perform(productClientViewModel.ClientId, productClientViewModel.ProductId,
                 productClientViewModel.UseCashBack, productClientViewModel.UsePoints);
