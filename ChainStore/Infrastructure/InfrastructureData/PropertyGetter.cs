@@ -18,33 +18,41 @@ namespace ChainStore.Infrastructure.InfrastructureData
 
         public T GetProperty<T>(string tableName, string propertyName, string idColumnName, Guid id)
         {
-            if(id.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(id));
-            if(propertyName==null) throw new ArgumentNullException(nameof(propertyName));
-            if(tableName==null) throw new ArgumentNullException(nameof(tableName));
-            if(idColumnName==null) throw new ArgumentNullException(nameof(idColumnName));
+            if (id.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(id));
+            if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+            if (tableName == null) throw new ArgumentNullException(nameof(tableName));
+            if (idColumnName == null) throw new ArgumentNullException(nameof(idColumnName));
             var con = new SqlConnection(_configuration.GetConnectionString("ChainStoreDBConnection"));
             var cm = new SqlCommand($"SELECT * FROM {tableName} WHERE {idColumnName} = @Id", con);
             con.Open();
             var param = new SqlParameter("@Id", id);
             cm.Parameters.Add(param);
-            var dr = cm.ExecuteReader();
             T data;
             try
             {
-                data = dr.Read() ? (T) dr[propertyName] : default;
+                var dr = cm.ExecuteReader();
+                try
+                {
+                    data = dr.Read() ? (T) dr[propertyName] : default;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    data = default;
+                }
+                catch (InvalidCastException)
+                {
+                    data = default;
+                }
+                finally
+                {
+                    dr.Close();
+                }
             }
-            catch (IndexOutOfRangeException)
+            catch (SqlException)
             {
                 data = default;
             }
-            catch (InvalidCastException)
-            {
-                data = default;
-            }
-            finally
-            {
-                dr.Close();
-            }
+
             con.Close();
             return data;
         }
