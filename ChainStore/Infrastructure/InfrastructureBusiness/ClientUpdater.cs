@@ -30,7 +30,7 @@ namespace ChainStore.Infrastructure.InfrastructureBusiness
                 if (purchaseList.Count != 0)
                     sum = purchaseList.Sum(purchase => _context.Products.Find(purchase.ProductId).Price);
                 var checkCashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId);
-                var checkDiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackDiscount", "ClientId", client.ClientId);
+                var checkDiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId);
                 if (daysInApplication > 60 && checkCashBackPercent == 0)
                 {
                     _context.Clients.Remove(client);
