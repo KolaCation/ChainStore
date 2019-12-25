@@ -17,27 +17,37 @@ namespace ChainStore.Domain.DomainCore
             Points = 0;
         }
 
-        public override void Pay(double sum, bool useCashBack, bool usePoints)
+        public override bool Pay(double sum, bool useCashBack, bool usePoints)
         {
-            if (sum < 0) return;
+            if (sum < 0) return false;
             if (usePoints)
             {
                 sum /= 1000;
-                if (Points < sum) return;
-                if (Points >= sum) Points -= sum;
+                if (Points < sum) return false;
+                if (Points >= sum)
+                {
+                    Points -= sum;
+                    return true;
+                }
             }
             else if (useCashBack)
             {
-                Points += sum / 1000;
                 sum -= sum * DiscountPercent / 100;
-                base.Pay(sum, true, false);
+                var res = base.Pay(sum, true, false);
+                if (!res) return false;
+                Points += sum / 1000;
+                return true;
             }
             else
             {
-                Points += sum / 1000;
                 sum -= sum * DiscountPercent / 100;
-                base.Pay(sum, false, false);
+                var res = base.Pay(sum, false, false);
+                if (!res) return false;
+                Points += sum / 1000;
+                return true;
             }
+
+            return false;
         }
     }
 }

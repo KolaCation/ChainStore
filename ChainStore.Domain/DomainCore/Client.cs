@@ -41,11 +41,12 @@ namespace ChainStore.Domain.DomainCore
             Balance += sum;
         }
 
-        public virtual void Pay(double sum, bool useCashBack, bool usePoints)
+        public virtual bool Pay(double sum, bool useCashBack, bool usePoints)
         {
             Validator.CheckBalance(sum);
-            if (Balance < sum) return;
+            if (Balance < sum) return false;
             Balance -= sum;
+            return true;
         }
     }
 }

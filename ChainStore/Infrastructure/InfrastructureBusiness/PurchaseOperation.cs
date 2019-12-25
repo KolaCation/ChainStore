@@ -43,26 +43,29 @@ namespace ChainStore.Infrastructure.InfrastructureBusiness
                     _bookRepository.DeleteBook(bookToDel.BookId);
                 var priceToCompareWith = product.Price -
                                          product.Price *
-                                         _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId) / 100;
-                var clientCashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
-
+                                         _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId",
+                                             client.ClientId) / 100;
+                var clientCashBack =
+                    _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
+                bool res;
                 if (usePoints)
                 {
                     priceToCompareWith = 0;
-                    client.Pay(product.Price, false, true);
+                    res = client.Pay(product.Price, false, true);
                 }
 
                 else if (useCashBack)
                 {
                     if (clientCashBack > priceToCompareWith) priceToCompareWith = 0;
                     if (clientCashBack < priceToCompareWith) priceToCompareWith -= clientCashBack;
-                    client.Pay(product.Price, true, false);
+                    res = client.Pay(product.Price, true, false);
                 }
                 else
                 {
-                    client.Pay(product.Price, false, false);
+                    res = client.Pay(product.Price, false, false);
                 }
 
+                if (!res) return;
                 product.Category.Store.Earn(priceToCompareWith);
                 product.ChangeStatus(ProductStatus.Purchased);
                 var purchase = new Purchase(clientId, productId);

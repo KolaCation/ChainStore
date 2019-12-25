@@ -55,10 +55,13 @@ namespace ChainStore.Controllers
                     ClientId = client.ClientId,
                     Balance = client.Balance,
                     Product = productToBuy,
-                    CashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId),
-                    CashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId),
-                    DiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId),
-                    Points = _propertyGetter.GetProperty<double>("dbo.Clients", "Points",  "ClientId", client.ClientId)
+                    CashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId",
+                        client.ClientId),
+                    CashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId",
+                        client.ClientId),
+                    DiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId",
+                        client.ClientId),
+                    Points = _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", client.ClientId)
                 };
                 return View(productClientViewModel);
             }
@@ -73,17 +76,21 @@ namespace ChainStore.Controllers
             var product = _productRepository.GetProduct(productClientViewModel.ProductId);
             if (client == null || product == null) return RedirectToAction(IndexAction, DefaultController);
             string message;
-            var productDiscount = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId);
+            var productDiscount =
+                _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId);
             var priceToCompareWith = product.Price - product.Price * productDiscount / 100;
-            var clientPoints = _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", client.ClientId);
-            var clientCashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
+            var clientPoints =
+                _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", client.ClientId);
+            var clientCashBack =
+                _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
             var productClientViewModelToReturnIfNotSucceed = new ProductClientViewModel
             {
                 ClientId = client.ClientId,
                 Balance = client.Balance,
                 Product = product,
                 CashBack = clientCashBack,
-                CashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId),
+                CashBackPercent =
+                    _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId),
                 DiscountPercent = productDiscount,
                 Points = clientPoints,
                 UseCashBack = productClientViewModel.UseCashBack,
@@ -101,11 +108,17 @@ namespace ChainStore.Controllers
             {
                 message = "Not Enough Money & Cash Back";
                 ModelState.AddModelError(string.Empty, message);
-                _purchaseOperation.Perform(productClientViewModel.ClientId, productClientViewModel.ProductId,
-                    productClientViewModel.UseCashBack, productClientViewModel.UsePoints);
                 return View(productClientViewModelToReturnIfNotSucceed);
             }
 
+            /*if (!productClientViewModel.UsePoints && !productClientViewModel.UseCashBack &&
+                productClientViewModel.Balance < priceToCompareWith)
+            {
+                message = "Not Enough Money";
+                ModelState.AddModelError(string.Empty, message);
+                return View(productClientViewModelToReturnIfNotSucceed);
+            }*/
+            
             _purchaseOperation.Perform(productClientViewModel.ClientId, productClientViewModel.ProductId,
                 productClientViewModel.UseCashBack, productClientViewModel.UsePoints);
             return RedirectToAction(IndexAction, DefaultController);
