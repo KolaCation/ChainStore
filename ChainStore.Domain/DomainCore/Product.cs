@@ -22,7 +22,6 @@ namespace ChainStore.Domain.DomainCore
             Price = price;
             ProductStatus = productStatus;
             CategoryId = categoryId;
-            //lala
         }
 
         public void ChangeStatus(ProductStatus productStatus)
