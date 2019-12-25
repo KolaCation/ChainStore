@@ -32,18 +32,21 @@ namespace ChainStore.Domain.DomainCore
             }
             else if (useCashBack)
             {
-                sum -= sum * DiscountPercent / 100;
-                var res = base.Pay(sum, true, false);
-                if (!res) return false;
+                
+                var priceWithDiscount = sum - sum * DiscountPercent / 100;
+                var res = base.Pay(priceWithDiscount, true, false);
                 Points += sum / 1000;
+                if (!res) return false;
+                
                 return true;
             }
             else
             {
-                sum -= sum * DiscountPercent / 100;
-                var res = base.Pay(sum, false, false);
-                if (!res) return false;
+                
+                var priceWithDiscount = sum - sum * DiscountPercent / 100;
+                var res = base.Pay(priceWithDiscount, false, false);
                 Points += sum / 1000;
+                if (!res) return false;
                 return true;
             }
 
