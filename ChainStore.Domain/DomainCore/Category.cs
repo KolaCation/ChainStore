@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
@@ -13,11 +12,12 @@ namespace ChainStore.Domain.DomainCore
         public Store Store { get; private set; }
 
         private readonly List<Product> _products;
-        public IReadOnlyCollection<Product> Products => new ReadOnlyCollection<Product>(_products);
+        public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
         public Category(CategoryNames categoryName, Guid? storeId)
         {
-            if (storeId != null && storeId.Value.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(storeId));
+            //if (storeId != null && storeId.Value.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(storeId));
+            CustomValidator.ValidateId(storeId);
             CategoryId = Guid.NewGuid();
             CategoryName = categoryName;
             StoreId = storeId;

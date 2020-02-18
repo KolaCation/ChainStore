@@ -1,7 +1,6 @@
-﻿using System;
+﻿using ChainStore.Shared.Util;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Validator = ChainStore.Domain.Util.Validator;
 
 namespace ChainStore.Domain.DomainCore
 {
@@ -14,16 +13,16 @@ namespace ChainStore.Domain.DomainCore
         public Mall Mall{ get; private set; }
 
         private readonly List<Category> _categories;
-        public IReadOnlyCollection<Category> Categories => new ReadOnlyCollection<Category>(_categories);
+        public IReadOnlyCollection<Category> Categories => _categories.AsReadOnly();
 
         public double Profit { get; private set; }
 
         public Store(string name, string location, Guid? mallId)
         {
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateString(location, 2, 40);
             StoreId = Guid.NewGuid();
             MallId = mallId;
-            Validator.CheckName(name);
-            Validator.CheckLocation(location);
             Name = name;
             Location = location;
             Profit = 0;
@@ -32,18 +31,19 @@ namespace ChainStore.Domain.DomainCore
 
         public void ChangeName(string newName)
         {
-            Validator.CheckName(newName);
+            CustomValidator.ValidateString(newName, 2, 40);
             Name = newName;
         }
 
         public void ChangeLocation(string newLocation)
         {
-            Validator.CheckLocation(newLocation);
+            CustomValidator.ValidateString(newLocation, 2, 40);
             Location = newLocation;
         }
 
         public void MoveToMall(Guid mallIId, string mallLocation)
         {
+            CustomValidator.ValidateId(mallIId);
             MallId = mallIId;
             ChangeLocation(mallLocation);
         }
@@ -56,7 +56,7 @@ namespace ChainStore.Domain.DomainCore
 
         public void Earn(double sum)
         {
-            Validator.CheckProfit(sum);
+            CustomValidator.ValidateNumber(sum, 0, 1000000);
             Profit += sum;
         }
     }

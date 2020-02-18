@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChainStore.Domain.Util;
+﻿using ChainStore.Shared.Util;
+using System;
 
 namespace ChainStore.Domain.DomainCore
 {
@@ -13,7 +11,7 @@ namespace ChainStore.Domain.DomainCore
         public ReliableClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent) : base(
             clientId, name, balance)
         {
-            if (cashBackPercent < 0 || cashBackPercent > 10) throw new ArgumentException();
+            CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
             if(cashBack < 0) throw new ArgumentException();
             CashBack = cashBack;
             CashBackPercent = cashBackPercent;
@@ -54,7 +52,6 @@ namespace ChainStore.Domain.DomainCore
                 CashBack += sum * CashBackPercent / 100;
                 return true;
             }
-
             return false;
         }
 

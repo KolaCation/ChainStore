@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Validator = ChainStore.Domain.Util.Validator;
+﻿using ChainStore.Shared.Util;
+using System;
 
 namespace ChainStore.Domain.DomainCore
 {
@@ -13,17 +11,17 @@ namespace ChainStore.Domain.DomainCore
 
         public Client(string name)
         {
+            CustomValidator.ValidateString(name, 2, 40);
             ClientId = Guid.NewGuid();
-            Validator.CheckName(name);
             Name = name;
             Balance = 0;
         }
 
         protected Client(Guid clientId, string name, double balance)
         {
-            Validator.CheckName(name);
-            Validator.CheckBalance(balance);
-            Validator.CheckId(clientId);
+            CustomValidator.CheckId(clientId);
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateNumber(balance, 0, 1000000);
             ClientId = clientId;
             Name = name;
             Balance = balance;
@@ -31,19 +29,19 @@ namespace ChainStore.Domain.DomainCore
 
         public void ChangeName(string newName)
         {
-            Validator.CheckName(newName);
+            CustomValidator.ValidateString(newName, 2, 40);
             Name = newName;
         }
 
         public virtual void ReplenishBalance(double sum)
         {
-            Validator.CheckBalance(sum);
+            CustomValidator.ValidateNumber(sum, 0, 1000000);
             Balance += sum;
         }
 
         public virtual bool Pay(double sum, bool useCashBack, bool usePoints)
         {
-            Validator.CheckBalance(sum);
+            CustomValidator.ValidateNumber(sum, 0, 1000000);
             if (Balance < sum) return false;
             Balance -= sum;
             return true;

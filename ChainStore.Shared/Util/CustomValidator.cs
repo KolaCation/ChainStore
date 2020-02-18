@@ -1,9 +1,15 @@
 ﻿using System;
 
-namespace ChainStore.Domain.Util
+namespace ChainStore.Shared.Util
 {
-    internal static class Validator
+    public static class CustomValidator
     {
+        public static void ValidateId(Guid id) { }
+        public static void ValidateId(Guid? id) { }
+        public static void ValidateString(string str, int minLength, int maxLength) { }
+        public static void ValidateNumber(int number, int minValue, int maxValue) { }
+        public static void ValidateNumber(double number, double minValue, double maxValue) { }
+        public static void ValidateObject<T>(T obj) { }
         public static void CheckId(Guid id)
         {
             if(id.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(id));

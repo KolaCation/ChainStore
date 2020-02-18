@@ -1,5 +1,5 @@
 ﻿using System;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
@@ -14,10 +14,10 @@ namespace ChainStore.Domain.DomainCore
 
         public Product(string name, double price, ProductStatus productStatus, Guid categoryId)
         {
-            Validator.CheckId(categoryId);
+            CustomValidator.ValidateId(categoryId);
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateNumber(price, 0, 1000000);
             ProductId = Guid.NewGuid();
-            Validator.CheckName(name);
-            Validator.CheckPrice(price);
             Name = name;
             Price = price;
             ProductStatus = productStatus;

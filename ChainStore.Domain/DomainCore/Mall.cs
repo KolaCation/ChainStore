@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
@@ -12,13 +11,13 @@ namespace ChainStore.Domain.DomainCore
         public string Location { get; private set; }
 
         private readonly List<Store> _stores;
-        public IReadOnlyCollection<Store> Stores => new ReadOnlyCollection<Store>(_stores);
+        public IReadOnlyCollection<Store> Stores => _stores.AsReadOnly();
 
         public Mall(string name, string location)
         {
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateString(location, 2, 40);
             MallId = Guid.NewGuid();
-            Validator.CheckName(name);
-            Validator.CheckLocation(location);
             Name = name;
             Location = location;
             _stores = new List<Store>();
@@ -26,13 +25,13 @@ namespace ChainStore.Domain.DomainCore
 
         public void ChangeName(string newName)
         {
-            Validator.CheckName(newName);
+            CustomValidator.ValidateString(newName, 2, 40);
             Name = newName;
         }
 
         public void ChangeLocation(string newLocation)
         {
-            Validator.CheckLocation(newLocation);
+            CustomValidator.ValidateString(newLocation, 2, 40);
             Location = newLocation;
         }
     }
