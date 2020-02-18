@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29319.158
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore", "ChainStore\ChainStore.csproj", "{43FEB978-BA30-43FB-8949-3C57AAB23AC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore", "ChainStore\ChainStore.csproj", "{43FEB978-BA30-43FB-8949-3C57AAB23AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.Domain", "ChainStore.Domain\ChainStore.Domain.csproj", "{34BE6883-2F87-434D-9812-520EF3401BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.Domain", "ChainStore.Domain\ChainStore.Domain.csproj", "{34BE6883-2F87-434D-9812-520EF3401BD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.DataAccessLayer", "ChainStore.DataAccessLayer\ChainStore.DataAccessLayer.csproj", "{95150AF1-6DA2-415B-8491-48E0913DFC59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.DataAccessLayerImpl", "ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayerImpl.csproj", "{FCA6B366-5D80-48F5-8477-723A9BFBB53E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.Actions", "ChainStore.Actions\ChainStore.Actions.csproj", "{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.ActionsImpl", "ChainStore.ActionsImpl\ChainStore.ActionsImpl.csproj", "{89C32417-3DF6-43FC-A5BD-983219DA6864}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{34BE6883-2F87-434D-9812-520EF3401BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34BE6883-2F87-434D-9812-520EF3401BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34BE6883-2F87-434D-9812-520EF3401BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95150AF1-6DA2-415B-8491-48E0913DFC59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95150AF1-6DA2-415B-8491-48E0913DFC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95150AF1-6DA2-415B-8491-48E0913DFC59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95150AF1-6DA2-415B-8491-48E0913DFC59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCA6B366-5D80-48F5-8477-723A9BFBB53E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCA6B366-5D80-48F5-8477-723A9BFBB53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCA6B366-5D80-48F5-8477-723A9BFBB53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCA6B366-5D80-48F5-8477-723A9BFBB53E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89C32417-3DF6-43FC-A5BD-983219DA6864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89C32417-3DF6-43FC-A5BD-983219DA6864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89C32417-3DF6-43FC-A5BD-983219DA6864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89C32417-3DF6-43FC-A5BD-983219DA6864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
