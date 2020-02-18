@@ -47,6 +47,7 @@ namespace ChainStore.Controllers
             {
                 stores = stores.Where(st => st.Name.Contains(searchString)).ToList().AsReadOnly();
             }
+
             return View(stores);
         }
 

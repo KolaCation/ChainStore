@@ -100,6 +100,7 @@ namespace ChainStore.Controllers
             }
 
             categoryToDel.RemoveFromStore();
+            _categoryRepository.DeleteCategory(categoryToDel.CategoryId);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }
