@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.Domain.DomainServices
+namespace ChainStore.DataAccessLayer.Repositories
 {
-    public interface IClientRepository
+    public interface IClientRepository : IRepository<Client>
     {
-        IReadOnlyCollection<Client> GetAllClients();
-        Client GetClient(Guid clientId);
-        void AddClient(Client client);
-        void UpdateClient(Client client);
-        void DeleteClient(Guid clientId);
     }
 }

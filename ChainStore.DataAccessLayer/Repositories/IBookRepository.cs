@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.Domain.DomainServices
+namespace ChainStore.DataAccessLayer.Repositories
 {
-    public interface IBookRepository
+    public interface IBookRepository : ICreateDeleteRepository<Book>
     {
-        void AddBook(Book book);
-        void DeleteBook(Guid bookId);
         List<Book> GetClientBooks(Guid clientId);
         void CheckBooksForExpiration();
     }

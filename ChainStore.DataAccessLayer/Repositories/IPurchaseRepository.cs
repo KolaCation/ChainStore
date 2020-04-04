@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.Domain.DomainServices
+namespace ChainStore.DataAccessLayer.Repositories
 {
-    public interface IPurchaseRepository
+    public interface IPurchaseRepository : ICreateDeleteRepository<Purchase>
     {
-        void AddPurchase(Purchase purchase);
-        void DeletePurchase(Guid purchaseId);
+        List<Purchase> GetClientPurchases(Guid clientId);
     }
 }

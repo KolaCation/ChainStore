@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainStore.Domain.DomainServices;
-using ChainStore.Identity;
+using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.Domain.DomainCore;
 using ChainStore.ViewModels;
 using ChainStore.ViewModels.ViewMakers;
 using Microsoft.AspNetCore.Authorization;
@@ -47,11 +47,11 @@ namespace ChainStore.Controllers
         [HttpPost]
         public IActionResult ReplenishBalance(ClientDetailsViewModel clientDetailsViewModel)
         {
-            var client = _clientRepository.GetClient(clientDetailsViewModel.ClientId);
+            var client = _clientRepository.GetOne(clientDetailsViewModel.ClientId);
             if (client != null)
             {
                 client.ReplenishBalance(clientDetailsViewModel.ClientBalance);
-                _clientRepository.UpdateClient(client);
+                _clientRepository.UpdateOne(client);
                 return RedirectToAction("ClientDetails", new {id = client.ClientId});
             }
             return View("ClientNotFound");
@@ -60,11 +60,11 @@ namespace ChainStore.Controllers
         [HttpPost]
         public IActionResult ChangeName(ClientDetailsViewModel clientDetailsViewModel)
         {
-            var client = _clientRepository.GetClient(clientDetailsViewModel.ClientId);
+            var client = _clientRepository.GetOne(clientDetailsViewModel.ClientId);
             if (client != null)
             {
-                client.ChangeName(clientDetailsViewModel.ClientName);
-                _clientRepository.UpdateClient(client);
+                client.UpdateName(clientDetailsViewModel.ClientName);
+                _clientRepository.UpdateOne(client);
                 return RedirectToAction("ClientDetails", new { id = client.ClientId });
             }
             return View("ClientNotFound");

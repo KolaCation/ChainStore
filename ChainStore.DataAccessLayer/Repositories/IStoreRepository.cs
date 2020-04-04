@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.Domain.DomainServices
+namespace ChainStore.DataAccessLayer.Repositories
 {
-    public interface IStoreRepository
+    public interface IStoreRepository : IRepository<Store>
     {
-        IReadOnlyCollection<Store> GetSAllStores();
-        Store GetStore(Guid storeId);
-        void AddStore(Store store);
-        void UpdateStore(Store store);
-        void DeleteStore(Guid storeId);
     }
 }

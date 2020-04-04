@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.Domain.DomainServices
+namespace ChainStore.DataAccessLayer.Repositories
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IRepository<Category>
     {
-        IReadOnlyCollection<Category> GetAllCategories();
-        Category GetCategory(Guid categoryId);
-        void AddCategory(Category category);
-        void UpdateCategory(Category category);
-        void DeleteCategory(Guid categoryId);
     }
 }

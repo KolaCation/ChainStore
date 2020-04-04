@@ -5,11 +5,11 @@ namespace ChainStore.Domain.DomainCore
 {
     public class ReliableClient : Client
     {
-        public double CashBack { get; private set; }
-        public int CashBackPercent { get; private set; }
+        public int CashBackPercent { get; }
+        public double CashBack { get; protected set; }
 
-        public ReliableClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent) : base(
-            clientId, name, balance)
+        public ReliableClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent) 
+            : base(clientId, name, balance)
         {
             CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
             if(cashBack < 0) throw new ArgumentException();

@@ -1,6 +1,7 @@
 ﻿@model IReadOnlyCollection<Store>
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ProductsGroupsViewMaker ProductsGroupsViewMaker
+@inject IMallRepository MallRepository
 @{
     ViewBag.Title = "Stores";
 }
@@ -26,8 +27,9 @@
                     }
                     @if (store.MallId != null)
                     {
-                        <h6 class="card-title mb-2 mt-2 text-muted">In @store.Mall.Name on @store.Mall.Location</h6>
-                        <h6 class="card-title mb-2 mt-2 text-muted">Click <a asp-action="MallDetails" asp-route-id="@store.MallId" asp-controller="Malls">here</a> to see other stores in @store.Mall.Name</h6>
+                        var mall = MallRepository.GetOne(store.MallId.Value);
+                        <h6 class="card-title mb-2 mt-2 text-muted">In @mall.Name on @mall.Location</h6>
+                        <h6 class="card-title mb-2 mt-2 text-muted">Click <a asp-action="MallDetails" asp-route-id="@store.MallId" asp-controller="Malls">here</a> to see other stores in @mall.Name</h6>
                     }
                     else
                     {
@@ -70,7 +72,7 @@
                                         {
                                             <li class="row list-group-item d-flex justify-content-between align-items-center ">
                                                 <p class="col-12 col-sm-auto col-md-12 card-text mt-3">
-                                                    @groupOfProducts.Key : @groupOfProducts.First().Price UAH (@groupOfProducts.Count())
+                                                    @groupOfProducts.Key : @groupOfProducts.First().PriceInUAH UAH (@groupOfProducts.Count())
                                                 </p>
                                                 <div class="row col-12 col-sm-auto col-md-12">
                                                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))

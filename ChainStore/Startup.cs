@@ -1,10 +1,10 @@
 using System;
-using ChainStore.Domain.ApplicationServices;
-using ChainStore.Domain.DomainServices;
-using ChainStore.Identity;
-using ChainStore.Infrastructure.InfrastructureBusiness;
-using ChainStore.Infrastructure.InfrastructureData;
-using ChainStore.Infrastructure.InfrastructureData.Repository;
+using ChainStore.Actions.ApplicationServices;
+using ChainStore.ActionsImpl.ApplicationServicesImpl;
+using ChainStore.DataAccessLayer.Helpers;
+using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl;
+using ChainStore.DataAccessLayerImpl.RepositoriesImpl;
 using ChainStore.ViewModels.ViewMakers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +26,7 @@ namespace ChainStore
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<MyDbContext>(options => options.UseSqlServer(_config.GetConnectionString("ChainStoreDBConnection")));
+            services.AddDbContextPool<MyDbContext>(options => options.UseSqlServer(_config.GetConnectionString("ChainStoreDBVer2"), assembly => assembly.MigrationsAssembly(typeof(MyDbContext).Assembly.FullName)));
             services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<MyDbContext>();
             services.AddScoped<IStoreRepository, SqlStoreRepository>();
@@ -40,8 +40,8 @@ namespace ChainStore
             services.AddScoped<IPurchaseOperation, PurchaseOperation>();
             services.AddScoped<IReservationOperation, BookOperation>();
             services.AddTransient<ProductsGroupsViewMaker>();
-            services.AddScoped<PropertyGetter>();
-            services.AddScoped<ClientUpdater>();
+            services.AddScoped<IClientUpdater, ClientUpdater>();
+            services.AddScoped<IClientService, ClientService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

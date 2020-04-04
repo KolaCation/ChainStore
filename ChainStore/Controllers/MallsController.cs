@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
-using ChainStore.Domain.DomainServices;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +30,7 @@ namespace ChainStore.Controllers
         public IActionResult Index(string searchString)
         {
             _bookRepository.CheckBooksForExpiration();
-            var malls = _mallRepository.GetAllMalls();
+            var malls = _mallRepository.GetAll();
             if (!string.IsNullOrEmpty(searchString))
             {
                 malls = malls.Where(m => m.Name.Contains(searchString)).ToList().AsReadOnly();
@@ -44,7 +44,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var mall = _mallRepository.GetMall(id.Value);
+            var mall = _mallRepository.GetOne(id.Value);
             if (mall == null) return RedirectToAction(IndexAction, DefaultController);
 
             return View(mall);
@@ -63,8 +63,8 @@ namespace ChainStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var mall = new Mall(mallViewModel.Name, mallViewModel.Location);
-                _mallRepository.AddMall(mall);
+                var mall = new Mall(Guid.NewGuid(), mallViewModel.Name, mallViewModel.Location);
+                _mallRepository.AddOne(mall);
                 return RedirectToAction(IndexAction, DefaultController);
             }
 
@@ -76,7 +76,7 @@ namespace ChainStore.Controllers
         public IActionResult EditMall(Guid? id)
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
-            var mallToEdit = _mallRepository.GetMall(id.Value);
+            var mallToEdit = _mallRepository.GetOne(id.Value);
             if (mallToEdit != null)
             {
                 var editMallViewModel = new EditMallViewModel
@@ -93,22 +93,19 @@ namespace ChainStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var mallToUpdate = _mallRepository.GetMall(editMallViewModel.MallId);
+                var mallToUpdate = _mallRepository.GetOne(editMallViewModel.MallId);
                 if (mallToUpdate == null) return RedirectToAction(IndexAction, DefaultController);
-
-                mallToUpdate.ChangeName(editMallViewModel.Name);
-                mallToUpdate.ChangeLocation(editMallViewModel.Location);
-
+                var updatedMall = new Mall(editMallViewModel.MallId, editMallViewModel.Name, editMallViewModel.Location);
                 if (mallToUpdate.Stores.Count != 0)
                 {
                     foreach (var store in mallToUpdate.Stores)
                     {
-                        store.ChangeLocation(mallToUpdate.Location);
-                        _storeRepository.UpdateStore(store);
+                        var updatedStore = new Store(store.StoreId, store.Name, updatedMall.Location, store.Profit, updatedMall.MallId);
+                        _storeRepository.UpdateOne(updatedStore);
                     }
                 }
 
-                _mallRepository.UpdateMall(mallToUpdate);
+                _mallRepository.UpdateOne(updatedMall);
                 return RedirectToAction(IndexAction, DefaultController);
             }
 
@@ -121,7 +118,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var mallToDel = _mallRepository.GetMall(id.Value);
+            var mallToDel = _mallRepository.GetOne(id.Value);
             if (mallToDel == null) return RedirectToAction(IndexAction, DefaultController);
 
             var delMallViewModel = new DeleteMallViewModel
@@ -134,7 +131,7 @@ namespace ChainStore.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteMall(DeleteMallViewModel deleteMallViewModel)
         {
-            var mallToDel = _mallRepository.GetMall(deleteMallViewModel.MallId);
+            var mallToDel = _mallRepository.GetOne(deleteMallViewModel.MallId);
             if (mallToDel == null) return RedirectToAction(IndexAction, DefaultController);
 
             if (mallToDel.Stores.Count != 0)
@@ -144,7 +141,7 @@ namespace ChainStore.Controllers
                 return View(deleteMallViewModel);
             }
 
-            _mallRepository.DeleteMall(mallToDel.MallId);
+            _mallRepository.DeleteOne(mallToDel.MallId);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }

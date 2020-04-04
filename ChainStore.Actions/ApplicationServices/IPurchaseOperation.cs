@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChainStore.Domain.ApplicationServices
+namespace ChainStore.Actions.ApplicationServices
 {
     public interface IPurchaseOperation
     {

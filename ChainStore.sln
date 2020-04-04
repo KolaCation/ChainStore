@@ -7,15 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore", "ChainStore\Ch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.Domain", "ChainStore.Domain\ChainStore.Domain.csproj", "{34BE6883-2F87-434D-9812-520EF3401BD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.DataAccessLayer", "ChainStore.DataAccessLayer\ChainStore.DataAccessLayer.csproj", "{95150AF1-6DA2-415B-8491-48E0913DFC59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.DataAccessLayer", "ChainStore.DataAccessLayer\ChainStore.DataAccessLayer.csproj", "{95150AF1-6DA2-415B-8491-48E0913DFC59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.DataAccessLayerImpl", "ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayerImpl.csproj", "{FCA6B366-5D80-48F5-8477-723A9BFBB53E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.DataAccessLayerImpl", "ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayerImpl.csproj", "{FCA6B366-5D80-48F5-8477-723A9BFBB53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.Actions", "ChainStore.Actions\ChainStore.Actions.csproj", "{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.Actions", "ChainStore.Actions\ChainStore.Actions.csproj", "{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.ActionsImpl", "ChainStore.ActionsImpl\ChainStore.ActionsImpl.csproj", "{89C32417-3DF6-43FC-A5BD-983219DA6864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.ActionsImpl", "ChainStore.ActionsImpl\ChainStore.ActionsImpl.csproj", "{89C32417-3DF6-43FC-A5BD-983219DA6864}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainStore.Shared", "ChainStore.Shared\ChainStore.Shared.csproj", "{4E0F6B19-F1B9-4466-B421-3CFC0AC00A6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.Shared", "ChainStore.Shared\ChainStore.Shared.csproj", "{4E0F6B19-F1B9-4466-B421-3CFC0AC00A6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

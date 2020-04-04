@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainStore.Domain.ApplicationServices;
-using ChainStore.Domain.DomainServices;
-using ChainStore.Identity;
-using ChainStore.Infrastructure.InfrastructureData;
+using ChainStore.Actions.ApplicationServices;
+using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl;
+using ChainStore.Shared.Util;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,13 +40,13 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var productToBuy = _productRepository.GetProduct(id.Value);
+            var productToBuy = _productRepository.GetOne(id.Value);
             if (productToBuy == null) return RedirectToAction(IndexAction, DefaultController);
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var client = _clientRepository.GetClient(user.ClientId);
+            var client = _clientRepository.GetOne(user.ClientDbModelId);
 
             if (client != null)
             {
@@ -55,13 +55,13 @@ namespace ChainStore.Controllers
                     ClientId = client.ClientId,
                     Balance = client.Balance,
                     Product = productToBuy,
-                    CashBack = _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId",
+                    CashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, "CashBack", EntityNames.ClientId,
                         client.ClientId),
-                    CashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId",
+                    CashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, "CashBackPercent", EntityNames.ClientId,
                         client.ClientId),
-                    DiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId",
+                    DiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, "DiscountPercent", EntityNames.ClientId,
                         client.ClientId),
-                    Points = _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", client.ClientId)
+                    Points = _propertyGetter.GetProperty<double>(EntityNames.Client, "Points", EntityNames.ClientId, client.ClientId)
                 };
                 return View(productClientViewModel);
             }
@@ -72,17 +72,22 @@ namespace ChainStore.Controllers
         [HttpPost]
         public IActionResult PurchaseOperation(ProductClientViewModel productClientViewModel)
         {
-            var client = _clientRepository.GetClient(productClientViewModel.ClientId);
-            var product = _productRepository.GetProduct(productClientViewModel.ProductId);
+            var client = _clientRepository.GetOne(productClientViewModel.ClientId);
+            var product = _productRepository.GetOne(productClientViewModel.ProductId);
             if (client == null || product == null) return RedirectToAction(IndexAction, DefaultController);
             string message;
             var productDiscount =
-                _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", client.ClientId);
-            var priceToCompareWith = product.Price - product.Price * productDiscount / 100;
+                _propertyGetter.GetProperty<int>(EntityNames.Client, "DiscountPercent", EntityNames.ClientId, client.ClientId);
+
+            var priceToCompareWith =
+                product.PriceInUAH - product.PriceInUAH * productDiscount / 100;
+
             var clientPoints =
-                _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", client.ClientId);
+                _propertyGetter.GetProperty<double>(EntityNames.Client, "Points", EntityNames.ClientId, client.ClientId);
+
             var clientCashBack =
-                _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", client.ClientId);
+                _propertyGetter.GetProperty<double>(EntityNames.Client, "CashBack", EntityNames.ClientId, client.ClientId);
+
             var productClientViewModelToReturnIfNotSucceed = new ProductClientViewModel
             {
                 ClientId = client.ClientId,
@@ -90,7 +95,7 @@ namespace ChainStore.Controllers
                 Product = product,
                 CashBack = clientCashBack,
                 CashBackPercent =
-                    _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", client.ClientId),
+                    _propertyGetter.GetProperty<int>(EntityNames.Client, "CashBackPercent", EntityNames.ClientId, client.ClientId),
                 DiscountPercent = productDiscount,
                 Points = clientPoints,
                 UseCashBack = productClientViewModel.UseCashBack,

@@ -5,19 +5,25 @@ namespace ChainStore.Domain.DomainCore
 {
     public sealed class Purchase
     {
-        public Guid PurchaseId{ get; private set; }
-        public Guid ClientId { get; private set; }
-        public Guid ProductId { get; private set; }
-        public DateTimeOffset CreationTime { get; private set; }
+        public Guid PurchaseId { get; }
+        public Guid ClientId { get; }
+        public Guid ProductId { get; }
+        public DateTimeOffset CreationTime { get; }
 
-        public Purchase(Guid clientId, Guid productId)
+        public Purchase(Guid purchaseId, Guid clientId, Guid productId)
         {
+            CustomValidator.ValidateId(purchaseId);
             CustomValidator.ValidateId(clientId);
             CustomValidator.ValidateId(productId);
-            PurchaseId = Guid.NewGuid();
+            PurchaseId = purchaseId;
             ClientId = clientId;
             ProductId = productId;
             CreationTime = DateTimeOffset.UtcNow;
+        }
+
+        public Purchase(Guid purchaseId, Guid clientId, Guid productId, DateTimeOffset creationTime) : this(purchaseId, clientId, productId)
+        {
+            CreationTime = creationTime;
         }
     }
 }

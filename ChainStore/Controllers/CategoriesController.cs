@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
-using ChainStore.Domain.DomainServices;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +33,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var store = _storeRepository.GetStore(id.Value);
+            var store = _storeRepository.GetOne(id.Value);
             if (store == null) return RedirectToAction(IndexAction, DefaultController);
 
             var createCategoryViewModel = new CreateCategoryViewModel
@@ -47,7 +47,7 @@ namespace ChainStore.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult AddCategoryToStore(CreateCategoryViewModel createCategoryViewModel)
         {
-            var store = _storeRepository.GetStore(createCategoryViewModel.StoreId);
+            var store = _storeRepository.GetOne(createCategoryViewModel.StoreId);
             if (store == null) return RedirectToAction(IndexAction, DefaultController);
 
             foreach (var category in store.Categories)
@@ -59,8 +59,8 @@ namespace ChainStore.Controllers
                 }
             }
 
-            var categoryToAdd = new Category(createCategoryViewModel.CategoryName, store.StoreId);
-            _categoryRepository.AddCategory(categoryToAdd);
+            var categoryToAdd = new Category(Guid.NewGuid(), createCategoryViewModel.CategoryName, store.StoreId);
+            _categoryRepository.AddOne(categoryToAdd);
             return RedirectToAction(IndexAction, DefaultController);
         }
 
@@ -71,7 +71,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var categoryToDel = _categoryRepository.GetCategory(id.Value);
+            var categoryToDel = _categoryRepository.GetOne(id.Value);
             if (categoryToDel == null) return RedirectToAction(IndexAction, DefaultController);
 
             var delCategoryViewModel = new DeleteCategoryViewModel {Category = categoryToDel};
@@ -82,10 +82,10 @@ namespace ChainStore.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteCategory(DeleteCategoryViewModel deleteCategoryViewModel)
         {
-            var categoryToDel = _categoryRepository.GetCategory(deleteCategoryViewModel.CategoryId);
+            var categoryToDel = _categoryRepository.GetOne(deleteCategoryViewModel.CategoryId);
             if (categoryToDel == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var productsInCatToDel = _productRepository.GetAllProducts().Where(pr =>
+            var productsInCatToDel = _productRepository.GetAll().Where(pr =>
                     pr.CategoryId.Equals(categoryToDel.CategoryId) &&
                     !pr.ProductStatus.Equals(ProductStatus.Purchased))
                 .ToList();
@@ -95,12 +95,11 @@ namespace ChainStore.Controllers
                 productsToDel.AddRange(productsToDel);
                 foreach (var product in productsToDel)
                 {
-                    _productRepository.DeleteProduct(product.ProductId);
+                    _productRepository.DeleteOne(product.ProductId);
                 }
             }
-
-            categoryToDel.RemoveFromStore();
-            _categoryRepository.DeleteCategory(categoryToDel.CategoryId);
+            var catToDel = new Category(categoryToDel.CategoryId, categoryToDel.CategoryName, null);
+            _categoryRepository.DeleteOne(catToDel.CategoryId);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }

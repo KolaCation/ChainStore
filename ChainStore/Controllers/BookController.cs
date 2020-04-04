@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainStore.Domain.ApplicationServices;
-using ChainStore.Domain.DomainCore;
-using ChainStore.Domain.DomainServices;
-using ChainStore.Identity;
-using ChainStore.Infrastructure.InfrastructureData;
+using ChainStore.Actions.ApplicationServices;
+using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,14 +39,14 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var productToBook = _productRepository.GetProduct(id.Value);
+            var productToBook = _productRepository.GetOne(id.Value);
             if (productToBook == null) return RedirectToAction(IndexAction, DefaultController);
 
             var client = await _userManager.GetUserAsync(User);
             if (client == null) return RedirectToAction(IndexAction, DefaultController);
 
             var productClientViewModel = new ProductClientViewModel
-                {ClientId = client.ClientId, Product = productToBook};
+                {ClientId = client.ClientDbModelId, Product = productToBook};
             return View(productClientViewModel);
         }
 
@@ -56,10 +54,10 @@ namespace ChainStore.Controllers
         [HttpPost]
         public IActionResult BookOperation(ProductClientViewModel productClientViewModel)
         {
-            var client = _clientRepository.GetClient(productClientViewModel.ClientId);
+            var client = _clientRepository.GetOne(productClientViewModel.ClientId);
             if (client == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var product = _productRepository.GetProduct(productClientViewModel.ProductId);
+            var product = _productRepository.GetOne(productClientViewModel.ProductId);
             if (product == null) return RedirectToAction(IndexAction, DefaultController);
 
             var checkForLimit = _bookRepository.GetClientBooks(productClientViewModel.ClientId);

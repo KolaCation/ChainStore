@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.Domain.DomainServices
+namespace ChainStore.DataAccessLayer.Repositories
 {
-    public interface IMallRepository
+    public interface IMallRepository : IRepository<Mall>
     {
-        IReadOnlyCollection<Mall> GetAllMalls();
-        Mall GetMall(Guid mallId);
-        void AddMall(Mall mall);
-        void UpdateMall(Mall mall);
-        void DeleteMall(Guid mallId);
     }
 }

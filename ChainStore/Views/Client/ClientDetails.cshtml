@@ -1,4 +1,5 @@
 ﻿@model ClientDetailsViewModel
+@inject ICategoryRepository CategoryRepository
 @{
     ViewBag.Title = "Client Details";
 }
@@ -95,10 +96,13 @@
             <div class="col-lg-4 col-md-6 col-sm-12 mt-3">
                 <div class="card text-center">
                     <h5 class="card-header">@book.Product.Name</h5>
-                    <h6 class="card-title mb-2 mt-2 text-muted">@book.Product.Category.CategoryName</h6>
+                    @{
+                        var category = CategoryRepository.GetOne(book.Product.CategoryId);
+                    }
+                    <h6 class="card-title mb-2 mt-2 text-muted">@category.CategoryName</h6>
                     <div class="card-body">
                         <p class="card-text">
-                            Price: @book.Product.Price UAH
+                            Price: @book.Product.PriceInUAH UAH
                         </p>
                         <p class="card-text">
                             Made: @book.BookCreationTime.DateTime.ToLocalTime()
@@ -134,10 +138,13 @@ else
             <div class="col-lg-4 col-md-6 col-sm-12 mt-3">
                 <div class="card text-center">
                     <h5 class="card-header">@purchase.Product.Name</h5>
-                    <h6 class="card-title mb-2 mt-2 text-muted">@purchase.Product.Category.CategoryName</h6>
+                    @{
+                        var category = CategoryRepository.GetOne(purchase.Product.CategoryId);
+                    }
+                    <h6 class="card-title mb-2 mt-2 text-muted">@category.CategoryName</h6>
                     <div class="card-body">
                         <p class="card-text">
-                            Price: @purchase.Product.Price UAH
+                            Price: @purchase.Product.PriceInUAH UAH
                         </p>
                         <p class="card-text">
                             Made: @purchase.PurchaseCreationTime.DateTime.ToLocalTime()

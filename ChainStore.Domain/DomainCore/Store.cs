@@ -6,52 +6,33 @@ namespace ChainStore.Domain.DomainCore
 {
     public sealed class Store
     {
-        public Guid StoreId { get; private set; }
-        public string Name { get; private set; }
-        public string Location { get; private set; }
-        public Guid? MallId{ get; private set; }
-        public Mall Mall{ get; private set; }
+        public Guid StoreId { get; }
+        public string Name { get; }
+        public string Location { get; }
+        public Guid? MallId{ get; }
 
         private readonly List<Category> _categories;
         public IReadOnlyCollection<Category> Categories => _categories.AsReadOnly();
-
         public double Profit { get; private set; }
 
-        public Store(string name, string location, Guid? mallId)
+        public Store(Guid storeId, string name, string location, double profit, Guid? mallId)
         {
+            CustomValidator.ValidateId(storeId);
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateString(location, 2, 40);
-            StoreId = Guid.NewGuid();
-            MallId = mallId;
+            CustomValidator.ValidateNumber(profit, 0, double.MaxValue);
+            StoreId = storeId;
             Name = name;
             Location = location;
-            Profit = 0;
+            Profit = profit;
+            MallId = mallId;
             _categories = new List<Category>();
         }
 
-        public void ChangeName(string newName)
+        public Store(List<Category> categories, Guid storeId, string name, string location, Guid? mallId, double profit) : this(storeId, name, location, profit, mallId)
         {
-            CustomValidator.ValidateString(newName, 2, 40);
-            Name = newName;
-        }
-
-        public void ChangeLocation(string newLocation)
-        {
-            CustomValidator.ValidateString(newLocation, 2, 40);
-            Location = newLocation;
-        }
-
-        public void MoveToMall(Guid mallIId, string mallLocation)
-        {
-            CustomValidator.ValidateId(mallIId);
-            MallId = mallIId;
-            ChangeLocation(mallLocation);
-        }
-
-        public void MoveFromMall(string newLocation)
-        {
-            MallId = null;
-            ChangeLocation(newLocation);
+            CustomValidator.ValidateObject(categories);
+            _categories = categories;
         }
 
         public void Earn(double sum)
