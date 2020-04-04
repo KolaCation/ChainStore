@@ -7,7 +7,6 @@
         Headphone,
         Keyboard,
         Tablet,
-        USB,
-
+        USB
     }
 }

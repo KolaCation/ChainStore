@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainStore.Actions.ApplicationServices;
+using ChainStore.DataAccessLayer.Helpers;
+using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl;
 using ChainStore.Domain.DomainCore;
-using ChainStore.Domain.DomainServices;
-using ChainStore.Identity;
-using ChainStore.Infrastructure.InfrastructureBusiness;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,19 +19,21 @@ namespace ChainStore.Controllers
         private readonly IClientRepository _clientRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ClientUpdater _clientUpdater;
+        private readonly IClientService _clientService;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
         public AccountController(IClientRepository clientRepository,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ClientUpdater clientUpdater)
+            IClientService clientService, RoleManager<IdentityRole> roleManager)
         {
             _clientRepository = clientRepository;
             _userManager = userManager;
             _signInManager = signInManager;
-            _clientUpdater = clientUpdater;
+            _clientService = clientService;
+            _roleManager = roleManager;
         }
 
         [HttpGet]
@@ -44,17 +47,18 @@ namespace ChainStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var clientDetails = new Client(registerClientViewModel.Name);
+                var clientDetails = new Client(Guid.NewGuid(), registerClientViewModel.Name, 0);
                 var client = new ApplicationUser
                 {
                     Id = clientDetails.ClientId.ToString(),
                     UserName = registerClientViewModel.Email,
                     Email = registerClientViewModel.Email,
-                    ClientId = clientDetails.ClientId,
+                    ClientDbModelId = clientDetails.ClientId,
                     CreationTime = DateTimeOffset.Now
                 };
-                _clientRepository.AddClient(clientDetails);
+                _clientRepository.AddOne(clientDetails);
                 var result = await _userManager.CreateAsync(client, registerClientViewModel.Password);
+
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(client, isPersistent: false);
@@ -99,7 +103,7 @@ namespace ChainStore.Controllers
                     if (user != null)
                     {
                         var checkForReliability = DateTimeOffset.Now - user.CreationTime;
-                        _clientUpdater.UpdateClient(user.ClientId, checkForReliability.Days);
+                        _clientService.CheckForStatusUpdate(user.ClientDbModelId, checkForReliability.Days);
                     }
 
                     return RedirectToAction(IndexAction, DefaultController);

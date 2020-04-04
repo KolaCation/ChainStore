@@ -1,58 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl;
 using ChainStore.Domain.DomainCore;
-using ChainStore.Infrastructure.InfrastructureData;
+using ChainStore.Shared.Util;
 using ChainStore.ViewModels.ViewMakers.DetailedInfo;
+using Microsoft.Extensions.Configuration;
 
 namespace ChainStore.ViewModels.ViewMakers
 {
     public class ClientDetailsViewModelMaker
     {
-        private readonly MyDbContext _context;
+        private readonly IClientRepository _clientRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IConfiguration _configuration;
         private readonly PropertyGetter _propertyGetter;
 
-        public ClientDetailsViewModelMaker(MyDbContext context, PropertyGetter propertyGetter)
+        public ClientDetailsViewModelMaker(IClientRepository clientRepository, IProductRepository productRepository, IPurchaseRepository purchaseRepository,
+            IBookRepository bookRepository, IConfiguration configuration)
         {
-            _context = context;
-            _propertyGetter = propertyGetter;
+            _clientRepository = clientRepository;
+            _productRepository = productRepository;
+            _purchaseRepository = purchaseRepository;
+            _bookRepository = bookRepository;
+            _configuration = configuration;
+            _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
         }
 
         public ClientDetailsViewModel MakeClientDetailsViewModel(Guid clientId)
         {
             if (clientId.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(clientId));
-            var checkClientForNull = _context.Clients.Find(clientId);
-            if (checkClientForNull == null) return null;
-
-            var purchases = (from product in _context.Products
-                    join purchase in _context.Purchases.Where(cl => cl.ClientId.Equals(clientId)) on product.ProductId
-                        equals purchase.ProductId
-                    select new PurchaseDetailedInfo(product,
-                        purchase.ClientId, purchase.CreationTime))
+            var exists = _clientRepository.Exists(clientId);
+            if (!exists) return null;
+            var body = _clientRepository.GetOne(clientId);
+            var purchases = (from product in _productRepository.GetAll()
+                    join purchase in _purchaseRepository.GetClientPurchases(clientId) on product.ProductId equals purchase.ProductId
+                    select new PurchaseDetailedInfo(product, purchase.ClientId, purchase.CreationTime))
                 .ToList();
 
-            foreach (var purchase in purchases)
-            {
-                _context.Entry(purchase.Product).Reference(p => p.Category).Load();
-            }
-
-            var books = (from product in _context.Products
-                    join book in _context.Books.Where(cl => cl.ClientId.Equals(clientId)) on product.ProductId equals
-                        book.ProductId
-                    select new BookDetailedInfo(product,
-                        book.ClientId, book.CreationTime, book.ExpirationTime))
+            var books = (from product in _productRepository.GetAll()
+                    join book in _bookRepository.GetClientBooks(clientId) on product.ProductId equals book.ProductId
+                    select new BookDetailedInfo(product, book.ClientId, book.CreationTime, book.ExpirationTime))
                 .ToList();
 
-            foreach (var book in books)
-            {
-                _context.Entry(book.Product).Reference(p => p.Category).Load();
-            }
-
-            var client = new List<Client> {checkClientForNull};
-            var clCashBack =  _propertyGetter.GetProperty<double>("dbo.Clients", "CashBack", "ClientId", checkClientForNull.ClientId);
-            var clCashBackPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "CashBackPercent", "ClientId", checkClientForNull.ClientId);
-            var clDiscountPercent = _propertyGetter.GetProperty<int>("dbo.Clients", "DiscountPercent", "ClientId", checkClientForNull.ClientId);
-            var clPoints = _propertyGetter.GetProperty<double>("dbo.Clients", "Points", "ClientId", checkClientForNull.ClientId);
+            var client = new List<Client> {body};
+            var clCashBack =  _propertyGetter.GetProperty<double>( EntityNames.Client, "CashBack", EntityNames.ClientId, body.ClientId);
+            var clCashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, "CashBackPercent", EntityNames.ClientId, body.ClientId);
+            var clDiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client,"DiscountPercent", EntityNames.ClientId, body.ClientId);
+            var clPoints = _propertyGetter.GetProperty<double>(EntityNames.Client, "Points", EntityNames.ClientId, body.ClientId);
 
             var clientDetailedInfo = (from cl in client
                 join purchase in purchases on cl.ClientId equals purchase.ClientId into purchasesList

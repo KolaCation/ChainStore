@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
-using ChainStore.Domain.DomainServices;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +29,7 @@ namespace ChainStore.Controllers
         public IActionResult Index(string searchString)
         {
             _bookRepository.CheckBooksForExpiration();
-            var products = _productRepository.GetAllProducts();
+            var products = _productRepository.GetAll();
             if (!string.IsNullOrEmpty(searchString))
             {
                 products = products.Where(pr => pr.Name.Contains(searchString)).ToList().AsReadOnly();
@@ -44,11 +44,14 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var product = _productRepository.GetProduct(id.Value);
+            var product = _productRepository.GetOne(id.Value);
             if (product == null) return RedirectToAction(IndexAction, DefaultController);
 
             var categoryProductsViewModel = new ReplenishProductsViewModel
-                {Product = product, Category = product.Category, QuantityOfProductsToReplenish = 1};
+            {
+                Product = product, Category = _categoryRepository.GetOne(product.CategoryId),
+                QuantityOfProductsToReplenish = 1
+            };
             return View(categoryProductsViewModel);
         }
 
@@ -58,15 +61,15 @@ namespace ChainStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var productToReplenish = _productRepository.GetProduct(replenishProductsViewModel.ProductId);
+                var productToReplenish = _productRepository.GetOne(replenishProductsViewModel.ProductId);
                 if (productToReplenish != null)
                 {
                     for (var i = 1; i <= replenishProductsViewModel.QuantityOfProductsToReplenish; i++)
                     {
-                        var product = new Product(productToReplenish.Name, productToReplenish.Price,
-                            ProductStatus.OnSale,
-                            replenishProductsViewModel.CategoryId);
-                        _productRepository.AddProduct(product);
+                        var product = new Product(Guid.NewGuid(), productToReplenish.Name,
+                            productToReplenish.PriceInUAH,
+                            ProductStatus.OnSale, replenishProductsViewModel.CategoryId);
+                        _productRepository.AddOne(product);
                     }
 
                     return RedirectToAction(IndexAction, DefaultController);
@@ -82,7 +85,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var category = _categoryRepository.GetCategory(id.Value);
+            var category = _categoryRepository.GetOne(id.Value);
             if (category == null) return RedirectToAction(IndexAction, DefaultController);
 
             var createProductViewModel = new CreateProductViewModel
@@ -98,10 +101,9 @@ namespace ChainStore.Controllers
             {
                 for (var i = 1; i <= createProductViewModel.QuantityOfProductsToAdd; i++)
                 {
-                    var product = new Product(createProductViewModel.Name, createProductViewModel.Price,
-                        ProductStatus.OnSale,
-                        createProductViewModel.CategoryId);
-                    _productRepository.AddProduct(product);
+                    var product = new Product(Guid.NewGuid(), createProductViewModel.Name, createProductViewModel.Price,
+                        ProductStatus.OnSale, createProductViewModel.CategoryId);
+                    _productRepository.AddOne(product);
                 }
 
                 return RedirectToAction(IndexAction, DefaultController);
@@ -117,7 +119,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var productToDel = _productRepository.GetProduct(id.Value);
+            var productToDel = _productRepository.GetOne(id.Value);
             if (productToDel == null) return RedirectToAction(IndexAction, DefaultController);
 
             var deleteProductViewModel = new DeleteProductViewModel {Product = productToDel};
@@ -128,19 +130,15 @@ namespace ChainStore.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteProduct(DeleteProductViewModel deleteProductViewModel)
         {
-            var productToDel = _productRepository.GetProduct(deleteProductViewModel.ProductId);
+            var productToDel = _productRepository.GetOne(deleteProductViewModel.ProductId);
             if (productToDel == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var productsToDel = _productRepository.GetAllProducts().Where(pr =>
-                    pr.Category != null &&
+            var productsToDel = _productRepository.GetAll().Where(pr =>
+                    _categoryRepository.Exists(pr.CategoryId) &&
                     pr.Name.Equals(productToDel.Name) &&
-                    pr.Category.CategoryName.Equals(
-                        productToDel.Category
-                            .CategoryName) &&
-                    pr.CategoryId.Equals(productToDel
-                        .CategoryId) &&
-                    pr.ProductStatus.Equals(productToDel
-                        .ProductStatus))
+                    pr.CategoryId.Equals(productToDel.CategoryId) &&
+                    _categoryRepository.GetOne(pr.CategoryId).CategoryName.Equals(_categoryRepository.GetOne(productToDel.CategoryId).CategoryName) &&
+                    pr.ProductStatus.Equals(productToDel.ProductStatus))
                 .ToList();
 
 
@@ -149,7 +147,7 @@ namespace ChainStore.Controllers
                 var productsToDelete = productsToDel.ToList();
                 foreach (var product in productsToDelete)
                 {
-                    _productRepository.DeleteProduct(product.ProductId);
+                    _productRepository.DeleteOne(product.ProductId);
                 }
             }
 

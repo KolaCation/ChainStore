@@ -1,24 +1,29 @@
 ﻿using System;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
     public sealed class Purchase
     {
-        public Guid PurchaseId{ get; private set; }
-        public Guid ClientId { get; private set; }
-        public Guid ProductId { get; private set; }
+        public Guid PurchaseId { get; }
+        public Guid ClientId { get; }
+        public Guid ProductId { get; }
+        public DateTimeOffset CreationTime { get; }
 
-        public DateTimeOffset CreationTime { get; private set; }
-
-        public Purchase(Guid clientId, Guid productId)
+        public Purchase(Guid purchaseId, Guid clientId, Guid productId)
         {
-            Validator.CheckId(clientId);
-            Validator.CheckId(productId);
-            PurchaseId = Guid.NewGuid();
+            CustomValidator.ValidateId(purchaseId);
+            CustomValidator.ValidateId(clientId);
+            CustomValidator.ValidateId(productId);
+            PurchaseId = purchaseId;
             ClientId = clientId;
             ProductId = productId;
             CreationTime = DateTimeOffset.UtcNow;
+        }
+
+        public Purchase(Guid purchaseId, Guid clientId, Guid productId, DateTimeOffset creationTime) : this(purchaseId, clientId, productId)
+        {
+            CreationTime = creationTime;
         }
     }
 }

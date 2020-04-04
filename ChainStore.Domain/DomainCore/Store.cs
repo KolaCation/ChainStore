@@ -1,62 +1,43 @@
-﻿using System;
+﻿using ChainStore.Shared.Util;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Validator = ChainStore.Domain.Util.Validator;
 
 namespace ChainStore.Domain.DomainCore
 {
     public sealed class Store
     {
-        public Guid StoreId { get; private set; }
-        public string Name { get; private set; }
-        public string Location { get; private set; }
-        public Guid? MallId{ get; private set; }
-        public Mall Mall{ get; private set; }
+        public Guid StoreId { get; }
+        public string Name { get; }
+        public string Location { get; }
+        public Guid? MallId{ get; }
 
         private readonly List<Category> _categories;
-        public IReadOnlyCollection<Category> Categories => new ReadOnlyCollection<Category>(_categories);
-
+        public IReadOnlyCollection<Category> Categories => _categories.AsReadOnly();
         public double Profit { get; private set; }
 
-        public Store(string name, string location, Guid? mallId)
+        public Store(Guid storeId, string name, string location, double profit, Guid? mallId)
         {
-            StoreId = Guid.NewGuid();
-            MallId = mallId;
-            Validator.CheckName(name);
-            Validator.CheckLocation(location);
+            CustomValidator.ValidateId(storeId);
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateString(location, 2, 40);
+            CustomValidator.ValidateNumber(profit, 0, double.MaxValue);
+            StoreId = storeId;
             Name = name;
             Location = location;
-            Profit = 0;
+            Profit = profit;
+            MallId = mallId;
             _categories = new List<Category>();
         }
 
-        public void ChangeName(string newName)
+        public Store(List<Category> categories, Guid storeId, string name, string location, Guid? mallId, double profit) : this(storeId, name, location, profit, mallId)
         {
-            Validator.CheckName(newName);
-            Name = newName;
-        }
-
-        public void ChangeLocation(string newLocation)
-        {
-            Validator.CheckLocation(newLocation);
-            Location = newLocation;
-        }
-
-        public void MoveToMall(Guid mallIId, string mallLocation)
-        {
-            MallId = mallIId;
-            ChangeLocation(mallLocation);
-        }
-
-        public void MoveFromMall(string newLocation)
-        {
-            MallId = null;
-            ChangeLocation(newLocation);
+            CustomValidator.ValidateObject(categories);
+            _categories = categories;
         }
 
         public void Earn(double sum)
         {
-            Validator.CheckProfit(sum);
+            CustomValidator.ValidateNumber(sum, 0, 1000000);
             Profit += sum;
         }
     }

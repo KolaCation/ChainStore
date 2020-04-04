@@ -1,25 +1,25 @@
 ﻿using System;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
     public sealed class Product
     {
-        public Guid ProductId { get; private set; }
-        public string Name { get; private set; }
-        public double Price { get; private set; }
+        public Guid ProductId { get; }
+        public string Name { get; }
+        public double PriceInUAH { get; }
         public ProductStatus ProductStatus { get; private set; }
-        public Guid CategoryId { get; private set; }
-        public Category Category { get; private set; }
+        public Guid CategoryId { get; }
 
-        public Product(string name, double price, ProductStatus productStatus, Guid categoryId)
+        public Product(Guid productId, string name, double priceInUAH, ProductStatus productStatus, Guid categoryId)
         {
-            Validator.CheckId(categoryId);
-            ProductId = Guid.NewGuid();
-            Validator.CheckName(name);
-            Validator.CheckPrice(price);
+            CustomValidator.ValidateId(productId);
+            CustomValidator.ValidateId(categoryId);
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateNumber(priceInUAH, 0, 1000000);
+            ProductId = productId;
             Name = name;
-            Price = price;
+            PriceInUAH = priceInUAH;
             ProductStatus = productStatus;
             CategoryId = categoryId;
         }

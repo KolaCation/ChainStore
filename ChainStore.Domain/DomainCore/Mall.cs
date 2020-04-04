@@ -1,39 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
     public sealed class Mall
     {
-        public Guid MallId { get; private set; }
-        public string Name { get; private set; }
-        public string Location { get; private set; }
+        public Guid MallId { get; }
+        public string Name { get; }
+        public string Location { get; }
 
         private readonly List<Store> _stores;
-        public IReadOnlyCollection<Store> Stores => new ReadOnlyCollection<Store>(_stores);
+        public IReadOnlyCollection<Store> Stores => _stores.AsReadOnly();
 
-        public Mall(string name, string location)
+
+        public Mall(Guid mallId, string name, string location)
         {
-            MallId = Guid.NewGuid();
-            Validator.CheckName(name);
-            Validator.CheckLocation(location);
+            CustomValidator.ValidateId(mallId);
+            CustomValidator.ValidateString(name, 2, 40);
+            CustomValidator.ValidateString(location, 2, 40);
+            MallId = mallId;
             Name = name;
             Location = location;
             _stores = new List<Store>();
         }
-
-        public void ChangeName(string newName)
+        public Mall(List<Store> stores, Guid mallId, string name, string location) : this(mallId, name, location)
         {
-            Validator.CheckName(newName);
-            Name = newName;
-        }
-
-        public void ChangeLocation(string newLocation)
-        {
-            Validator.CheckLocation(newLocation);
-            Location = newLocation;
+            CustomValidator.ValidateObject(stores);
+            _stores = stores;
         }
     }
 }

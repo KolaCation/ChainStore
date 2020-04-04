@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ChainStore.Domain.DomainCore
 {
     public class VipClient : ReliableClient
     {
-        public int DiscountPercent { get; private set; }
+        public int DiscountPercent { get; }
         public double Points { get; private set; }
 
-        public VipClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent) : base(
-            clientId, name,
-            balance, cashBack, cashBackPercent)
+        public VipClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent, double points) 
+            : base(clientId, name, balance, cashBack, cashBackPercent)
         {
             DiscountPercent = 5;
-            Points = 0;
+            Points = points;
         }
 
         public override bool Pay(double sum, bool useCashBack, bool usePoints)

@@ -1,23 +1,24 @@
 ﻿using System;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
     public sealed class Book
     {
-        public Guid BookId{ get; private set; }
-        public Guid ClientId { get; private set; }
-        public Guid ProductId { get; private set; }
-        public DateTimeOffset CreationTime  { get; private set; }
-        public DateTimeOffset ExpirationTime { get; private set; }
-        public int ReserveDaysCount { get; private set; }
+        public Guid BookId { get; }
+        public Guid ClientId { get; }
+        public Guid ProductId { get; }
+        public DateTimeOffset CreationTime { get; }
+        public DateTimeOffset ExpirationTime { get; }
+        public int ReserveDaysCount { get; }
 
-        public Book(Guid clientId, Guid productId, int reserveDaysCount)
+        public Book(Guid bookId, Guid clientId, Guid productId, int reserveDaysCount)
         {
-            if(reserveDaysCount < 1 || reserveDaysCount > 7) throw new ArgumentException();
-            Validator.CheckId(clientId);
-            Validator.CheckId(productId);
-            BookId = Guid.NewGuid();
+            CustomValidator.ValidateNumber(reserveDaysCount, 1, 7);
+            CustomValidator.ValidateId(bookId);
+            CustomValidator.ValidateId(clientId);
+            CustomValidator.ValidateId(productId);
+            BookId = bookId;
             ClientId = clientId;
             ProductId = productId;
             CreationTime = DateTimeOffset.UtcNow;
@@ -25,13 +26,18 @@ namespace ChainStore.Domain.DomainCore
             ReserveDaysCount = reserveDaysCount;
         }
 
+        public Book(Guid bookId, Guid clientId, Guid productId, DateTimeOffset creationTime,
+            DateTimeOffset expirationTime, int reserveDaysCount) : this(bookId, clientId, productId, reserveDaysCount)
+        {
+            CreationTime = creationTime;
+            ExpirationTime = expirationTime;
+        }
+
         public bool IsExpired()
         {
             var difference = ExpirationTime - DateTimeOffset.Now;
             if (difference.Days > 0) return false;
-            ClientId = Guid.Empty;
             return true;
         }
     }
 }
-

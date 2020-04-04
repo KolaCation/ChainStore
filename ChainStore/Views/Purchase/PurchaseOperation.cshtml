@@ -23,13 +23,13 @@
                 <hr />
                 @if (Model.DiscountPercent == 0)
                 {
-                    <div>Price: @Model.Product.Price UAH</div>
+                    <div>Price: @Model.Product.PriceInUAH UAH</div>
                 }
                 else
                 {
-                    var priceWithDiscount = Model.Product.Price - Model.Product.Price * Model.DiscountPercent / 100;
-                    var priceInPoints = Model.Product.Price / 1000;
-                    <div>Price: <span style="text-decoration: line-through">@Model.Product.Price</span> @priceWithDiscount UAH</div>
+                    var priceWithDiscount = Model.Product.PriceInUAH - Model.Product.PriceInUAH * Model.DiscountPercent / 100;
+                    var priceInPoints = Model.Product.PriceInUAH / 1000;
+                    <div>Price: <span style="text-decoration: line-through">@Model.Product.PriceInUAH</span> @priceWithDiscount UAH</div>
                     <div>Price In Points: @priceInPoints</div>
                 }
             </p>

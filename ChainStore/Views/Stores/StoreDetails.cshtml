@@ -1,6 +1,7 @@
 ﻿@model Store
 @inject ProductsGroupsViewMaker ProductsGroupsViewMaker
 @inject SignInManager<ApplicationUser> SignInManager
+@inject IMallRepository MallRepository
 @{
     ViewBag.Title = "Store Details";
 }
@@ -13,8 +14,9 @@
     }
     @if (Model.MallId != null)
     {
-        <h6 class="card-title mb-2 mt-2 text-muted text-center">In @Model.Mall.Name on @Model.Mall.Location</h6>
-        <h6 class="card-title mb-2 mt-2 text-muted text-center">Click <a asp-action="MallDetails" asp-route-id="@Model.MallId" asp-controller="Malls">here</a> to see other stores in @Model.Mall.Name</h6>
+        var mall = MallRepository.GetOne(Model.MallId.Value);
+        <h6 class="card-title mb-2 mt-2 text-muted text-center">In @mall.Name on @mall.Location</h6>
+        <h6 class="card-title mb-2 mt-2 text-muted text-center">Click <a asp-action="MallDetails" asp-route-id="@Model.MallId" asp-controller="Malls">here</a> to see other stores in @mall.Name</h6>
     }
     else
     {
@@ -46,7 +48,7 @@
                             <h6 class="card-title mb-2 mt-2 text-muted">Left: @groupOfProducts.Count()</h6>
                             <div class="card-body">
                                 <p class="card-text mt-3">
-                                    Price: @groupOfProducts.First().Price UAH
+                                    Price: @groupOfProducts.First().PriceInUAH UAH
                                 </p>
                             </div>
                             <div class="card-footer text-center">

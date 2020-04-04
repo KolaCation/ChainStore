@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ChainStore.Domain.Util;
+using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {
     public sealed class Category
     {
-        public Guid CategoryId { get; private set; }
-        public CategoryNames CategoryName { get; private set; }
-        public Guid? StoreId { get; private set; }
-        public Store Store { get; private set; }
+        public Guid CategoryId { get; }
+        public CategoryNames CategoryName { get; }
+        public Guid? StoreId { get; }
 
         private readonly List<Product> _products;
-        public IReadOnlyCollection<Product> Products => new ReadOnlyCollection<Product>(_products);
+        public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
-        public Category(CategoryNames categoryName, Guid? storeId)
+        public Category(Guid categoryId, CategoryNames categoryName, Guid? storeId)
         {
-            if (storeId != null && storeId.Value.Equals(Guid.Empty)) throw new ArgumentNullException(nameof(storeId));
-            CategoryId = Guid.NewGuid();
+            CustomValidator.ValidateId(categoryId);
+            CategoryId = categoryId;
             CategoryName = categoryName;
             StoreId = storeId;
-            _products = new List<Product>();
         }
 
-        public void RemoveFromStore()
+        public Category(List<Product> products, Guid categoryId, CategoryNames categoryName, Guid? storeId) : this(categoryId, categoryName, storeId)
         {
-            StoreId = null;
+            CustomValidator.ValidateObject(products);
+            _products = products;
         }
     }
 }
