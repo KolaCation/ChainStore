@@ -16,6 +16,7 @@ namespace ChainStore.Domain.DomainCore
         public Category(Guid categoryId, CategoryNames categoryName, Guid? storeId)
         {
             CustomValidator.ValidateId(categoryId);
+            CustomValidator.ValidateId(storeId);
             CategoryId = categoryId;
             CategoryName = categoryName;
             StoreId = storeId;

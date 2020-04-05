@@ -6,6 +6,7 @@ using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ChainStore.DataAccessLayerImpl
@@ -24,6 +25,7 @@ namespace ChainStore.DataAccessLayerImpl
         public void UpdateClientStatus(Client client, ClientStatus clientStatus)
         {
             CustomValidator.ValidateObject(client);
+            Detach(client.ClientId);
             switch (clientStatus)
             {
                 case ClientStatus.DefaultToReliable:
@@ -56,6 +58,13 @@ namespace ChainStore.DataAccessLayerImpl
                     _context.SaveChanges();
                     break;
             }
+        }
+
+        private void Detach(Guid id)
+        {
+            CustomValidator.ValidateId(id);
+            var entity = _context.Clients.Find(id);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

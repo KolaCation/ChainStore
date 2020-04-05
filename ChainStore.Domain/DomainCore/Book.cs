@@ -36,7 +36,7 @@ namespace ChainStore.Domain.DomainCore
         public bool IsExpired()
         {
             var difference = ExpirationTime - DateTimeOffset.Now;
-            if (difference.Days > 0) return false;
+            if (difference.Milliseconds > 0) return false;
             return true;
         }
     }

@@ -13,7 +13,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public ReliableClientDbModel(Guid clientDbModelId, string name, double balance, double cashBack, int cashBackPercent) : base(clientDbModelId, name, balance)
         {
             CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
-            if (cashBack < 0) throw new ArgumentException();
+            CustomValidator.ValidateNumber(cashBack, 0, 100_000_000);
             CashBack = cashBack;
             CashBackPercent = cashBackPercent;
         }

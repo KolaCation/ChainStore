@@ -21,6 +21,7 @@ namespace ChainStore.Domain.DomainCore
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateString(location, 2, 40);
             CustomValidator.ValidateNumber(profit, 0, double.MaxValue);
+            CustomValidator.ValidateId(mallId);
             StoreId = storeId;
             Name = name;
             Location = location;
@@ -37,7 +38,7 @@ namespace ChainStore.Domain.DomainCore
 
         public void Earn(double sum)
         {
-            CustomValidator.ValidateNumber(sum, 0, 1000000);
+            CustomValidator.ValidateNumber(sum, 0, 100_000_000);
             Profit += sum;
         }
     }

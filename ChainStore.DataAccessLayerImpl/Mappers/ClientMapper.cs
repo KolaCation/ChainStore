@@ -20,48 +20,47 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public ClientDbModel DomainToDb(Client item)
         {
             CustomValidator.ValidateObject(item);
-            var entityName = typeof(ClientDbModel).Name;
+            var entityName = typeof(Client).Name;
             var idColumnName = nameof(ClientDbModel.ClientDbModelId);
 
-            var cashBackPercent = _propertyGetter.GetProperty<int>(entityName, nameof(ReliableClientDbModel.CashBackPercent), idColumnName, item.ClientId);
+            var cashBackPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClient.CashBackPercent), idColumnName, item.ClientId);
             if (cashBackPercent == 0) return new ClientDbModel(item.ClientId, item.Name, item.Balance);
 
-            var discountPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClientDbModel.DiscountPercent), idColumnName, item.ClientId);
-            var cashBack = _propertyGetter.GetProperty<int>(entityName, nameof(ReliableClientDbModel.CashBack), idColumnName, item.ClientId);
+            var discountPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClient.DiscountPercent), idColumnName, item.ClientId);
+
 
             if (cashBackPercent != 0 && discountPercent == 0)
             {
-                return new ReliableClientDbModel(item.ClientId, item.Name, item.Balance, cashBackPercent,
-                    cashBackPercent);
+                var reliable = (ReliableClient) item;
+                return new ReliableClientDbModel(reliable.ClientId, reliable.Name, reliable.Balance, reliable.CashBack, cashBackPercent);
             }
             else
             {
-                var points = _propertyGetter.GetProperty<int>(entityName, nameof(VipClientDbModel.Points), idColumnName, item.ClientId);
-                return new VipClientDbModel(item.ClientId, item.Name, item.Balance, cashBack, cashBackPercent, points);
+                var vip = (VipClient)item;
+                return new VipClientDbModel(vip.ClientId, vip.Name, vip.Balance, vip.CashBack, cashBackPercent, vip.Points);
             }
         }
 
         public Client DbToDomain(ClientDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var entityName = typeof(ClientDbModel).Name;
+            var entityName = typeof(Client).Name;
             var idColumnName = nameof(ClientDbModel.ClientDbModelId);
 
-            var cashBackPercent = _propertyGetter.GetProperty<int>(entityName, nameof(ReliableClientDbModel.CashBackPercent), idColumnName, item.ClientDbModelId);
+            var cashBackPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClient.CashBackPercent), idColumnName, item.ClientDbModelId);
             if (cashBackPercent == 0) return new Client(item.ClientDbModelId, item.Name, item.Balance);
 
-            var discountPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClientDbModel.DiscountPercent), idColumnName, item.ClientDbModelId);
-            var cashBack = _propertyGetter.GetProperty<int>(entityName, nameof(ReliableClientDbModel.CashBack), idColumnName, item.ClientDbModelId);
+            var discountPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClient.DiscountPercent), idColumnName, item.ClientDbModelId);
 
             if (cashBackPercent != 0 && discountPercent == 0)
             {
-                return new ReliableClient(item.ClientDbModelId, item.Name, item.Balance, cashBackPercent,
-                    cashBackPercent);
+                var reliable = (ReliableClientDbModel) item;
+                return new ReliableClient(reliable.ClientDbModelId, reliable.Name, reliable.Balance, reliable.CashBack, cashBackPercent);
             }
             else
             {
-                var points = _propertyGetter.GetProperty<int>(entityName, nameof(VipClientDbModel.Points), idColumnName, item.ClientDbModelId);
-                return new VipClient(item.ClientDbModelId, item.Name, item.Balance, cashBack, cashBackPercent, points);
+                var vip = (VipClientDbModel) item;
+                return new VipClient(vip.ClientDbModelId, vip.Name, vip.Balance, vip.CashBack, cashBackPercent, vip.Points);
             }
         }
     }

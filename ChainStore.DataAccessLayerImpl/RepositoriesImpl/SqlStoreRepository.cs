@@ -86,6 +86,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                     !st.StoreDbModelId.Equals(item.StoreId) &&
                     st.MallDbModelId == null);
                 if (storeWithTheSameLocationAndNameExists) return;
+                Detach(item.StoreId);
                 var enState = _context.Stores.Update(_storeMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -109,6 +110,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Stores.Any(item => item.StoreDbModelId.Equals(id));
+        }
+
+        private void Detach(Guid id)
+        {
+            CustomValidator.ValidateId(id);
+            var entity = _context.Stores.Find(id);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

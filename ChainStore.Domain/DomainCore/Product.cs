@@ -16,7 +16,7 @@ namespace ChainStore.Domain.DomainCore
             CustomValidator.ValidateId(productId);
             CustomValidator.ValidateId(categoryId);
             CustomValidator.ValidateString(name, 2, 40);
-            CustomValidator.ValidateNumber(priceInUAH, 0, 1000000);
+            CustomValidator.ValidateNumber(priceInUAH, 0, 100_000_000);
             ProductId = productId;
             Name = name;
             PriceInUAH = priceInUAH;

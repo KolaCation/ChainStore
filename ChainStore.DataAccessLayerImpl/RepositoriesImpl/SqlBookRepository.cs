@@ -50,6 +50,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 {
                     var product = _productMapper.DbToDomain(productDbModel);
                     product.ChangeStatus(ProductStatus.OnSale);
+                    Detach<ProductDbModel>(product.ProductId);
                     _context.Products.Update(_productMapper.DomainToDb(product));
                 }
                 else
@@ -62,6 +63,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
 
             foreach (var book in booksToRemove)
             {
+                Detach<BookDbModel>(book.BookId);
                 _context.Books.Remove(_bookMapper.DomainToDb(book));
             }
 
@@ -97,6 +99,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Books.Any(item => item.BookDbModelId.Equals(id));
+        }
+
+        private void Detach<TEntity>(Guid id) where TEntity : class
+        {
+            CustomValidator.ValidateId(id);
+            var entity = _context.Set<TEntity>().Find(id);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

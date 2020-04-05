@@ -60,6 +60,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             var exists = Exists(item.ProductId);
             if (exists)
             {
+                Detach(item.ProductId);
                 var enState = _context.Products.Update(_productMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -83,6 +84,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Products.Any(item => item.ProductDbModelId.Equals(id));
+        }
+
+        private void Detach(Guid id)
+        {
+            CustomValidator.ValidateId(id);
+            var entity = _context.Products.Find(id);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

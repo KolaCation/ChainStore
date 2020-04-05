@@ -11,9 +11,9 @@ namespace ChainStore.Domain.DomainCore
 
         public Client(Guid clientId, string name, double balance)
         {
-            CustomValidator.CheckId(clientId);
+            CustomValidator.ValidateId(clientId);
             CustomValidator.ValidateString(name, 2, 40);
-            CustomValidator.ValidateNumber(balance, 0, 1000000);
+            CustomValidator.ValidateNumber(balance, 0, 100_000_000);
             ClientId = clientId;
             Name = name;
             Balance = balance;
@@ -27,13 +27,13 @@ namespace ChainStore.Domain.DomainCore
 
         public virtual void ReplenishBalance(double sum)
         {
-            CustomValidator.ValidateNumber(sum, 0, 1000000);
+            CustomValidator.ValidateNumber(sum, 0, 100_000_000);
             Balance += sum;
         }
 
         public virtual bool Pay(double sum, bool useCashBack, bool usePoints)
         {
-            CustomValidator.ValidateNumber(sum, 0, 1000000);
+            CustomValidator.ValidateNumber(sum, 0, 100_000_000);
             if (Balance < sum) return false;
             Balance -= sum;
             return true;

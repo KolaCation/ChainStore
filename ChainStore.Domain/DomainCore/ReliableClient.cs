@@ -12,7 +12,7 @@ namespace ChainStore.Domain.DomainCore
             : base(clientId, name, balance)
         {
             CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
-            if(cashBack < 0) throw new ArgumentException();
+            CustomValidator.ValidateNumber(cashBack, 0, 100_000_000);
             CashBack = cashBack;
             CashBackPercent = cashBackPercent;
         }

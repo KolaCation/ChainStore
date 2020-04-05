@@ -15,7 +15,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         {
             CustomValidator.ValidateId(clientDbModelId);
             CustomValidator.ValidateString(name, 2, 40);
-            CustomValidator.ValidateNumber(balance, 0, 1000000);
+            CustomValidator.ValidateNumber(balance, 0, 100_000_000);
             ClientDbModelId = clientDbModelId;
             Name = name;
             Balance = balance;

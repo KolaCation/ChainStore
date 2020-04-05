@@ -24,6 +24,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateString(location, 2, 40);
             CustomValidator.ValidateNumber(profit, 0, double.MaxValue);
+            CustomValidator.ValidateId(mallDbModelId);
             StoreDbModelId = storeDbModelId;
             Name = name;
             Location = location;

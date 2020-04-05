@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainStore.Actions.ApplicationServices;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
+using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -26,13 +27,13 @@ namespace ChainStore.Controllers
 
         public PurchaseController(IProductRepository productRepository,
             UserManager<ApplicationUser> userManager, IPurchaseOperation purchaseOperation,
-            IClientRepository clientRepository, PropertyGetter propertyGetter)
+            IClientRepository clientRepository)
         {
             _productRepository = productRepository;
             _userManager = userManager;
             _purchaseOperation = purchaseOperation;
             _clientRepository = clientRepository;
-            _propertyGetter = propertyGetter;
+            _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
         }
 
         [HttpGet]
@@ -55,13 +56,13 @@ namespace ChainStore.Controllers
                     ClientId = client.ClientId,
                     Balance = client.Balance,
                     Product = productToBuy,
-                    CashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, "CashBack", EntityNames.ClientId,
+                    CashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId,
                         client.ClientId),
-                    CashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, "CashBackPercent", EntityNames.ClientId,
+                    CashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId,
                         client.ClientId),
-                    DiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, "DiscountPercent", EntityNames.ClientId,
+                    DiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId,
                         client.ClientId),
-                    Points = _propertyGetter.GetProperty<double>(EntityNames.Client, "Points", EntityNames.ClientId, client.ClientId)
+                    Points = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, client.ClientId)
                 };
                 return View(productClientViewModel);
             }
@@ -77,16 +78,16 @@ namespace ChainStore.Controllers
             if (client == null || product == null) return RedirectToAction(IndexAction, DefaultController);
             string message;
             var productDiscount =
-                _propertyGetter.GetProperty<int>(EntityNames.Client, "DiscountPercent", EntityNames.ClientId, client.ClientId);
+                _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.ClientId);
 
             var priceToCompareWith =
                 product.PriceInUAH - product.PriceInUAH * productDiscount / 100;
 
             var clientPoints =
-                _propertyGetter.GetProperty<double>(EntityNames.Client, "Points", EntityNames.ClientId, client.ClientId);
+                _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, client.ClientId);
 
             var clientCashBack =
-                _propertyGetter.GetProperty<double>(EntityNames.Client, "CashBack", EntityNames.ClientId, client.ClientId);
+                _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, client.ClientId);
 
             var productClientViewModelToReturnIfNotSucceed = new ProductClientViewModel
             {
@@ -95,7 +96,7 @@ namespace ChainStore.Controllers
                 Product = product,
                 CashBack = clientCashBack,
                 CashBackPercent =
-                    _propertyGetter.GetProperty<int>(EntityNames.Client, "CashBackPercent", EntityNames.ClientId, client.ClientId),
+                    _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId, client.ClientId),
                 DiscountPercent = productDiscount,
                 Points = clientPoints,
                 UseCashBack = productClientViewModel.UseCashBack,
@@ -117,7 +118,7 @@ namespace ChainStore.Controllers
             }
 
             if (!productClientViewModel.UsePoints && !productClientViewModel.UseCashBack &&
-                productClientViewModel.Balance < priceToCompareWith)
+                client.Balance < priceToCompareWith)
             {
                 message = "Not Enough Money";
                 ModelState.AddModelError(string.Empty, message);

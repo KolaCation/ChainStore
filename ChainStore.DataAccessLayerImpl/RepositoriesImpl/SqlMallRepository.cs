@@ -85,6 +85,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             {
                 var mallWithTheSameNameExists = _context.Malls.Any(m => m.Name.Equals(item.Name) && m.Location.Equals(item.Location));
                 if (mallWithTheSameNameExists) return;
+                Detach(item.MallId);
                 var enState = _context.Malls.Update(_mallMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -108,6 +109,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Malls.Any(item => item.MallDbModelId.Equals(id));
+        }
+
+        private void Detach(Guid id)
+        {
+            CustomValidator.ValidateId(id);
+            var entity = _context.Malls.Find(id);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

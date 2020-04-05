@@ -20,7 +20,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             CustomValidator.ValidateId(productDbModelId);
             CustomValidator.ValidateId(categoryDbModelId);
             CustomValidator.ValidateString(name, 2, 40);
-            CustomValidator.ValidateNumber(priceInUAH, 0, 1000000);
+            CustomValidator.ValidateNumber(priceInUAH, 0, 100_000_000);
             ProductDbModelId = productDbModelId;
             Name = name;
             PriceInUAH = priceInUAH;

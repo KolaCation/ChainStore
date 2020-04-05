@@ -42,8 +42,8 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
                 var books = _bookRepository.GetClientBooks(client.ClientId);
                 var bookToDel = books.FirstOrDefault(b => b.ProductId.Equals(product.ProductId));
                 if (product.ProductStatus.Equals(ProductStatus.Booked) && bookToDel != null) _bookRepository.DeleteOne(bookToDel.BookId);
-                var priceToCompareWith = product.PriceInUAH - product.PriceInUAH * _propertyGetter.GetProperty<int>("ClientDbModel", "DiscountPercent", "ClientDbModelId", client.ClientId) / 100;
-                var clientCashBack = _propertyGetter.GetProperty<double>("ClientDbModel", "CashBack", "ClientDbModelId", client.ClientId);
+                var priceToCompareWith = product.PriceInUAH - product.PriceInUAH * _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.ClientId) / 100;
+                var clientCashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, client.ClientId);
                 bool res;
                 if (usePoints)
                 {

@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <input type="hidden" asp-for="@Model.ClientId" value="@Model.ClientId" />
                             <label asp-for="@Model.ClientBalance" class="col-form-label">Replenish Balance:</label>
-                            <input type="number" asp-for="@Model.ClientBalance" value="0" max="75000" min="0" class="form-control" placeholder="Sum...">
+                            <input type="number" asp-for="@Model.ClientBalance" value="0" max="100000" min="0" class="form-control" placeholder="Sum...">
                             <span asp-validation-for="@Model.ClientBalance" class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: auto">Replenish</button>
@@ -87,7 +87,7 @@
         <br />
     }
 }
-<h4>My reserves: </h4>
+<h4>My Reserves: </h4>
 @if (Model.ClientBookDetailedInfoList.Count() != 0)
 {
     <div class="row justify-content-start m-3">

@@ -70,6 +70,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             {
                 var hasSameName = _context.Categories.Any(cat => cat.CategoryName.Equals(item.CategoryName) && cat.StoreDbModelId.Equals(item.StoreId));
                 if (hasSameName) return;
+                Detach(item.CategoryId);
                 var enState = _context.Categories.Update(_categoryMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -93,6 +94,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Categories.Any(item => item.CategoryDbModelId.Equals(id));
+        }
+
+        private void Detach(Guid id)
+        {
+            CustomValidator.ValidateId(id);
+            var entity = _context.Categories.Find(id);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

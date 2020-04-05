@@ -19,6 +19,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public CategoryDbModel(Guid categoryDbModelId, CategoryNames categoryName, Guid? storeDbModelId)
         {
             CustomValidator.ValidateId(categoryDbModelId);
+            CustomValidator.ValidateId(storeDbModelId);
             CategoryDbModelId = categoryDbModelId;
             CategoryName = categoryName;
             StoreDbModelId = storeDbModelId;

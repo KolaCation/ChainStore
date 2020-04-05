@@ -13,7 +13,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public VipClientDbModel(Guid clientDbModelId, string name, double balance, double cashBack, int cashBackPercent, double points)
             : base(clientDbModelId, name, balance, cashBack, cashBackPercent)
         {
-            if(points < 0) throw new ArgumentException();
+            CustomValidator.ValidateNumber(points, 0, 100_000_000);
             DiscountPercent = 5;
             Points = points;
         }

@@ -51,10 +51,10 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
                     sum = purchasedProducts.Sum(pr => pr.PriceInUAH);
                 }
 
-                var checkCashBackPercent = _propertyGetter.GetProperty<int>("ClientDbModel", "CashBackPercent",
-                    "ClientDbModelId", client.ClientId);
-                var checkDiscountPercent = _propertyGetter.GetProperty<int>("ClientDbModel", "DiscountPercent",
-                    "ClientDbModelId", client.ClientId);
+                var checkCashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent),
+                    EntityNames.ClientId, client.ClientId);
+                var checkDiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent),
+                    EntityNames.ClientId, client.ClientId);
 
                 if (daysInApplication > 60 && checkCashBackPercent == 0)
                 {
