@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainStore.Actions.ApplicationServices;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using ChainStore.ViewModels;
@@ -19,19 +20,19 @@ namespace ChainStore.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IPurchaseOperation _purchaseOperation;
+        private readonly IPurchaseService _purchaseService;
         private readonly IClientRepository _clientRepository;
         private readonly PropertyGetter _propertyGetter;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
         public PurchaseController(IProductRepository productRepository,
-            UserManager<ApplicationUser> userManager, IPurchaseOperation purchaseOperation,
+            UserManager<ApplicationUser> userManager, IPurchaseService purchaseService,
             IClientRepository clientRepository)
         {
             _productRepository = productRepository;
             _userManager = userManager;
-            _purchaseOperation = purchaseOperation;
+            _purchaseService = purchaseService;
             _clientRepository = clientRepository;
             _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
         }
@@ -125,7 +126,7 @@ namespace ChainStore.Controllers
                 return View(productClientViewModelToReturnIfNotSucceed);
             }
             
-            _purchaseOperation.Perform(productClientViewModel.ClientId, productClientViewModel.ProductId,
+            _purchaseService.HandleOperation(productClientViewModel.ClientId, productClientViewModel.ProductId,
                 productClientViewModel.UseCashBack, productClientViewModel.UsePoints);
             return RedirectToAction(IndexAction, DefaultController);
         }

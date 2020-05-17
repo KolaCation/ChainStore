@@ -1,9 +1,8 @@
 ﻿using System;
 using ChainStore.Shared.Util;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
-namespace ChainStore.DataAccessLayerImpl
+namespace ChainStore.DataAccessLayerImpl.Helpers
 {
     public sealed class PropertyGetter
     {

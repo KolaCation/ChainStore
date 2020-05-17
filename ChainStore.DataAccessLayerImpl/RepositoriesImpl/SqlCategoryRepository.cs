@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl.DbModels;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
@@ -70,7 +72,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             {
                 var hasSameName = _context.Categories.Any(cat => cat.CategoryName.Equals(item.CategoryName) && cat.StoreDbModelId.Equals(item.StoreId));
                 if (hasSameName) return;
-                Detach(item.CategoryId);
+                DetachService.Detach<CategoryDbModel>(_context, item.CategoryId);
                 var enState = _context.Categories.Update(_categoryMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -94,13 +96,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Categories.Any(item => item.CategoryDbModelId.Equals(id));
-        }
-
-        private void Detach(Guid id)
-        {
-            CustomValidator.ValidateId(id);
-            var entity = _context.Categories.Find(id);
-            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

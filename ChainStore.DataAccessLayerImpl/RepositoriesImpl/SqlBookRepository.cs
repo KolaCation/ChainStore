@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.DbModels;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
@@ -50,7 +51,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 {
                     var product = _productMapper.DbToDomain(productDbModel);
                     product.ChangeStatus(ProductStatus.OnSale);
-                    Detach<ProductDbModel>(product.ProductId);
+                    DetachService.Detach<ProductDbModel>(_context, product.ProductId);
                     _context.Products.Update(_productMapper.DomainToDb(product));
                 }
                 else
@@ -63,7 +64,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
 
             foreach (var book in booksToRemove)
             {
-                Detach<BookDbModel>(book.BookId);
+                DetachService.Detach<BookDbModel>(_context, book.BookId);
                 _context.Books.Remove(_bookMapper.DomainToDb(book));
             }
 
@@ -99,13 +100,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Books.Any(item => item.BookDbModelId.Equals(id));
-        }
-
-        private void Detach<TEntity>(Guid id) where TEntity : class
-        {
-            CustomValidator.ValidateId(id);
-            var entity = _context.Set<TEntity>().Find(id);
-            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

@@ -3,13 +3,14 @@ using System.Linq;
 using ChainStore.Actions.ApplicationServices;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using Microsoft.Extensions.Configuration;
 
 namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 {
-    public class PurchaseOperation : IPurchaseOperation
+    public class PurchaseService : IPurchaseService
     {
         private readonly IClientRepository _clientRepository;
         private readonly IProductRepository _productRepository;
@@ -19,7 +20,7 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
         private readonly ICategoryRepository _categoryRepository;
         private readonly PropertyGetter _propertyGetter;
 
-        public PurchaseOperation(IClientRepository clientRepository, IProductRepository productRepository,
+        public PurchaseService(IClientRepository clientRepository, IProductRepository productRepository,
             IPurchaseRepository purchaseRepository, IStoreRepository storeRepository, IBookRepository bookRepository, ICategoryRepository categoryRepository)
         {
             _clientRepository = clientRepository;
@@ -31,7 +32,7 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
             _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
         }
 
-        public void Perform(Guid clientId, Guid productId, bool useCashBack, bool usePoints)
+        public void HandleOperation(Guid clientId, Guid productId, bool useCashBack, bool usePoints)
         {
             CustomValidator.ValidateId(clientId);
             CustomValidator.ValidateId(productId);

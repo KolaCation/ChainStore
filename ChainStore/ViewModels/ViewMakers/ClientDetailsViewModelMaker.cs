@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using ChainStore.ViewModels.ViewMakers.DetailedInfo;

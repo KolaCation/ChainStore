@@ -17,6 +17,7 @@ namespace ChainStore.Controllers
         private readonly IBookRepository _bookRepository;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
+        private const string ProductNotFoundPage = "ProductNotFound";
 
         public ProductsController(ICategoryRepository categoryRepository, IProductRepository productRepository,
             IBookRepository bookRepository)
@@ -45,7 +46,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var product = _productRepository.GetOne(id.Value);
-            if (product == null) return RedirectToAction(IndexAction, DefaultController);
+            if (product == null) return View(ProductNotFoundPage, id.Value);
 
             var categoryProductsViewModel = new ReplenishProductsViewModel
             {
@@ -76,7 +77,7 @@ namespace ChainStore.Controllers
                 }
             }
 
-            return RedirectToAction(IndexAction, DefaultController);
+            return View(ProductNotFoundPage, replenishProductsViewModel.ProductId);
         }
 
         [HttpGet]
@@ -86,7 +87,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var category = _categoryRepository.GetOne(id.Value);
-            if (category == null) return RedirectToAction(IndexAction, DefaultController);
+            if (category == null) return RedirectToAction(IndexAction, DefaultController);//CategoryNotFoundPage
 
             var createProductViewModel = new CreateProductViewModel
                 {Category = category, QuantityOfProductsToAdd = 1};
@@ -120,7 +121,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var productToDel = _productRepository.GetOne(id.Value);
-            if (productToDel == null) return RedirectToAction(IndexAction, DefaultController);
+            if (productToDel == null) return View(ProductNotFoundPage, id.Value);
 
             var deleteProductViewModel = new DeleteProductViewModel {Product = productToDel};
             return View(deleteProductViewModel);
@@ -131,7 +132,7 @@ namespace ChainStore.Controllers
         public IActionResult DeleteProduct(DeleteProductViewModel deleteProductViewModel)
         {
             var productToDel = _productRepository.GetOne(deleteProductViewModel.ProductId);
-            if (productToDel == null) return RedirectToAction(IndexAction, DefaultController);
+            if (productToDel == null) return View(ProductNotFoundPage, deleteProductViewModel.ProductId);
 
             var productsToDel = _productRepository.GetAll().Where(pr =>
                     _categoryRepository.Exists(pr.CategoryId) &&

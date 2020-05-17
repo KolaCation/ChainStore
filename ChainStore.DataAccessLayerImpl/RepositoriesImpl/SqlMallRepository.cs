@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl.DbModels;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
@@ -85,7 +87,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             {
                 var mallWithTheSameNameExists = _context.Malls.Any(m => m.Name.Equals(item.Name) && m.Location.Equals(item.Location));
                 if (mallWithTheSameNameExists) return;
-                Detach(item.MallId);
+                DetachService.Detach<MallDbModel>(_context, item.MallId);
                 var enState = _context.Malls.Update(_mallMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -109,13 +111,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Malls.Any(item => item.MallDbModelId.Equals(id));
-        }
-
-        private void Detach(Guid id)
-        {
-            CustomValidator.ValidateId(id);
-            var entity = _context.Malls.Find(id);
-            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

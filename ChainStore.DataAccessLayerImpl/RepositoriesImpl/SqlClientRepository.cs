@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.DbModels;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
@@ -61,7 +62,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             var exists = Exists(item.ClientId);
             if (exists)
             {
-                Detach(item.ClientId);
+                DetachService.Detach<ClientDbModel>(_context, item.ClientId);
                 var enState = _context.Clients.Update(_clientMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -87,11 +88,28 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             return _context.Clients.Any(item => item.ClientDbModelId.Equals(id));
         }
 
-        private void Detach(Guid id)
+        public void AddReliableClient(ReliableClient client)
         {
-            CustomValidator.ValidateId(id);
-            var entity = _context.Clients.Find(id);
-            _context.Entry(entity).State = EntityState.Detached;
+            CustomValidator.ValidateObject(client);
+            var exists = Exists(client.ClientId);
+            if (!exists)
+            {
+                var enState = _context.ReliableClients.Add(new ReliableClientDbModel(client.ClientId, client.Name, client.Balance, client.CashBack, client.CashBackPercent));
+                enState.State = EntityState.Added;
+                _context.SaveChanges();
+            }
+        }
+
+        public void AddVipClient(VipClient client)
+        {
+            CustomValidator.ValidateObject(client);
+            var exists = Exists(client.ClientId);
+            if (!exists)
+            {
+                var enState = _context.VipClients.Add(new VipClientDbModel(client.ClientId, client.Name, client.Balance, client.CashBack, client.CashBackPercent, client.Points));
+                enState.State = EntityState.Added;
+                _context.SaveChanges();
+            }
         }
     }
 }

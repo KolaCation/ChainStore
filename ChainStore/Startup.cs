@@ -1,9 +1,9 @@
 using System;
 using ChainStore.Actions.ApplicationServices;
 using ChainStore.ActionsImpl.ApplicationServicesImpl;
-using ChainStore.DataAccessLayer.Helpers;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.RepositoriesImpl;
 using ChainStore.ViewModels.ViewMakers;
 using Microsoft.AspNetCore.Builder;
@@ -37,10 +37,9 @@ namespace ChainStore
             services.AddScoped<IProductRepository, SqlProductRepository>();
             services.AddScoped<IMallRepository, SqlMallRepository>();
             services.AddScoped<ClientDetailsViewModelMaker>();
-            services.AddScoped<IPurchaseOperation, PurchaseOperation>();
-            services.AddScoped<IReservationOperation, BookOperation>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IReservationService, BookService>();
             services.AddTransient<ProductsGroupsViewMaker>();
-            services.AddScoped<IClientUpdater, ClientUpdater>();
             services.AddScoped<IClientService, ClientService>();
         }
 
