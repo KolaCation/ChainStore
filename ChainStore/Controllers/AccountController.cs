@@ -102,7 +102,7 @@ namespace ChainStore.Controllers
                     if (user != null)
                     {
                         var checkForReliability = DateTimeOffset.Now - user.CreationTime;
-                        _clientService.CheckForStatusUpdate(user.ClientDbModelId, checkForReliability.Days);
+                        _clientService.TryUpdateClientStatus(user.ClientDbModelId, checkForReliability.Days);
                     }
 
                     return RedirectToAction(IndexAction, DefaultController);

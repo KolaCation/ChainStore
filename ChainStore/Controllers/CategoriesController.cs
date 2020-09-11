@@ -17,7 +17,6 @@ namespace ChainStore.Controllers
         private readonly IProductRepository _productRepository;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
-        private const string StoreNotFoundPage = "StoreNotFound";
         private const string StoreDetailsPage = "StoreDetails";
 
         public CategoriesController(IStoreRepository storeRepository, ICategoryRepository categoryRepository,
@@ -36,7 +35,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var store = _storeRepository.GetOne(id.Value);
-            if (store == null) return RedirectToAction(StoreDetailsPage, DefaultController, new{id=id.Value});
+            if (store == null) return View("StoreNotFound", id.Value);
 
             var createCategoryViewModel = new CreateCategoryViewModel
             {
@@ -50,7 +49,7 @@ namespace ChainStore.Controllers
         public IActionResult AddCategoryToStore(CreateCategoryViewModel createCategoryViewModel)
         {
             var store = _storeRepository.GetOne(createCategoryViewModel.StoreId);
-            if (store == null) return RedirectToAction(StoreDetailsPage, DefaultController, new { id = createCategoryViewModel.StoreId });
+            if (store == null) return View("StoreNotFound", createCategoryViewModel.StoreId);
 
             foreach (var category in store.Categories)
             {
@@ -74,7 +73,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var categoryToDel = _categoryRepository.GetOne(id.Value);
-            if (categoryToDel == null) return RedirectToAction(IndexAction, DefaultController);//CategoryNotFound
+            if (categoryToDel == null) return View("CategoryNotFound", id.Value);//CategoryNotFound
 
             var delCategoryViewModel = new DeleteCategoryViewModel {Category = categoryToDel};
             return View(delCategoryViewModel);
@@ -85,7 +84,7 @@ namespace ChainStore.Controllers
         public IActionResult DeleteCategory(DeleteCategoryViewModel deleteCategoryViewModel)
         {
             var categoryToDel = _categoryRepository.GetOne(deleteCategoryViewModel.CategoryId);
-            if (categoryToDel == null) return RedirectToAction(IndexAction, DefaultController);//CategoryNotFound
+            if (categoryToDel == null) return View("CategoryNotFound", deleteCategoryViewModel.CategoryId);//CategoryNotFound
 
             var productsInCatToDel = _productRepository.GetAll().Where(pr =>
                     pr.CategoryId.Equals(categoryToDel.CategoryId) &&

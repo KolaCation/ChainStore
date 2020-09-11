@@ -12,6 +12,7 @@ using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace ChainStore.Controllers
 {
@@ -22,19 +23,21 @@ namespace ChainStore.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPurchaseService _purchaseService;
         private readonly IClientRepository _clientRepository;
+        private readonly IConfiguration _config;
         private readonly PropertyGetter _propertyGetter;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
         public PurchaseController(IProductRepository productRepository,
             UserManager<ApplicationUser> userManager, IPurchaseService purchaseService,
-            IClientRepository clientRepository)
+            IClientRepository clientRepository, IConfiguration config)
         {
             _productRepository = productRepository;
             _userManager = userManager;
             _purchaseService = purchaseService;
             _clientRepository = clientRepository;
-            _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
+            _config = config;
+            _propertyGetter = new PropertyGetter(_config.GetConnectionString("ChainStoreDBVer2"));
         }
 
         [HttpGet]
@@ -43,10 +46,10 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var productToBuy = _productRepository.GetOne(id.Value);
-            if (productToBuy == null) return RedirectToAction(IndexAction, DefaultController);
+            if (productToBuy == null) return View("ProductNotFound", id.Value);
 
             var user = await _userManager.GetUserAsync(User);
-            if (user == null) return RedirectToAction(IndexAction, DefaultController);
+            if (user == null) return View("ClientNotFound");
 
             var client = _clientRepository.GetOne(user.ClientDbModelId);
 
@@ -75,8 +78,9 @@ namespace ChainStore.Controllers
         public IActionResult PurchaseOperation(ProductClientViewModel productClientViewModel)
         {
             var client = _clientRepository.GetOne(productClientViewModel.ClientId);
+            if (client == null) return View("ClientNotFound", productClientViewModel.ClientId);
             var product = _productRepository.GetOne(productClientViewModel.ProductId);
-            if (client == null || product == null) return RedirectToAction(IndexAction, DefaultController);
+            if (product == null) return View("ProductNotFound", productClientViewModel.ProductId);
             string message;
             var productDiscount =
                 _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.ClientId);

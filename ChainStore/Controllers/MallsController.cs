@@ -18,8 +18,6 @@ namespace ChainStore.Controllers
         private readonly IBookRepository _bookRepository;
         private const string IndexAction = "Index";
         private const string DefaultController = "Malls";
-        private const string MallNotFoundPage = "MallNotFound";
-        private const string MallDetailsPage = "MallDetails";
 
         public MallsController(IMallRepository mallRepository, IStoreRepository storeRepository,
             IBookRepository bookRepository)
@@ -35,7 +33,7 @@ namespace ChainStore.Controllers
             var malls = _mallRepository.GetAll();
             if (!string.IsNullOrEmpty(searchString))
             {
-                malls = malls.Where(m => m.Name.Contains(searchString)).ToList().AsReadOnly();
+                malls = malls.Where(m => m.Name.ToLower().Contains(searchString.ToLower())).ToList().AsReadOnly();
             }
 
             return View(malls);
@@ -47,7 +45,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var mall = _mallRepository.GetOne(id.Value);
-            if (mall == null) return View(MallNotFoundPage, id.Value);
+            if (mall == null) return View("MallNotFound", id.Value);
 
             return View(mall);
         }
@@ -67,7 +65,7 @@ namespace ChainStore.Controllers
             {
                 var mall = new Mall(Guid.NewGuid(), mallViewModel.Name, mallViewModel.Location);
                 _mallRepository.AddOne(mall);
-                return RedirectToAction(MallDetailsPage, new {id=mall.MallId});
+                return RedirectToAction("MallDetails", new {id=mall.MallId});
             }
 
             return View(mallViewModel);
@@ -86,7 +84,7 @@ namespace ChainStore.Controllers
                 return View(editMallViewModel);
             }
 
-            return View(MallNotFoundPage, id.Value);
+            return View("MallNotFound", id.Value);
         }
 
         [HttpPost]
@@ -96,7 +94,7 @@ namespace ChainStore.Controllers
             if (ModelState.IsValid)
             {
                 var mallToUpdate = _mallRepository.GetOne(editMallViewModel.MallId);
-                if (mallToUpdate == null) return View(MallNotFoundPage, editMallViewModel.MallId);
+                if (mallToUpdate == null) return View("MallNotFound", editMallViewModel.MallId);
                 var updatedMall = new Mall(editMallViewModel.MallId, editMallViewModel.Name, editMallViewModel.Location);
                 if (mallToUpdate.Stores.Count != 0)
                 {
@@ -108,7 +106,7 @@ namespace ChainStore.Controllers
                 }
 
                 _mallRepository.UpdateOne(updatedMall);
-                return RedirectToAction(MallDetailsPage, new {id=updatedMall.MallId});
+                return RedirectToAction("MallDetails", new {id=updatedMall.MallId});
             }
 
             return View(editMallViewModel);
@@ -121,7 +119,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var mallToDel = _mallRepository.GetOne(id.Value);
-            if (mallToDel == null) return View(MallNotFoundPage, id.Value);
+            if (mallToDel == null) return View("MallNotFound", id.Value);
 
             var delMallViewModel = new DeleteMallViewModel
                 {MallName = mallToDel.Name, MallLocation = mallToDel.Location, MallId = mallToDel.MallId};
@@ -134,7 +132,7 @@ namespace ChainStore.Controllers
         public IActionResult DeleteMall(DeleteMallViewModel deleteMallViewModel)
         {
             var mallToDel = _mallRepository.GetOne(deleteMallViewModel.MallId);
-            if (mallToDel == null) return View(MallNotFoundPage, deleteMallViewModel.MallId);
+            if (mallToDel == null) return View("MallNotFound", deleteMallViewModel.MallId);
 
             if (mallToDel.Stores.Count != 0)
             {

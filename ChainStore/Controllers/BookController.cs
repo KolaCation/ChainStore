@@ -40,10 +40,10 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var productToBook = _productRepository.GetOne(id.Value);
-            if (productToBook == null) return RedirectToAction(IndexAction, DefaultController);//ProductNotFound
+            if (productToBook == null) return View("ProductNotFound", id.Value);//ProductNotFound
 
             var client = await _userManager.GetUserAsync(User);
-            if (client == null) return RedirectToAction(IndexAction, DefaultController);//ClientNotFound
+            if (client == null) return View("ClientNotFound");//ClientNotFound
 
             var productClientViewModel = new ProductClientViewModel
                 {ClientId = client.ClientDbModelId, Product = productToBook};
@@ -55,13 +55,13 @@ namespace ChainStore.Controllers
         public IActionResult BookOperation(ProductClientViewModel productClientViewModel)
         {
             var client = _clientRepository.GetOne(productClientViewModel.ClientId);
-            if (client == null) return RedirectToAction(IndexAction, DefaultController);//ClientNotFound
+            if (client == null) return View("ClientNotFound", productClientViewModel.ClientId);//ClientNotFound
 
             var product = _productRepository.GetOne(productClientViewModel.ProductId);
-            if (product == null) return RedirectToAction(IndexAction, DefaultController);//ProductNotFound
+            if (product == null) return RedirectToAction("ProductNotFound", productClientViewModel.ProductId);//ProductNotFound
 
             var checkForLimit = _bookRepository.GetClientBooks(productClientViewModel.ClientId);
-            if (checkForLimit == null) return RedirectToAction(IndexAction, DefaultController);
+            if (checkForLimit == null) return View("ClientNotFound", productClientViewModel.ClientId);
 
             if (productClientViewModel.BookDaysCount > 7 || productClientViewModel.BookDaysCount < 1)
             {

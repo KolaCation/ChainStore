@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.DbModels;
@@ -16,11 +15,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
     public class SqlClientRepository : IClientRepository
     {
         private readonly MyDbContext _context;
+        private readonly IConfiguration _config;
         private readonly ClientMapper _clientMapper;
-        public SqlClientRepository(MyDbContext context)
+        public SqlClientRepository(MyDbContext context, IConfiguration config)
         {
             _context = context;
-            _clientMapper = new ClientMapper(new PropertyGetter(ConnectionStringProvider.ConnectionString));
+            _config = config;
+            _clientMapper = new ClientMapper(new PropertyGetter(_config.GetConnectionString("ChainStoreDBVer2")));
         }
 
         public void AddOne(Client item)

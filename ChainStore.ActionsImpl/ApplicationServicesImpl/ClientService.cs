@@ -6,6 +6,7 @@ using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
+using Microsoft.Extensions.Configuration;
 
 namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 {
@@ -14,18 +15,20 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
         private readonly IClientRepository _clientRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IConfiguration _config;
         private readonly PropertyGetter _propertyGetter;
 
         public ClientService(IClientRepository clientRepository, IPurchaseRepository purchaseRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository, IConfiguration config)
         {
             _clientRepository = clientRepository;
             _purchaseRepository = purchaseRepository;
             _productRepository = productRepository;
-            _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
+            _config = config;
+            _propertyGetter = new PropertyGetter(_config.GetConnectionString("ChainStoreDBVer2"));
         }
 
-        public void CheckForStatusUpdate(Guid clientId, int daysInApplication)
+        public bool TryUpdateClientStatus(Guid clientId, int daysInApplication)
         {
             CustomValidator.ValidateId(clientId);
             if (daysInApplication < 0) throw new ArgumentException();
@@ -38,8 +41,8 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
                 {
                     var purchasedProducts =
                         (from purchase in purchaseList
-                            where _productRepository.Exists(purchase.ProductId)
-                            select _productRepository.GetOne(purchase.ProductId))
+                         where _productRepository.Exists(purchase.ProductId)
+                         select _productRepository.GetOne(purchase.ProductId))
                         .ToList();
                     sum = purchasedProducts.Sum(pr => pr.PriceInUAH);
                 }
@@ -60,7 +63,7 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 
                 if (daysInApplication > 60 && sum >= 200_000 && checkDiscountPercent == 0 && checkCashBackPercent != 0)
                 {
-                    var currentReliableClient = (ReliableClient) client;
+                    var currentReliableClient = (ReliableClient)client;
                     _clientRepository.DeleteOne(currentReliableClient.ClientId);
                     var vip = new VipClient
                     (
@@ -79,6 +82,11 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
                     var vip = new VipClient(client.ClientId, client.Name, client.Balance, 0, 10, 0);
                     _clientRepository.AddVipClient(vip);
                 }
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

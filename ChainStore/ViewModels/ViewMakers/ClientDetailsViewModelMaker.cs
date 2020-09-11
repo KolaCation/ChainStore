@@ -17,18 +17,18 @@ namespace ChainStore.ViewModels.ViewMakers
         private readonly IProductRepository _productRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IBookRepository _bookRepository;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
         private readonly PropertyGetter _propertyGetter;
 
         public ClientDetailsViewModelMaker(IClientRepository clientRepository, IProductRepository productRepository, IPurchaseRepository purchaseRepository,
-            IBookRepository bookRepository, IConfiguration configuration)
+            IBookRepository bookRepository, IConfiguration config)
         {
             _clientRepository = clientRepository;
             _productRepository = productRepository;
             _purchaseRepository = purchaseRepository;
             _bookRepository = bookRepository;
-            _configuration = configuration;
-            _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
+            _config = config;
+            _propertyGetter = new PropertyGetter(_config.GetConnectionString("ChainStoreDBVer2"));
         }
 
         public ClientDetailsViewModel MakeClientDetailsViewModel(Guid clientId)
@@ -48,10 +48,10 @@ namespace ChainStore.ViewModels.ViewMakers
                 .ToList();
 
             var client = new List<Client> {body};
-            var clCashBack =  _propertyGetter.GetProperty<double>( EntityNames.Client, "CashBack", EntityNames.ClientId, body.ClientId);
-            var clCashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, "CashBackPercent", EntityNames.ClientId, body.ClientId);
-            var clDiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client,"DiscountPercent", EntityNames.ClientId, body.ClientId);
-            var clPoints = _propertyGetter.GetProperty<double>(EntityNames.Client, "Points", EntityNames.ClientId, body.ClientId);
+            var clCashBack =  _propertyGetter.GetProperty<double>( EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, body.ClientId);
+            var clCashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId, body.ClientId);
+            var clDiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, body.ClientId);
+            var clPoints = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, body.ClientId);
 
             var clientDetailedInfo = (from cl in client
                 join purchase in purchases on cl.ClientId equals purchase.ClientId into purchasesList
