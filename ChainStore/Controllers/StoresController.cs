@@ -42,7 +42,7 @@ namespace ChainStore.Controllers
             var stores = _storeRepository.GetAll();
             if (!string.IsNullOrEmpty(searchString))
             {
-                stores = stores.Where(st => st.Name.Contains(searchString)).ToList().AsReadOnly();
+                stores = stores.Where(st => st.Name.ToLower().Contains(searchString.ToLower())).ToList().AsReadOnly();
             }
             return View(stores);
         }
@@ -55,7 +55,7 @@ namespace ChainStore.Controllers
             var store = _storeRepository.GetOne(id.Value);
 
 
-            if (store == null) return RedirectToAction(IndexAction, DefaultController);
+            if (store == null) return View("StoreNotFound", id.Value);
 
             return View(store);
         }
@@ -76,7 +76,7 @@ namespace ChainStore.Controllers
             {
                 var store = new Store(Guid.NewGuid(), storeViewModel.Name, storeViewModel.Location, 0, null);
                 _storeRepository.AddOne(store);
-                return RedirectToAction(IndexAction, DefaultController);
+                return RedirectToAction("StoreDetails", new {id=store.StoreId});
             }
 
             return View(storeViewModel);
@@ -102,7 +102,7 @@ namespace ChainStore.Controllers
             foreach (var storeId in storesToAdd)
             {
                 var store = _storeRepository.GetOne(storeId);
-                if (store == null) return RedirectToAction(IndexAction, DefaultController);
+                if (store == null) return View("StoreNotFound", storeId);
                 if (store.MallId == null)
                 {
                     var updatedStore = new Store(store.StoreId, store.Name, mall.Location, store.Profit, mall.MallId);
@@ -126,7 +126,7 @@ namespace ChainStore.Controllers
                 return View(editStoreViewModel);
             }
 
-            return RedirectToAction(IndexAction, DefaultController);
+            return View("StoreNotFound", id.Value);
         }
 
         [HttpPost]
@@ -136,14 +136,14 @@ namespace ChainStore.Controllers
             if (ModelState.IsValid)
             {
                 var storeToUpdate = _storeRepository.GetOne(editStoreViewModel.StoreId);
-                if (storeToUpdate == null) return RedirectToAction(IndexAction, DefaultController);
+                if (storeToUpdate == null) return View("StoreNotFound", editStoreViewModel.StoreId);
                 var updatedStore = new Store(editStoreViewModel.StoreId, editStoreViewModel.Name, editStoreViewModel.Location, storeToUpdate.Profit, storeToUpdate.MallId);
                 if (storeToUpdate.MallId != null && _mallRepository.Exists(storeToUpdate.MallId.Value) && !_mallRepository.GetOne(storeToUpdate.MallId.Value).Location.Equals(editStoreViewModel.Location))
                 {
                    updatedStore = new Store(editStoreViewModel.StoreId, editStoreViewModel.Name, editStoreViewModel.Location, storeToUpdate.Profit, null);
                 }
                 _storeRepository.UpdateOne(updatedStore);
-                return RedirectToAction(IndexAction, DefaultController);
+                return RedirectToAction("StoreDetails", new {id=updatedStore.StoreId});
             }
 
             return View(editStoreViewModel);
@@ -156,7 +156,7 @@ namespace ChainStore.Controllers
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
 
             var storeToDel = _storeRepository.GetOne(id.Value);
-            if (storeToDel == null) return RedirectToAction(IndexAction, DefaultController);
+            if (storeToDel == null) return View("StoreNotFound", id.Value);
 
             var delStoreViewModel = new DeleteStoreViewModel {Store = storeToDel};
             return View(delStoreViewModel);
@@ -167,7 +167,7 @@ namespace ChainStore.Controllers
         public IActionResult DeleteStore(DeleteStoreViewModel deleteStoreViewModel)
         {
             var storeToDel = _storeRepository.GetOne(deleteStoreViewModel.StoreId);
-            if (storeToDel == null) return RedirectToAction(IndexAction, DefaultController);
+            if (storeToDel == null) return View("StoreNotFound", deleteStoreViewModel.StoreId);
 
             if (storeToDel.Categories.Count != 0)
             {

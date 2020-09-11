@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ChainStore.DataAccessLayerImpl.DbModels;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -20,7 +21,7 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public ClientDbModel DomainToDb(Client item)
         {
             CustomValidator.ValidateObject(item);
-            var entityName = typeof(Client).Name;
+            var entityName = nameof(Client);
             var idColumnName = nameof(ClientDbModel.ClientDbModelId);
 
             var cashBackPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClient.CashBackPercent), idColumnName, item.ClientId);
@@ -44,7 +45,7 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public Client DbToDomain(ClientDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var entityName = typeof(Client).Name;
+            var entityName = nameof(Client);
             var idColumnName = nameof(ClientDbModel.ClientDbModelId);
 
             var cashBackPercent = _propertyGetter.GetProperty<int>(entityName, nameof(VipClient.CashBackPercent), idColumnName, item.ClientDbModelId);

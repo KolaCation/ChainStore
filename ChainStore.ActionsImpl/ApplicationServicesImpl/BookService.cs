@@ -6,14 +6,14 @@ using ChainStore.Shared.Util;
 
 namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 {
-    public class BookOperation : IReservationOperation
+    public class BookService : IReservationService
     {
         private readonly IProductRepository _productRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IClientRepository _clientRepository;
 
 
-        public BookOperation(IProductRepository productRepository,
+        public BookService(IProductRepository productRepository,
             IBookRepository bookRepository, IClientRepository clientRepository)
         {
             _productRepository = productRepository;
@@ -21,7 +21,7 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
             _clientRepository = clientRepository;
         }
 
-        public void Perform(Guid clientId, Guid productId, int reserveDaysCount)
+        public void HandleOperation(Guid clientId, Guid productId, int reserveDaysCount)
         {
             CustomValidator.ValidateId(clientId);
             CustomValidator.ValidateId(productId);

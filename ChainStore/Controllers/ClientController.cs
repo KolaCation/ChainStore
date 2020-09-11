@@ -20,6 +20,8 @@ namespace ChainStore.Controllers
         private readonly ClientDetailsViewModelMaker _clientDetailsViewModelMaker;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
+        private const string ClientNotFoundPage = "ClientNotFound";
+        private const string ClientDetailsPage = "ClientDetails";
 
         public ClientController(IClientRepository clientRepository,
             IBookRepository bookRepository,
@@ -41,7 +43,7 @@ namespace ChainStore.Controllers
                 return View(client);
             }
 
-            return View("ClientNotFound");
+            return View(ClientNotFoundPage, id.Value);
         }
 
         [HttpPost]
@@ -52,9 +54,9 @@ namespace ChainStore.Controllers
             {
                 client.ReplenishBalance(clientDetailsViewModel.ClientBalance);
                 _clientRepository.UpdateOne(client);
-                return RedirectToAction("ClientDetails", new {id = client.ClientId});
+                return RedirectToAction(ClientDetailsPage, new {id = client.ClientId});
             }
-            return View("ClientNotFound");
+            return View(ClientNotFoundPage, clientDetailsViewModel.ClientId);
         }
 
         [HttpPost]
@@ -65,9 +67,9 @@ namespace ChainStore.Controllers
             {
                 client.UpdateName(clientDetailsViewModel.ClientName);
                 _clientRepository.UpdateOne(client);
-                return RedirectToAction("ClientDetails", new { id = client.ClientId });
+                return RedirectToAction(ClientDetailsPage, new { id = client.ClientId });
             }
-            return View("ClientNotFound");
+            return View(ClientNotFoundPage, clientDetailsViewModel.ClientId);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainStore.Actions.ApplicationServices;
-using ChainStore.DataAccessLayer.Helpers;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
 using ChainStore.Domain.DomainCore;
@@ -103,7 +102,7 @@ namespace ChainStore.Controllers
                     if (user != null)
                     {
                         var checkForReliability = DateTimeOffset.Now - user.CreationTime;
-                        _clientService.CheckForStatusUpdate(user.ClientDbModelId, checkForReliability.Days);
+                        _clientService.TryUpdateClientStatus(user.ClientDbModelId, checkForReliability.Days);
                     }
 
                     return RedirectToAction(IndexAction, DefaultController);

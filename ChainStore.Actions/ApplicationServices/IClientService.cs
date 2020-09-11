@@ -6,6 +6,6 @@ namespace ChainStore.Actions.ApplicationServices
 {
     public interface IClientService
     {
-        void CheckForStatusUpdate(Guid clientId, int daysInApplication);
+        bool TryUpdateClientStatus(Guid clientId, int daysInApplication);
     }
 }

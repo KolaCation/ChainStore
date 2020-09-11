@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ChainStore.DataAccessLayer.Repositories;
+using ChainStore.DataAccessLayerImpl.DbModels;
+using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
@@ -86,7 +88,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                     !st.StoreDbModelId.Equals(item.StoreId) &&
                     st.MallDbModelId == null);
                 if (storeWithTheSameLocationAndNameExists) return;
-                Detach(item.StoreId);
+                DetachService.Detach<StoreDbModel>(_context, item.StoreId);
                 var enState = _context.Stores.Update(_storeMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -110,13 +112,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Stores.Any(item => item.StoreDbModelId.Equals(id));
-        }
-
-        private void Detach(Guid id)
-        {
-            CustomValidator.ValidateId(id);
-            var entity = _context.Stores.Find(id);
-            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }
