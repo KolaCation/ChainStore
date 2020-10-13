@@ -5,7 +5,7 @@
 <div asp-validation-summary="All" class="text-danger mt-2"></div>
 <div class="mt-3">
     <div class="card text-center">
-        <h5 class="card-header">@Model.Category.CategoryName</h5>
+        <h5 class="card-header">@Model.Category.Name</h5>
         <div class="card-footer text-center">
             <form method="post" asp-action="AddProduct" asp-controller="Products">
                 <input type="hidden" asp-for="CategoryId" value="@Model.Category.CategoryId" />

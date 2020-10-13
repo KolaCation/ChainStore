@@ -137,7 +137,7 @@ namespace ChainStore.Controllers
                     _categoryRepository.Exists(pr.CategoryId) &&
                     pr.Name.Equals(productToDel.Name) &&
                     pr.CategoryId.Equals(productToDel.CategoryId) &&
-                    _categoryRepository.GetOne(pr.CategoryId).CategoryName.Equals(_categoryRepository.GetOne(productToDel.CategoryId).CategoryName) &&
+                    _categoryRepository.GetOne(pr.CategoryId).Name.ToLower().Equals(_categoryRepository.GetOne(productToDel.CategoryId).Name.ToLower()) &&
                     pr.ProductStatus.Equals(productToDel.ProductStatus))
                 .ToList();
 

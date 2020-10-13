@@ -52,7 +52,7 @@
                         {
                             foreach (var category in store.Categories)
                             {
-                                var uniqueCategoryCollapseId = category.CategoryName.ToString() + categoryIndex.ToString();
+                                var uniqueCategoryCollapseId = category.Name + categoryIndex.ToString();
                                 <h4 class="card-title mt-2 mb-2" id="@category.CategoryId.ToString()">
                                     <button class="btn btn-info" style="width: 100%" type="button"
                                             data-toggle="collapse"
@@ -60,7 +60,7 @@
                                             aria-expanded="False"
                                             aria-controls="@uniqueCategoryCollapseId">
 
-                                        See @category.CategoryName's
+                                        See @category.Name's
                                     </button>
                                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                                     {

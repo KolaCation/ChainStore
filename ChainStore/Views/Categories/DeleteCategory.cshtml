@@ -4,7 +4,7 @@
 }
 <form asp-controller="Categories" asp-action="DeleteCategory" method="post">
     <input type="hidden" asp-for="CategoryId" value="@Model.Category.CategoryId" />
-    <h4 class="text-danger card-text mt-3">Delete '@Model.Category.CategoryName'? Warning! All products in this category will be deleted!</h4>
+    <h4 class="text-danger card-text mt-3">Delete '@Model.Category.Name'? Warning! All products in this category will be deleted!</h4>
     <a asp-controller="Stores" asp-action="Index" class="btn btn-primary m-1">Back</a>
     <button type="submit" class="btn btn-danger m-1">Delete</button>
 </form>

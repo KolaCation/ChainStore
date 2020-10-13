@@ -21,7 +21,8 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
         private readonly PropertyGetter _propertyGetter;
 
         public PurchaseService(IClientRepository clientRepository, IProductRepository productRepository,
-            IPurchaseRepository purchaseRepository, IStoreRepository storeRepository, IBookRepository bookRepository, ICategoryRepository categoryRepository)
+            IPurchaseRepository purchaseRepository, IStoreRepository storeRepository,
+            IBookRepository bookRepository, ICategoryRepository categoryRepository, IConfiguration configuration)
         {
             _clientRepository = clientRepository;
             _productRepository = productRepository;
@@ -29,7 +30,7 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
             _storeRepository = storeRepository;
             _bookRepository = bookRepository;
             _categoryRepository = categoryRepository;
-            _propertyGetter = new PropertyGetter(ConnectionStringProvider.ConnectionString);
+            _propertyGetter = new PropertyGetter(configuration.GetConnectionString("ChainStoreDBVer2"));
         }
 
         public void HandleOperation(Guid clientId, Guid productId, bool useCashBack, bool usePoints)
@@ -49,24 +50,24 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
                 if (usePoints)
                 {
                     priceToCompareWith = 0;
-                    res = client.Pay(product.PriceInUAH, false, true);
+                    res = client.Charge(product.PriceInUAH, false, true);
                 }
 
                 else if (useCashBack)
                 {
                     if (clientCashBack > priceToCompareWith) priceToCompareWith = 0;
                     if (clientCashBack < priceToCompareWith) priceToCompareWith -= clientCashBack;
-                    res = client.Pay(product.PriceInUAH, true, false);
+                    res = client.Charge(product.PriceInUAH, true, false);
                 }
                 else
                 {
-                    res = client.Pay(product.PriceInUAH, false, false);
+                    res = client.Charge(product.PriceInUAH, false, false);
                 }
 
                 if (!res) return;
                 var category = _categoryRepository.GetOne(product.CategoryId);
-                var store = _storeRepository.GetOne(category.StoreId.Value);
-                store.Earn(priceToCompareWith);
+                var store = _productRepository.GetStoreOfSpecificProduct(product.ProductId);
+                store.GetProfit(priceToCompareWith);
                 product.ChangeStatus(ProductStatus.Purchased);
                 var purchase = new Purchase(Guid.NewGuid(), clientId, productId);
                 _clientRepository.UpdateOne(client);

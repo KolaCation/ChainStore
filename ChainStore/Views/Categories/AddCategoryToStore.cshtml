@@ -1,4 +1,4 @@
-﻿@model CreateCategoryViewModel
+﻿@model AddCategoryToStoreViewModel
 @inject IMallRepository MallRepository
 @{
     ViewBag.Title = "Add Category";
@@ -19,7 +19,7 @@
     <form class="mt-2" method="post" asp-action="AddCategoryToStore" asp-controller="Categories">
         <input type="hidden" asp-for="StoreId" value="@Model.Store.StoreId"/>
         <label asp-for="CategoryName">Category Name: </label>
-        <select class="form-group" asp-for="CategoryName" asp-items="Html.GetEnumSelectList<CategoryNames>()"></select>
+        <select class="form-group" asp-for="CategoryName" asp-items="Html.GetEnumSelectList<ChainStore.Views.Categories.CategoryNames>()"></select>
         <button type="submit" value="sumbit" class="btn btn-primary ml-2">Add</button>
         <a asp-action="Index" asp-controller="Stores" class="btn-primary btn ml-2">Back</a>
     </form>

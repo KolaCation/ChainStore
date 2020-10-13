@@ -16,11 +16,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
     {
         private readonly MyDbContext _context;
         private readonly ProductMapper _productMapper;
+        private readonly StoreMapper _storeMapper;
 
         public SqlProductRepository(MyDbContext context)
         {
             _context = context;
             _productMapper = new ProductMapper();
+            _storeMapper = new StoreMapper(context);
         }
 
         public void AddOne(Product item)
@@ -86,6 +88,19 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Products.Any(item => item.ProductDbModelId.Equals(id));
+        }
+
+        public Store GetStoreOfSpecificProduct(Guid productId)
+        {
+            CustomValidator.ValidateId(productId);
+            var res = _context.StoreProductDbModels.FirstOrDefault(e => e.ProductId.Equals(productId));
+            if(res != null)
+            {
+                var storeDbModelId = res.Store1Id;
+                var storeDbModel = _context.Stores.Find(storeDbModelId);
+                return _storeMapper.DbToDomain(storeDbModel);
+            }
+            return null;
         }
     }
 }

@@ -9,10 +9,11 @@ namespace ChainStore.Domain.DomainCore
         public Guid StoreId { get; }
         public string Name { get; }
         public string Location { get; }
-        public Guid? MallId{ get; }
+        public Guid? MallId { get; }
 
         private readonly List<Category> _categories;
         public IReadOnlyCollection<Category> Categories => _categories.AsReadOnly();
+
         public double Profit { get; private set; }
 
         public Store(Guid storeId, string name, string location, double profit, Guid? mallId)
@@ -36,7 +37,7 @@ namespace ChainStore.Domain.DomainCore
             _categories = categories;
         }
 
-        public void Earn(double sum)
+        public void GetProfit(double sum)
         {
             CustomValidator.ValidateNumber(sum, 0, 100_000_000);
             Profit += sum;

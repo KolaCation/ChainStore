@@ -6,5 +6,6 @@ namespace ChainStore.DataAccessLayer.Repositories
 {
     public interface IProductRepository : IRepository<Product>
     {
+        Store GetStoreOfSpecificProduct(Guid productId);
     }
 }

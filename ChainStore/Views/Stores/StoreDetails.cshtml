@@ -29,7 +29,7 @@
     @foreach (var category in Model.Categories)
     {
         <h3>
-            @category.CategoryName
+            @category.Name
         </h3>
         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
         {

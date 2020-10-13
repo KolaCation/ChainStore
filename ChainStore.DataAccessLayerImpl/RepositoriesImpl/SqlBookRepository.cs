@@ -42,23 +42,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 if (!result) return;
                 var productDbModel = _context.Products.Find(book.ProductId);
                 CustomValidator.ValidateObject(productDbModel);
-                _context.Entry(productDbModel).Reference(p => p.CategoryDbModel).Load();
-                if (productDbModel.CategoryDbModel.StoreDbModelId != null)
-                {
-                    _context.Entry(productDbModel.CategoryDbModel).Reference(cat => cat.StoreDbModel).Load();
-                }
-                if (productDbModel.CategoryDbModel.StoreDbModel != null)
-                {
-                    var product = _productMapper.DbToDomain(productDbModel);
-                    product.ChangeStatus(ProductStatus.OnSale);
-                    DetachService.Detach<ProductDbModel>(_context, product.ProductId);
-                    _context.Products.Update(_productMapper.DomainToDb(product));
-                }
-                else
-                {
-                    _context.Products.Remove(productDbModel);
-                }
-
+                var product = _productMapper.DbToDomain(productDbModel);
+                product.ChangeStatus(ProductStatus.OnSale);
+                DetachService.Detach<ProductDbModel>(_context, product.ProductId);
+                _context.Products.Update(_productMapper.DomainToDb(product));
                 booksToRemove.Add(book);
             }
 

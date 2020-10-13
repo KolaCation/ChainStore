@@ -30,10 +30,11 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         {
             CustomValidator.ValidateObject(item);
             var storeDbModel = _context.Stores.Find(item.StoreDbModelId);
-            _context.Entry(storeDbModel).Collection(st => st.CategoryDbModels).Load();
+            _context.Entry(storeDbModel).Collection(st => st.StoreCategoryRelation).Load();
+            _context.Entry(storeDbModel).Collection(st => st.StoreProductRelation).Load();
             return new Store
             (
-                (from categoryDbModel in storeDbModel.CategoryDbModels select _categoryMapper.DbToDomain(categoryDbModel)).ToList(),
+                (from categoryDbModel in storeDbModel.CategoryDbModels select _categoryMapper.DbToDomainStoreSpecificProducts(categoryDbModel, item.StoreDbModelId)).ToList(),
                 item.StoreDbModelId,
                 item.Name,
                 item.Location,

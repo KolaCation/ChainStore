@@ -10,6 +10,8 @@ namespace ChainStore.DataAccessLayerImpl
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
         }
+        internal DbSet<StoreProductDbModel> StoreProductDbModels { get; set; }
+        internal DbSet<StoreCategoryDbModel> StoreCategoryDbModels { get; set; }
         internal DbSet<ProductDbModel> Products { get; set; }
         internal DbSet<ClientDbModel> Clients { get; set; }
         internal DbSet<ReliableClientDbModel> ReliableClients { get; set; }
@@ -19,16 +21,18 @@ namespace ChainStore.DataAccessLayerImpl
         internal DbSet<CategoryDbModel> Categories { get; set; }
         internal DbSet<StoreDbModel> Stores { get; set; }
         internal DbSet<MallDbModel> Malls { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<StoreProductDbModel>().HasKey(e => new { e.Store1Id, e.ProductId });
+            modelBuilder.Entity<StoreCategoryDbModel>().HasKey(e => new { e.Store2Id, e.CategoryId });
             modelBuilder.Entity<MallDbModel>().HasMany(m => m.StoreDbModels).WithOne(st => st.MallDbModel).IsRequired(false);
-            modelBuilder.Entity<StoreDbModel>().HasMany(st => st.CategoryDbModels).WithOne(cat => cat.StoreDbModel)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<StoreProductDbModel>().HasOne(e => e.StoreDbModel).WithMany(e => e.StoreProductRelation);
+            modelBuilder.Entity<StoreProductDbModel>().HasOne(e => e.ProductDbModel).WithMany(e => e.StoreProductRelation);
+            modelBuilder.Entity<StoreCategoryDbModel>().HasOne(e => e.StoreDbModel).WithMany(e => e.StoreCategoryRelation);
+            modelBuilder.Entity<StoreCategoryDbModel>().HasOne(e => e.CategoryDbModel).WithMany(e => e.StoreCategoryRelation);
             modelBuilder.Entity<CategoryDbModel>().HasMany(cat => cat.ProductDbModels).WithOne(pr => pr.CategoryDbModel);
             modelBuilder.Seed();
-            
         }
     }
 }

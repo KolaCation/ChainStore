@@ -99,7 +99,7 @@
                     @{
                         var category = CategoryRepository.GetOne(book.Product.CategoryId);
                     }
-                    <h6 class="card-title mb-2 mt-2 text-muted">@category.CategoryName</h6>
+                    <h6 class="card-title mb-2 mt-2 text-muted">@category.Name</h6>
                     <div class="card-body">
                         <p class="card-text">
                             Price: @book.Product.PriceInUAH UAH
@@ -141,7 +141,7 @@ else
                     @{
                         var category = CategoryRepository.GetOne(purchase.Product.CategoryId);
                     }
-                    <h6 class="card-title mb-2 mt-2 text-muted">@category.CategoryName</h6>
+                    <h6 class="card-title mb-2 mt-2 text-muted">@category.Name</h6>
                     <div class="card-body">
                         <p class="card-text">
                             Price: @purchase.Product.PriceInUAH UAH
