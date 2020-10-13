@@ -10,8 +10,8 @@ namespace ChainStore.DataAccessLayerImpl
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
         }
-        internal DbSet<StoreProductDbModel> StoreProductDbModels { get; set; }
-        internal DbSet<StoreCategoryDbModel> StoreCategoryDbModels { get; set; }
+        internal DbSet<StoreProductDbModel> StoreProductRelation { get; set; }
+        internal DbSet<StoreCategoryDbModel> StoreCategoryRelation { get; set; }
         internal DbSet<ProductDbModel> Products { get; set; }
         internal DbSet<ClientDbModel> Clients { get; set; }
         internal DbSet<ReliableClientDbModel> ReliableClients { get; set; }

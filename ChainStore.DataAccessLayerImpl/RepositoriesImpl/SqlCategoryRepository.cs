@@ -98,10 +98,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             CustomValidator.ValidateObject(category);
             CustomValidator.ValidateId(storeId);
             var storeCatRel = new StoreCategoryDbModel(storeId, category.CategoryId);
-            if (!_context.StoreCategoryDbModels
+            if (!_context.StoreCategoryRelation
                 .Any(e => e.CategoryId.Equals(storeCatRel.CategoryId) && e.StoreId.Equals(storeId)))
             {
-                _context.StoreCategoryDbModels.Add(storeCatRel);
+                _context.StoreCategoryRelation.Add(storeCatRel);
             }
         }
     }

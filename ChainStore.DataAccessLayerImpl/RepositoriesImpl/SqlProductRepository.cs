@@ -93,7 +93,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public Store GetStoreOfSpecificProduct(Guid productId)
         {
             CustomValidator.ValidateId(productId);
-            var res = _context.StoreProductDbModels.FirstOrDefault(e => e.ProductId.Equals(productId));
+            var res = _context.StoreProductRelation.FirstOrDefault(e => e.ProductId.Equals(productId));
             if(res != null)
             {
                 var storeDbModelId = res.StoreId;
