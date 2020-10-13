@@ -8,16 +8,16 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 {
     internal sealed class StoreCategoryDbModel
     {
-        public Guid Store2Id { get; private set; }
+        public Guid StoreId { get; private set; }
         public StoreDbModel StoreDbModel { get; private set; }
         public Guid CategoryId { get; private set; }
         public CategoryDbModel CategoryDbModel { get; private set; }
 
-        public StoreCategoryDbModel(Guid store2Id, Guid categoryId)
+        public StoreCategoryDbModel(Guid storeId, Guid categoryId)
         {
-            CustomValidator.ValidateId(store2Id);
+            CustomValidator.ValidateId(storeId);
             CustomValidator.ValidateId(categoryId);
-            Store2Id = store2Id;
+            StoreId = storeId;
             CategoryId = categoryId;
         }
     }

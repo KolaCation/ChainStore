@@ -96,7 +96,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             var res = _context.StoreProductDbModels.FirstOrDefault(e => e.ProductId.Equals(productId));
             if(res != null)
             {
-                var storeDbModelId = res.Store1Id;
+                var storeDbModelId = res.StoreId;
                 var storeDbModel = _context.Stores.Find(storeDbModelId);
                 return _storeMapper.DbToDomain(storeDbModel);
             }

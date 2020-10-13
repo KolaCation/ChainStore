@@ -35,7 +35,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             CustomValidator.ValidateId(storeId);
             var storeSpecificProducts = (from pr in _productDbModels
                                          from storeProdRel in pr.StoreProductRelation
-                                         where storeProdRel.Store1Id.Equals(storeId)
+                                         where storeProdRel.StoreId.Equals(storeId)
                                          && storeProdRel.ProductDbModel.CategoryDbModelId.Equals(CategoryDbModelId)
                                          select storeProdRel.ProductDbModel).ToList().AsReadOnly();
             return storeSpecificProducts;
