@@ -99,7 +99,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             CustomValidator.ValidateId(storeId);
             var storeCatRel = new StoreCategoryDbModel(storeId, category.CategoryId);
             if (!_context.StoreCategoryRelation
-                .Any(e => e.CategoryId.Equals(storeCatRel.CategoryId) && e.StoreId.Equals(storeId)))
+                .Any(e => e.CategoryDbModelId.Equals(storeCatRel.CategoryDbModelId) && e.StoreDbModelId.Equals(storeCatRel.StoreDbModelId)))
             {
                 _context.StoreCategoryRelation.Add(storeCatRel);
             }

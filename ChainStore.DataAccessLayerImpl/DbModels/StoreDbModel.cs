@@ -44,7 +44,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 
         private IReadOnlyCollection<CategoryDbModel> GetStoreSpecificCategories()
         {
-            return (from storeCatRel in _storeCategoryRelation where storeCatRel.StoreId.Equals(StoreDbModelId) select storeCatRel.CategoryDbModel).ToList().AsReadOnly();
+            return (from storeCatRel in _storeCategoryRelation where storeCatRel.StoreDbModelId.Equals(StoreDbModelId) select storeCatRel.CategoryDbModel).ToList().AsReadOnly();
         }
     }
 }
