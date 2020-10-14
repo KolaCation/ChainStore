@@ -10,7 +10,8 @@ namespace ChainStore.ViewModels
     {
         public Store Store { get; set; }
         public Guid StoreId { get; set; }
-        public string CategoryName { get; set; }//replace with DB list
+        public Guid CategoryId { get; set; }
+        public List<Category> CategoriesOption { get; set; }
 
         public AddCategoryToStoreViewModel()
         {

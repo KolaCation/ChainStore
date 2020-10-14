@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChainStore.DataAccessLayerImpl.Migrations
 {
-    public partial class DomainStructureRework : Migration
+    public partial class DbStructureRework : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -277,55 +277,51 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StoreCategoryDbModels",
+                name: "StoreCategoryRelation",
                 columns: table => new
                 {
-                    StoreId = table.Column<Guid>(nullable: false),
-                    CategoryId = table.Column<Guid>(nullable: false),
-                    StoreDbModelId = table.Column<Guid>(nullable: true),
-                    CategoryDbModelId = table.Column<Guid>(nullable: true)
+                    StoreDbModelId = table.Column<Guid>(nullable: false),
+                    CategoryDbModelId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StoreCategoryDbModels", x => new { x.StoreId, x.CategoryId });
+                    table.PrimaryKey("PK_StoreCategoryRelation", x => new { x.StoreDbModelId, x.CategoryDbModelId });
                     table.ForeignKey(
-                        name: "FK_StoreCategoryDbModels_Categories_CategoryDbModelId",
+                        name: "FK_StoreCategoryRelation_Categories_CategoryDbModelId",
                         column: x => x.CategoryDbModelId,
                         principalTable: "Categories",
                         principalColumn: "CategoryDbModelId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StoreCategoryDbModels_Stores_StoreDbModelId",
+                        name: "FK_StoreCategoryRelation_Stores_StoreDbModelId",
                         column: x => x.StoreDbModelId,
                         principalTable: "Stores",
                         principalColumn: "StoreDbModelId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "StoreProductDbModels",
+                name: "StoreProductRelation",
                 columns: table => new
                 {
-                    StoreId = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: false),
-                    StoreDbModelId = table.Column<Guid>(nullable: true),
-                    ProductDbModelId = table.Column<Guid>(nullable: true)
+                    StoreDbModelId = table.Column<Guid>(nullable: false),
+                    ProductDbModelId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StoreProductDbModels", x => new { x.StoreId, x.ProductId });
+                    table.PrimaryKey("PK_StoreProductRelation", x => new { x.StoreDbModelId, x.ProductDbModelId });
                     table.ForeignKey(
-                        name: "FK_StoreProductDbModels_Products_ProductDbModelId",
+                        name: "FK_StoreProductRelation_Products_ProductDbModelId",
                         column: x => x.ProductDbModelId,
                         principalTable: "Products",
                         principalColumn: "ProductDbModelId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StoreProductDbModels_Stores_StoreDbModelId",
+                        name: "FK_StoreProductRelation_Stores_StoreDbModelId",
                         column: x => x.StoreDbModelId,
                         principalTable: "Stores",
                         principalColumn: "StoreDbModelId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -333,64 +329,65 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                 columns: new[] { "CategoryDbModelId", "Name", "StoreDbModelId" },
                 values: new object[,]
                 {
-                    { new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "Laptop", null },
-                    { new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"), "Mouse", null }
+                    { new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "Laptop", null },
+                    { new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"), "Mouse", null },
+                    { new Guid("59752d04-3a1e-4833-9eb9-f0d274da76b0"), "USB", null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Malls",
                 columns: new[] { "MallDbModelId", "Location", "Name" },
-                values: new object[] { new Guid("c4570f80-3d01-4bb8-bdef-ce87b29c69a6"), "10 Pandora Street", "Ocean Plaza" });
-
-            migrationBuilder.InsertData(
-                table: "StoreCategoryDbModels",
-                columns: new[] { "StoreId", "CategoryId", "CategoryDbModelId", "StoreDbModelId" },
-                values: new object[,]
-                {
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"), null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "StoreProductDbModels",
-                columns: new[] { "StoreId", "ProductId", "ProductDbModelId", "StoreDbModelId" },
-                values: new object[,]
-                {
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("f0228d9a-2050-4e4c-979f-413103c703ae"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("c9930aba-d5f2-42a5-a1a8-5893bcaf7e12"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("b9d1bdcc-ddf2-4b21-99b6-993773e33432"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("dc136d9b-a826-433a-8687-acd6dd6141c1"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("fed28943-0fa6-48c5-9e4a-add9e9040af5"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("c6ee5f31-3354-448d-b26c-4111406365ec"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("78ca4154-a904-48fe-a4c5-fa7e23020729"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("e6b96cf1-9952-49b7-9148-7492f1f02d76"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("f1e5b4b5-876f-4d1a-be99-a0cff31c055b"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("4f2b7566-f5d3-496e-9549-b9e84e5f9fb4"), null, null },
-                    { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), new Guid("c8d32a25-8039-4852-8164-35fdb1c6a6b5"), null, null }
-                });
+                values: new object[] { new Guid("57817fa9-88dc-4c4e-abb2-26e0b1d2ed9a"), "10 Pandora Street", "Ocean Plaza" });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "ProductDbModelId", "CategoryDbModelId", "Name", "PriceInUAH", "ProductStatus" },
                 values: new object[,]
                 {
-                    { new Guid("f0228d9a-2050-4e4c-979f-413103c703ae"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G1", 20000.0, 0 },
-                    { new Guid("c6ee5f31-3354-448d-b26c-4111406365ec"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G2", 30000.0, 0 },
-                    { new Guid("78ca4154-a904-48fe-a4c5-fa7e23020729"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G3", 40000.0, 0 },
-                    { new Guid("e6b96cf1-9952-49b7-9148-7492f1f02d76"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G4", 50000.0, 0 },
-                    { new Guid("f1e5b4b5-876f-4d1a-be99-a0cff31c055b"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 850 G5", 60000.0, 0 },
-                    { new Guid("c9930aba-d5f2-42a5-a1a8-5893bcaf7e12"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G1", 20000.0, 0 },
-                    { new Guid("b9d1bdcc-ddf2-4b21-99b6-993773e33432"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G1", 20000.0, 0 },
-                    { new Guid("dc136d9b-a826-433a-8687-acd6dd6141c1"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G1", 20000.0, 0 },
-                    { new Guid("fed28943-0fa6-48c5-9e4a-add9e9040af5"), new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"), "HP 450 G1", 20000.0, 0 },
-                    { new Guid("4f2b7566-f5d3-496e-9549-b9e84e5f9fb4"), new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"), "LogTech G12", 1000.0, 0 },
-                    { new Guid("c8d32a25-8039-4852-8164-35fdb1c6a6b5"), new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"), "X7", 2000.0, 0 }
+                    { new Guid("c0a047de-d55c-4199-aa7e-68f4d6c4073a"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G1", 20000.0, 0 },
+                    { new Guid("b3cb63d7-83ce-4de5-a137-c98e8f3feaed"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G2", 30000.0, 0 },
+                    { new Guid("96fbdc34-e7df-408b-8c70-9bd99c3d855d"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G3", 40000.0, 0 },
+                    { new Guid("8bee4fd0-8716-4f52-8069-2a1fd66978a1"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G4", 50000.0, 0 },
+                    { new Guid("3dfa0460-37f0-4892-9715-770e596391eb"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 850 G5", 60000.0, 0 },
+                    { new Guid("b29787ec-7169-4d27-83aa-238388a582a7"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G1", 20000.0, 0 },
+                    { new Guid("485e099d-10bb-406f-8394-0333d22421d1"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G1", 20000.0, 0 },
+                    { new Guid("0667a62e-5b5c-4d92-b569-fa9a1e4f4077"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G1", 20000.0, 0 },
+                    { new Guid("e05d35c8-f8b7-48c5-9e13-2d4b59b2d73e"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"), "HP 450 G1", 20000.0, 0 },
+                    { new Guid("bd3686c9-13a8-47a6-a33c-9d8794eda51b"), new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"), "LogTech G12", 1000.0, 0 },
+                    { new Guid("10868013-4ed5-4a89-8b00-7c662e44cfd7"), new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"), "X7", 2000.0, 0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreDbModelId", "Location", "MallDbModelId", "Name", "Profit" },
-                values: new object[] { new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"), "10 Pandora Street", new Guid("c4570f80-3d01-4bb8-bdef-ce87b29c69a6"), "Shields and Weapons", 0.0 });
+                values: new object[] { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), "10 Pandora Street", new Guid("57817fa9-88dc-4c4e-abb2-26e0b1d2ed9a"), "Shields and Weapons", 0.0 });
+
+            migrationBuilder.InsertData(
+                table: "StoreCategoryRelation",
+                columns: new[] { "StoreDbModelId", "CategoryDbModelId" },
+                values: new object[,]
+                {
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StoreProductRelation",
+                columns: new[] { "StoreDbModelId", "ProductDbModelId" },
+                values: new object[,]
+                {
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("c0a047de-d55c-4199-aa7e-68f4d6c4073a") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("b29787ec-7169-4d27-83aa-238388a582a7") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("485e099d-10bb-406f-8394-0333d22421d1") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("0667a62e-5b5c-4d92-b569-fa9a1e4f4077") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("e05d35c8-f8b7-48c5-9e13-2d4b59b2d73e") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("b3cb63d7-83ce-4de5-a137-c98e8f3feaed") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("96fbdc34-e7df-408b-8c70-9bd99c3d855d") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("8bee4fd0-8716-4f52-8069-2a1fd66978a1") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("3dfa0460-37f0-4892-9715-770e596391eb") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("bd3686c9-13a8-47a6-a33c-9d8794eda51b") },
+                    { new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"), new Guid("10868013-4ed5-4a89-8b00-7c662e44cfd7") }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -442,24 +439,14 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                 column: "CategoryDbModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoreCategoryDbModels_CategoryDbModelId",
-                table: "StoreCategoryDbModels",
+                name: "IX_StoreCategoryRelation_CategoryDbModelId",
+                table: "StoreCategoryRelation",
                 column: "CategoryDbModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoreCategoryDbModels_StoreDbModelId",
-                table: "StoreCategoryDbModels",
-                column: "StoreDbModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StoreProductDbModels_ProductDbModelId",
-                table: "StoreProductDbModels",
+                name: "IX_StoreProductRelation_ProductDbModelId",
+                table: "StoreProductRelation",
                 column: "ProductDbModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StoreProductDbModels_StoreDbModelId",
-                table: "StoreProductDbModels",
-                column: "StoreDbModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stores_MallDbModelId",
@@ -494,10 +481,10 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                 name: "Purchases");
 
             migrationBuilder.DropTable(
-                name: "StoreCategoryDbModels");
+                name: "StoreCategoryRelation");
 
             migrationBuilder.DropTable(
-                name: "StoreProductDbModels");
+                name: "StoreProductRelation");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

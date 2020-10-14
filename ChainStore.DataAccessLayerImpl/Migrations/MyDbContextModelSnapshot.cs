@@ -137,13 +137,18 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "Laptop"
                         },
                         new
                         {
-                            CategoryDbModelId = new Guid("de0e229b-2a02-41da-88b3-a7bd44309566"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"),
                             Name = "Mouse"
+                        },
+                        new
+                        {
+                            CategoryDbModelId = new Guid("59752d04-3a1e-4833-9eb9-f0d274da76b0"),
+                            Name = "USB"
                         });
                 });
 
@@ -189,7 +194,7 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            MallDbModelId = new Guid("93db65aa-ba5e-43f0-ac25-3b145e8ca31b"),
+                            MallDbModelId = new Guid("57817fa9-88dc-4c4e-abb2-26e0b1d2ed9a"),
                             Location = "10 Pandora Street",
                             Name = "Ocean Plaza"
                         });
@@ -222,88 +227,88 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            ProductDbModelId = new Guid("d886020e-c115-4b51-a3b0-c11ca0a80d7d"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("c0a047de-d55c-4199-aa7e-68f4d6c4073a"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("fe4781af-4bd6-4e83-8ea7-8f4c3c79848a"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("b3cb63d7-83ce-4de5-a137-c98e8f3feaed"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G2",
                             PriceInUAH = 30000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("1215cddc-4da2-4530-a653-e4634009bb1c"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("96fbdc34-e7df-408b-8c70-9bd99c3d855d"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G3",
                             PriceInUAH = 40000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("0732ea14-6e25-442d-a3d3-fed4f214a12c"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("8bee4fd0-8716-4f52-8069-2a1fd66978a1"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G4",
                             PriceInUAH = 50000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("f549a7b1-9746-44af-a4fa-0a1e4649796b"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("3dfa0460-37f0-4892-9715-770e596391eb"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 850 G5",
                             PriceInUAH = 60000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("22d990e9-b177-49ba-ad83-214a78cfea6a"),
-                            CategoryDbModelId = new Guid("de0e229b-2a02-41da-88b3-a7bd44309566"),
+                            ProductDbModelId = new Guid("bd3686c9-13a8-47a6-a33c-9d8794eda51b"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"),
                             Name = "LogTech G12",
                             PriceInUAH = 1000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("fa10a6a8-364b-4d0a-91a7-15d752f557c0"),
-                            CategoryDbModelId = new Guid("de0e229b-2a02-41da-88b3-a7bd44309566"),
+                            ProductDbModelId = new Guid("10868013-4ed5-4a89-8b00-7c662e44cfd7"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"),
                             Name = "X7",
                             PriceInUAH = 2000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("7b366602-b480-4c30-a0ef-c17013b4b47c"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("b29787ec-7169-4d27-83aa-238388a582a7"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("5cfffeb8-538b-41cf-963f-f49c4ef97e95"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("485e099d-10bb-406f-8394-0333d22421d1"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("e76ad929-058a-4c0a-b839-305951890d77"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("0667a62e-5b5c-4d92-b569-fa9a1e4f4077"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("c874bb95-433c-4ce7-a541-953f5a2db3fe"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267"),
+                            ProductDbModelId = new Guid("e05d35c8-f8b7-48c5-9e13-2d4b59b2d73e"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
@@ -347,13 +352,13 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            CategoryDbModelId = new Guid("e376db72-02b7-4e86-b0a4-460752468267")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            CategoryDbModelId = new Guid("de0e229b-2a02-41da-88b3-a7bd44309566")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618")
                         });
                 });
 
@@ -384,9 +389,9 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
                             Location = "10 Pandora Street",
-                            MallDbModelId = new Guid("93db65aa-ba5e-43f0-ac25-3b145e8ca31b"),
+                            MallDbModelId = new Guid("57817fa9-88dc-4c4e-abb2-26e0b1d2ed9a"),
                             Name = "Shields and Weapons",
                             Profit = 0.0
                         });
@@ -409,58 +414,58 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("d886020e-c115-4b51-a3b0-c11ca0a80d7d")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("c0a047de-d55c-4199-aa7e-68f4d6c4073a")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("7b366602-b480-4c30-a0ef-c17013b4b47c")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("b29787ec-7169-4d27-83aa-238388a582a7")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("5cfffeb8-538b-41cf-963f-f49c4ef97e95")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("485e099d-10bb-406f-8394-0333d22421d1")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("e76ad929-058a-4c0a-b839-305951890d77")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("0667a62e-5b5c-4d92-b569-fa9a1e4f4077")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("c874bb95-433c-4ce7-a541-953f5a2db3fe")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("e05d35c8-f8b7-48c5-9e13-2d4b59b2d73e")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("fe4781af-4bd6-4e83-8ea7-8f4c3c79848a")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("b3cb63d7-83ce-4de5-a137-c98e8f3feaed")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("1215cddc-4da2-4530-a653-e4634009bb1c")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("96fbdc34-e7df-408b-8c70-9bd99c3d855d")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("0732ea14-6e25-442d-a3d3-fed4f214a12c")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("8bee4fd0-8716-4f52-8069-2a1fd66978a1")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("f549a7b1-9746-44af-a4fa-0a1e4649796b")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("3dfa0460-37f0-4892-9715-770e596391eb")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("22d990e9-b177-49ba-ad83-214a78cfea6a")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("bd3686c9-13a8-47a6-a33c-9d8794eda51b")
                         },
                         new
                         {
-                            StoreDbModelId = new Guid("a28b221a-98d4-4069-b888-8e423651c64b"),
-                            ProductDbModelId = new Guid("fa10a6a8-364b-4d0a-91a7-15d752f557c0")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("10868013-4ed5-4a89-8b00-7c662e44cfd7")
                         });
                 });
 

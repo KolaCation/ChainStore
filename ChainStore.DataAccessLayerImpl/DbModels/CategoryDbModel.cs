@@ -20,6 +20,8 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         private readonly List<ProductDbModel> _productDbModels;
         public IReadOnlyCollection<ProductDbModel> ProductDbModels => _productDbModels.AsReadOnly();
 
+        public Guid? StoreDbModelId { get; private set; }
+
         public CategoryDbModel(Guid categoryDbModelId, string name)
         {
             CustomValidator.ValidateId(categoryDbModelId);
@@ -28,6 +30,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             Name = name;
             _productDbModels = new List<ProductDbModel>();
             _storeCategoryRelation = new List<StoreCategoryDbModel>();
+            StoreDbModelId = default;
         }
 
         internal IReadOnlyCollection<ProductDbModel> GetStoreSpecificProducts(Guid storeId)

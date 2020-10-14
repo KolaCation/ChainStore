@@ -5,6 +5,7 @@ using System.Text;
 using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace ChainStore.DataAccessLayerImpl.Mappers
@@ -29,9 +30,11 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public Store DbToDomain(StoreDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var storeDbModel = _context.Stores.Find(item.StoreDbModelId);
-            _context.Entry(storeDbModel).Collection(st => st.StoreCategoryRelation).Load();
-            _context.Entry(storeDbModel).Collection(st => st.StoreProductRelation).Load();
+            var storeDbModel = _context.Stores.Where(e => e.StoreDbModelId.Equals(item.StoreDbModelId))
+                .Include(e => e.StoreCategoryRelation)
+                .ThenInclude(e => e.CategoryDbModel)
+                .Include(e => e.StoreProductRelation)
+                .ThenInclude(e => e.ProductDbModel).FirstOrDefault();
             return new Store
             (
                 (from categoryDbModel in storeDbModel.CategoryDbModels select _categoryMapper.DbToDomainStoreSpecificProducts(categoryDbModel, item.StoreDbModelId)).ToList(),

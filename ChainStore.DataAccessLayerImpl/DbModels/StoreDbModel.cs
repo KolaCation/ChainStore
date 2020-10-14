@@ -22,6 +22,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         private readonly List<StoreProductDbModel> _storeProductRelation;
         public IReadOnlyCollection<StoreProductDbModel> StoreProductRelation => _storeProductRelation.AsReadOnly();
 
+        private List<CategoryDbModel> _categoryDbModels;
         public IReadOnlyCollection<CategoryDbModel> CategoryDbModels => GetStoreSpecificCategories();
 
         public double Profit { get; private set; }
@@ -40,6 +41,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             Profit = profit;
             _storeCategoryRelation = new List<StoreCategoryDbModel>();
             _storeProductRelation = new List<StoreProductDbModel>();
+            _categoryDbModels = new List<CategoryDbModel>();
         }
 
         private IReadOnlyCollection<CategoryDbModel> GetStoreSpecificCategories()

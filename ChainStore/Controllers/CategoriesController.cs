@@ -62,10 +62,12 @@ namespace ChainStore.Controllers
 
             var store = _storeRepository.GetOne(id.Value);
             if (store == null) return View("StoreNotFound", id.Value);
+            var categories = _categoryRepository.GetAll();
 
             var addCategoryToStoreViewModel = new AddCategoryToStoreViewModel
             {
-                Store = store
+                Store = store,
+                CategoriesOption = categories.ToList()
             };
             return View(addCategoryToStoreViewModel);
         }
@@ -76,13 +78,13 @@ namespace ChainStore.Controllers
         {
             var store = _storeRepository.GetOne(addCategoryToStoreViewModel.StoreId);
             if (store == null) return View("StoreNotFound", addCategoryToStoreViewModel.StoreId);
-            if (store.Categories.Any(category => category.Name.ToLower().Equals(addCategoryToStoreViewModel.CategoryName.ToString().ToLower())))
+            var categoryWithThatId = _categoryRepository.GetOne(addCategoryToStoreViewModel.CategoryId);
+            if (store.Categories.Any(category => category.CategoryId.Equals(addCategoryToStoreViewModel.CategoryId)))
             {
-                ModelState.AddModelError(string.Empty, $"Category '{addCategoryToStoreViewModel.CategoryName}' already exists");
+                ModelState.AddModelError(string.Empty, $"Category '{categoryWithThatId.Name}' already exists");
                 return View(new AddCategoryToStoreViewModel { Store = store });
             }
-            var categoryToAdd = _categoryRepository.GetAll().FirstOrDefault(e=>e.Name.ToLower().Equals(addCategoryToStoreViewModel.CategoryName.ToLower()));
-            _categoryRepository.AddCategoryToStore(categoryToAdd, store.StoreId);
+            _categoryRepository.AddCategoryToStore(categoryWithThatId, store.StoreId);
             return RedirectToAction(IndexAction, DefaultController);
         }
 

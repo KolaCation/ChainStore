@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChainStore.DataAccessLayerImpl.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20201013015732_DomainStructureRework")]
-    partial class DomainStructureRework
+    [Migration("20201013040057_DbStructureRework")]
+    partial class DbStructureRework
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,13 +139,18 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "Laptop"
                         },
                         new
                         {
-                            CategoryDbModelId = new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"),
                             Name = "Mouse"
+                        },
+                        new
+                        {
+                            CategoryDbModelId = new Guid("59752d04-3a1e-4833-9eb9-f0d274da76b0"),
+                            Name = "USB"
                         });
                 });
 
@@ -191,7 +196,7 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            MallDbModelId = new Guid("c4570f80-3d01-4bb8-bdef-ce87b29c69a6"),
+                            MallDbModelId = new Guid("57817fa9-88dc-4c4e-abb2-26e0b1d2ed9a"),
                             Location = "10 Pandora Street",
                             Name = "Ocean Plaza"
                         });
@@ -224,88 +229,88 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            ProductDbModelId = new Guid("f0228d9a-2050-4e4c-979f-413103c703ae"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("c0a047de-d55c-4199-aa7e-68f4d6c4073a"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("c6ee5f31-3354-448d-b26c-4111406365ec"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("b3cb63d7-83ce-4de5-a137-c98e8f3feaed"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G2",
                             PriceInUAH = 30000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("78ca4154-a904-48fe-a4c5-fa7e23020729"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("96fbdc34-e7df-408b-8c70-9bd99c3d855d"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G3",
                             PriceInUAH = 40000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("e6b96cf1-9952-49b7-9148-7492f1f02d76"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("8bee4fd0-8716-4f52-8069-2a1fd66978a1"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G4",
                             PriceInUAH = 50000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("f1e5b4b5-876f-4d1a-be99-a0cff31c055b"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("3dfa0460-37f0-4892-9715-770e596391eb"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 850 G5",
                             PriceInUAH = 60000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("4f2b7566-f5d3-496e-9549-b9e84e5f9fb4"),
-                            CategoryDbModelId = new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"),
+                            ProductDbModelId = new Guid("bd3686c9-13a8-47a6-a33c-9d8794eda51b"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"),
                             Name = "LogTech G12",
                             PriceInUAH = 1000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("c8d32a25-8039-4852-8164-35fdb1c6a6b5"),
-                            CategoryDbModelId = new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904"),
+                            ProductDbModelId = new Guid("10868013-4ed5-4a89-8b00-7c662e44cfd7"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618"),
                             Name = "X7",
                             PriceInUAH = 2000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("c9930aba-d5f2-42a5-a1a8-5893bcaf7e12"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("b29787ec-7169-4d27-83aa-238388a582a7"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("b9d1bdcc-ddf2-4b21-99b6-993773e33432"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("485e099d-10bb-406f-8394-0333d22421d1"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("dc136d9b-a826-433a-8687-acd6dd6141c1"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("0667a62e-5b5c-4d92-b569-fa9a1e4f4077"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
                         },
                         new
                         {
-                            ProductDbModelId = new Guid("fed28943-0fa6-48c5-9e4a-add9e9040af5"),
-                            CategoryDbModelId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4"),
+                            ProductDbModelId = new Guid("e05d35c8-f8b7-48c5-9e13-2d4b59b2d73e"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0"),
                             Name = "HP 450 G1",
                             PriceInUAH = 20000.0,
                             ProductStatus = 0
@@ -334,36 +339,28 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
 
             modelBuilder.Entity("ChainStore.DataAccessLayerImpl.DbModels.StoreCategoryDbModel", b =>
                 {
-                    b.Property<Guid>("StoreId")
+                    b.Property<Guid>("StoreDbModelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("CategoryDbModelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryDbModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("StoreDbModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("StoreId", "CategoryId");
+                    b.HasKey("StoreDbModelId", "CategoryDbModelId");
 
                     b.HasIndex("CategoryDbModelId");
 
-                    b.HasIndex("StoreDbModelId");
-
-                    b.ToTable("StoreCategoryDbModels");
+                    b.ToTable("StoreCategoryRelation");
 
                     b.HasData(
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            CategoryId = new Guid("79454a4e-76e9-44fd-bf24-01f86fcf5db4")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            CategoryDbModelId = new Guid("bdc0bc96-a4df-40ea-aeb9-199e633c31e0")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            CategoryId = new Guid("dcb0af0c-45e5-400f-b10f-ff4e071ed904")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            CategoryDbModelId = new Guid("0b7c1794-ddd8-4fd6-a5a6-68ac9d13f618")
                         });
                 });
 
@@ -394,9 +391,9 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                     b.HasData(
                         new
                         {
-                            StoreDbModelId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
                             Location = "10 Pandora Street",
-                            MallDbModelId = new Guid("c4570f80-3d01-4bb8-bdef-ce87b29c69a6"),
+                            MallDbModelId = new Guid("57817fa9-88dc-4c4e-abb2-26e0b1d2ed9a"),
                             Name = "Shields and Weapons",
                             Profit = 0.0
                         });
@@ -404,81 +401,73 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
 
             modelBuilder.Entity("ChainStore.DataAccessLayerImpl.DbModels.StoreProductDbModel", b =>
                 {
-                    b.Property<Guid>("StoreId")
+                    b.Property<Guid>("StoreDbModelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("ProductDbModelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProductDbModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("StoreDbModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("StoreId", "ProductId");
+                    b.HasKey("StoreDbModelId", "ProductDbModelId");
 
                     b.HasIndex("ProductDbModelId");
 
-                    b.HasIndex("StoreDbModelId");
-
-                    b.ToTable("StoreProductDbModels");
+                    b.ToTable("StoreProductRelation");
 
                     b.HasData(
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("f0228d9a-2050-4e4c-979f-413103c703ae")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("c0a047de-d55c-4199-aa7e-68f4d6c4073a")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("c9930aba-d5f2-42a5-a1a8-5893bcaf7e12")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("b29787ec-7169-4d27-83aa-238388a582a7")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("b9d1bdcc-ddf2-4b21-99b6-993773e33432")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("485e099d-10bb-406f-8394-0333d22421d1")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("dc136d9b-a826-433a-8687-acd6dd6141c1")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("0667a62e-5b5c-4d92-b569-fa9a1e4f4077")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("fed28943-0fa6-48c5-9e4a-add9e9040af5")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("e05d35c8-f8b7-48c5-9e13-2d4b59b2d73e")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("c6ee5f31-3354-448d-b26c-4111406365ec")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("b3cb63d7-83ce-4de5-a137-c98e8f3feaed")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("78ca4154-a904-48fe-a4c5-fa7e23020729")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("96fbdc34-e7df-408b-8c70-9bd99c3d855d")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("e6b96cf1-9952-49b7-9148-7492f1f02d76")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("8bee4fd0-8716-4f52-8069-2a1fd66978a1")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("f1e5b4b5-876f-4d1a-be99-a0cff31c055b")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("3dfa0460-37f0-4892-9715-770e596391eb")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("4f2b7566-f5d3-496e-9549-b9e84e5f9fb4")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("bd3686c9-13a8-47a6-a33c-9d8794eda51b")
                         },
                         new
                         {
-                            StoreId = new Guid("7b3bc365-9bf2-44c5-827f-e88b31b5c7e4"),
-                            ProductId = new Guid("c8d32a25-8039-4852-8164-35fdb1c6a6b5")
+                            StoreDbModelId = new Guid("98edc982-8f27-4bbc-b531-2a0e37a6459a"),
+                            ProductDbModelId = new Guid("10868013-4ed5-4a89-8b00-7c662e44cfd7")
                         });
                 });
 
@@ -659,11 +648,15 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                 {
                     b.HasOne("ChainStore.DataAccessLayerImpl.DbModels.CategoryDbModel", "CategoryDbModel")
                         .WithMany("StoreCategoryRelation")
-                        .HasForeignKey("CategoryDbModelId");
+                        .HasForeignKey("CategoryDbModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ChainStore.DataAccessLayerImpl.DbModels.StoreDbModel", "StoreDbModel")
                         .WithMany("StoreCategoryRelation")
-                        .HasForeignKey("StoreDbModelId");
+                        .HasForeignKey("StoreDbModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChainStore.DataAccessLayerImpl.DbModels.StoreDbModel", b =>
@@ -677,11 +670,15 @@ namespace ChainStore.DataAccessLayerImpl.Migrations
                 {
                     b.HasOne("ChainStore.DataAccessLayerImpl.DbModels.ProductDbModel", "ProductDbModel")
                         .WithMany("StoreProductRelation")
-                        .HasForeignKey("ProductDbModelId");
+                        .HasForeignKey("ProductDbModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ChainStore.DataAccessLayerImpl.DbModels.StoreDbModel", "StoreDbModel")
                         .WithMany("StoreProductRelation")
-                        .HasForeignKey("StoreDbModelId");
+                        .HasForeignKey("StoreDbModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

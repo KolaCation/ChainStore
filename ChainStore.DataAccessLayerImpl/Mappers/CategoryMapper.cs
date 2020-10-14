@@ -5,6 +5,7 @@ using System.Text;
 using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChainStore.DataAccessLayerImpl.Mappers
 {
@@ -28,30 +29,22 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public Category DbToDomain(CategoryDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var categoryDbModel = _context.Categories.Find(item.CategoryDbModelId);
-            _context.Entry(categoryDbModel).Collection(cat => cat.ProductDbModels).Load();
-            foreach(var pr in categoryDbModel.ProductDbModels)
-            {
-                _context.Entry(pr).Collection(pr => pr.StoreProductRelation).Load();
-            }
-           return new Category
-           (
-               (from productDbModel in categoryDbModel.ProductDbModels select _productMapper.DbToDomain(productDbModel)).ToList(),
-               categoryDbModel.CategoryDbModelId,
-               categoryDbModel.Name
-           );
+            var categoryDbModel = _context.Categories.Where(e => e.CategoryDbModelId.Equals(item.CategoryDbModelId))
+                .Include(e => e.ProductDbModels).ThenInclude(e => e.StoreProductRelation).ThenInclude(e => e.StoreDbModel).FirstOrDefault();
+            return new Category
+            (
+                (from productDbModel in categoryDbModel.ProductDbModels select _productMapper.DbToDomain(productDbModel)).ToList(),
+                categoryDbModel.CategoryDbModelId,
+                categoryDbModel.Name
+            );
         }
 
         public Category DbToDomainStoreSpecificProducts(CategoryDbModel item, Guid storeId)
         {
             CustomValidator.ValidateObject(item);
             CustomValidator.ValidateId(storeId);
-            var categoryDbModel = _context.Categories.Find(item.CategoryDbModelId);
-            _context.Entry(categoryDbModel).Collection(cat => cat.ProductDbModels).Load();
-            foreach (var pr in categoryDbModel.ProductDbModels)
-            {
-                _context.Entry(pr).Collection(pr => pr.StoreProductRelation).Load();
-            }
+            var categoryDbModel = _context.Categories.Where(e => e.CategoryDbModelId.Equals(item.CategoryDbModelId))
+                        .Include(e => e.ProductDbModels).ThenInclude(e => e.StoreProductRelation).ThenInclude(e => e.StoreDbModel).FirstOrDefault();
             return new Category
             (
                 (from productDbModel in categoryDbModel.GetStoreSpecificProducts(storeId) select _productMapper.DbToDomain(productDbModel)).ToList(),

@@ -10,6 +10,12 @@
     <Compile Remove="Migrations\20201013015355_Test.Designer.cs" />
     <Compile Remove="Migrations\20201013015428_DomainStructureRework.cs" />
     <Compile Remove="Migrations\20201013015428_DomainStructureRework.Designer.cs" />
+    <Compile Remove="Migrations\20201013023114_DbStructureRework.cs" />
+    <Compile Remove="Migrations\20201013023114_DbStructureRework.Designer.cs" />
+    <Compile Remove="Migrations\20201013023446_DbStructureRework.cs" />
+    <Compile Remove="Migrations\20201013023446_DbStructureRework.Designer.cs" />
+    <Compile Remove="Migrations\20201013034046_DbStructureRework.cs" />
+    <Compile Remove="Migrations\20201013034046_DbStructureRework.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

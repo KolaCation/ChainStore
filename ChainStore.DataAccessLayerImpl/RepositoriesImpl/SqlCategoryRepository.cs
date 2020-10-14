@@ -102,6 +102,21 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 .Any(e => e.CategoryDbModelId.Equals(storeCatRel.CategoryDbModelId) && e.StoreDbModelId.Equals(storeCatRel.StoreDbModelId)))
             {
                 _context.StoreCategoryRelation.Add(storeCatRel);
+                _context.SaveChanges();
+            }
+        }
+
+        public void DeleteCategoryFromStore(Category category, Guid storeId)
+        {
+            CustomValidator.ValidateObject(category);
+            CustomValidator.ValidateId(storeId);
+            if (_context.StoreCategoryRelation
+                .Any(e => e.CategoryDbModelId.Equals(category.CategoryId) && e.StoreDbModelId.Equals(storeId)))
+            {
+               var storeCatRelToDel = _context.StoreCategoryRelation.First(e =>
+                    e.CategoryDbModelId.Equals(category.CategoryId) && e.StoreDbModelId.Equals(storeId));
+                _context.StoreCategoryRelation.Remove(storeCatRelToDel);
+                _context.SaveChanges();
             }
         }
     }

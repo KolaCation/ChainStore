@@ -22,17 +22,19 @@ namespace ChainStore.Controllers
         private readonly IStoreRepository _storeRepository;
         private readonly IProductRepository _productRepository;
         private readonly IBookRepository _bookRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
 
         public StoresController(IMallRepository mallRepository, IStoreRepository storeRepository, IProductRepository productRepository,
-            IBookRepository bookRepository)
+            IBookRepository bookRepository, ICategoryRepository categoryRepository)
         {
             _mallRepository = mallRepository;
             _storeRepository = storeRepository;
             _productRepository = productRepository;
             _bookRepository = bookRepository;
+            _categoryRepository = categoryRepository;
         }
 
 
@@ -172,6 +174,7 @@ namespace ChainStore.Controllers
             if (storeToDel.Categories.Count != 0)
             {
                 var productsToRemove = new List<Product>();
+                var categoriesToRemoveFromStore = new List<Category>();
                 foreach (var category in storeToDel.Categories)
                 {
                     productsToRemove.AddRange(category.Products
@@ -179,11 +182,17 @@ namespace ChainStore.Controllers
                             pr.CategoryId.Equals(category.CategoryId) &&
                             !pr.ProductStatus.Equals(ProductStatus.Purchased))
                         .ToList());
+                    categoriesToRemoveFromStore.Add(category);
                 }
 
                 foreach (var product in productsToRemove)
                 {
                     _productRepository.DeleteOne(product.ProductId);
+                }
+
+                foreach (var category in categoriesToRemoveFromStore)
+                {
+                    _categoryRepository.DeleteCategoryFromStore(category, storeToDel.StoreId);
                 }
             }
 
