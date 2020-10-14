@@ -64,8 +64,8 @@
                                     </button>
                                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                                     {
-                                        <a asp-action="AddProduct" asp-controller="Products" asp-route-id="@category.CategoryId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Product</a>
-                                        <a asp-action="DeleteCategory" asp-controller="Categories" asp-route-id="@category.CategoryId" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove Category</a>
+                                        <a asp-action="AddProductToStore" asp-controller="Products" asp-route-storeId="@store.StoreId" asp-route-categoryId="@category.CategoryId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Product</a>
+                                        <a asp-action="DeleteCategoryFromStore" asp-controller="Categories" asp-route-storeId="@store.StoreId" asp-route-categoryId="@category.CategoryId" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove Category</a>
                                     }
                                 </h4>
                                 <div id="@uniqueCategoryCollapseId" class="collapse" aria-labelledby="@category.CategoryId.ToString()" data-parent="#@uniqueAccordionId">
@@ -83,7 +83,7 @@
                                                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                                                         {
                                                             <a asp-action="ReplenishProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().ProductId" class=" col-6 btn btn-primary" style="width: auto">Replenish Product</a>
-                                                            <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().ProductId" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
+                                                            <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id ="@groupOfProducts.First().ProductId" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
                                                         }
                                                         else
                                                         {

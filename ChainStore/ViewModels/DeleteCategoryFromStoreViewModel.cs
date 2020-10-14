@@ -6,14 +6,14 @@ using ChainStore.Domain.DomainCore;
 
 namespace ChainStore.ViewModels
 {
-    public class DeleteProductViewModel
+    public class DeleteCategoryFromStoreViewModel
     {
-        public Product Product { get; set; }
-        public Guid ProductId { get; set; }
         public Category Category { get; set; }
         public Guid CategoryId { get; set; }
+        public Guid StoreId { get; set; }
 
-        public DeleteProductViewModel()
+
+        public DeleteCategoryFromStoreViewModel()
         {
         }
     }

@@ -91,28 +91,31 @@ namespace ChainStore.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteCategory(Guid? id)
+        public IActionResult DeleteCategoryFromStore(Guid? storeId, Guid? categoryId)
         {
-            if (id == null) return RedirectToAction(IndexAction, DefaultController);
+            if (storeId == null || categoryId == null) return RedirectToAction(IndexAction, DefaultController);
 
-            var categoryToDel = _categoryRepository.GetOne(id.Value);
-            if (categoryToDel == null) return View("CategoryNotFound", id.Value);//CategoryNotFound
+            var store = _storeRepository.GetOne(storeId.Value);
+            if (store == null) return View("StoreNotFound", storeId.Value);
 
-            var delCategoryViewModel = new DeleteCategoryViewModel { Category = categoryToDel };
+            var categoryToDel = _categoryRepository.GetOne(categoryId.Value);
+            if (categoryToDel == null) return View("CategoryNotFound", categoryId.Value);//CategoryNotFound
+
+            var delCategoryViewModel = new DeleteCategoryFromStoreViewModel { StoreId = store.StoreId, Category = categoryToDel };
             return View(delCategoryViewModel);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteCategory(DeleteCategoryViewModel deleteCategoryViewModel)
+        public IActionResult DeleteCategoryFromStore(DeleteCategoryFromStoreViewModel deleteCategoryFromStoreViewModel)
         {
-            var categoryToDel = _categoryRepository.GetOne(deleteCategoryViewModel.CategoryId);
-            if (categoryToDel == null) return View("CategoryNotFound", deleteCategoryViewModel.CategoryId);//CategoryNotFound
+            var store = _storeRepository.GetOne(deleteCategoryFromStoreViewModel.StoreId);
+            if (store == null) return View("StoreNotFound", deleteCategoryFromStoreViewModel.StoreId);//StoreNotFound
 
-            var productsInCatToDel = _productRepository.GetAll().Where(pr =>
-                    pr.CategoryId.Equals(categoryToDel.CategoryId) &&
-                    !pr.ProductStatus.Equals(ProductStatus.Purchased))
-                .ToList();
+            var categoryToDelFromStore = _categoryRepository.GetOne(deleteCategoryFromStoreViewModel.CategoryId);
+            if (categoryToDelFromStore == null) return View("CategoryNotFound", deleteCategoryFromStoreViewModel.CategoryId);//CategoryNotFound
+
+            var productsInCatToDel = store.Categories.First(e => e.CategoryId.Equals(categoryToDelFromStore.CategoryId)).Products;
             if (productsInCatToDel.Count != 0)
             {
                 var productsToDel = productsInCatToDel.ToList();
@@ -122,8 +125,8 @@ namespace ChainStore.Controllers
                     _productRepository.DeleteOne(product.ProductId);
                 }
             }
-            var catToDel = new Category(categoryToDel.CategoryId, categoryToDel.Name);//?
-            _categoryRepository.DeleteOne(catToDel.CategoryId);
+            var catToDel = new Category(categoryToDelFromStore.CategoryId, categoryToDelFromStore.Name);//?
+            _categoryRepository.DeleteCategoryFromStore(catToDel, store.StoreId);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }
