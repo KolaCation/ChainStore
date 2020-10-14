@@ -45,23 +45,40 @@ namespace ChainStore.Controllers
             var storesToDisplay = new List<Store>();
             if (!string.IsNullOrEmpty(searchStringStore))
             {
-                storesToDisplay.AddRange(stores.Where(st => st.Name.ToLower().Contains(searchStringStore.ToLower())).ToList().AsReadOnly());
+                storesToDisplay.AddRange(stores.Where(st => st.Name.ToLower().Contains(searchStringStore.ToLower())).ToList());
             }
 
             if (!string.IsNullOrEmpty(searchStringProduct))
             {
-                foreach (var store in storesToDisplay)
+                if (string.IsNullOrEmpty(searchStringStore))
                 {
+                    storesToDisplay = stores.ToList();
+                }
+                var storesToIterate = new List<Store>(storesToDisplay);
+                foreach (var store in storesToIterate)
+                {
+                    bool success = false;
                     foreach (var category in store.Categories)
                     {
                         foreach (var product in category.Products)
                         {
-                            if (!product.Name.ToLower().Contains(searchStringProduct.ToLower()))
+                            if (product.Name.ToLower().Contains(searchStringProduct.ToLower()))
                             {
-                                storesToDisplay.Remove(store);
+                                success = true;
+                                break;
+                            }
+                            else
+                            {
+                                success = false;
                             }
                         }
+
+                        if (success)
+                        {
+                            break;
+                        }
                     }
+                    if (!success) storesToDisplay.Remove(store);
                 }
             }
 
