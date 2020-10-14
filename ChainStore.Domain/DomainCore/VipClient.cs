@@ -14,7 +14,7 @@ namespace ChainStore.Domain.DomainCore
             Points = points;
         }
 
-        public override bool Pay(double sum, bool useCashBack, bool usePoints)
+        public override bool Charge(double sum, bool useCashBack, bool usePoints)
         {
             if (sum < 0) return false;
             if (usePoints)
@@ -31,7 +31,7 @@ namespace ChainStore.Domain.DomainCore
             {
                 
                 var priceWithDiscount = sum - sum * DiscountPercent / 100;
-                var res = base.Pay(priceWithDiscount, true, false);
+                var res = base.Charge(priceWithDiscount, true, false);
                 Points += sum / 1000;
                 if (!res) return false;
                 
@@ -41,7 +41,7 @@ namespace ChainStore.Domain.DomainCore
             {
                 
                 var priceWithDiscount = sum - sum * DiscountPercent / 100;
-                var res = base.Pay(priceWithDiscount, false, false);
+                var res = base.Charge(priceWithDiscount, false, false);
                 Points += sum / 1000;
                 if (!res) return false;
                 return true;

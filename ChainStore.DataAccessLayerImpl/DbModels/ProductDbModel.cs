@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
@@ -15,6 +16,9 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public Guid CategoryDbModelId { get; private set; }
         public CategoryDbModel CategoryDbModel { get; private set; }
 
+        private readonly List<StoreProductDbModel> _storeProductRelation;
+        public IReadOnlyCollection<StoreProductDbModel> StoreProductRelation => _storeProductRelation.AsReadOnly();
+
         public ProductDbModel(Guid productDbModelId, string name, double priceInUAH, ProductStatus productStatus, Guid categoryDbModelId)
         {
             CustomValidator.ValidateId(productDbModelId);
@@ -26,6 +30,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             PriceInUAH = priceInUAH;
             ProductStatus = productStatus;
             CategoryDbModelId = categoryDbModelId;
+            _storeProductRelation = new List<StoreProductDbModel>();
         }
     }
 }

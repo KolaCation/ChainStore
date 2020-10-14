@@ -20,6 +20,8 @@ namespace ChainStore.ViewModels
         [Required(ErrorMessage = "Count is required")]
         public int QuantityOfProductsToAdd { get; set; }
 
+        public Guid StoreId { get; set; }
+
         public CreateProductViewModel()
         {
         }

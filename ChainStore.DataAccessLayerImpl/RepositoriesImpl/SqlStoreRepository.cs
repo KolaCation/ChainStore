@@ -49,10 +49,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             {
                 var storeDbModel = _context.Stores.Find(id);
                 _context.Entry(storeDbModel).Collection(st => st.CategoryDbModels).Load();
-                foreach (var categoryDbModel in storeDbModel.CategoryDbModels)
-                {
-                    _context.Entry(categoryDbModel).Collection(cat => cat.ProductDbModels).Load();
-                }
                 return _storeMapper.DbToDomain(storeDbModel);
             }
             else
@@ -64,14 +60,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public IReadOnlyCollection<Store> GetAll()
         {
             var storeDbModelList = _context.Stores.ToList();
-            foreach (var storeDbModel in storeDbModelList)
-            {
-                _context.Entry(storeDbModel).Collection(st => st.CategoryDbModels).Load();
-                foreach (var categoryDbModel in storeDbModel.CategoryDbModels)
-                {
-                    _context.Entry(categoryDbModel).Collection(cat => cat.ProductDbModels).Load();
-                }
-            }
             var storeList = (from storeDbModel in storeDbModelList select _storeMapper.DbToDomain(storeDbModel)).ToList();
             return storeList.AsReadOnly();
         }

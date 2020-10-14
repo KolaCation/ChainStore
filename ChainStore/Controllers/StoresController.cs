@@ -22,29 +22,72 @@ namespace ChainStore.Controllers
         private readonly IStoreRepository _storeRepository;
         private readonly IProductRepository _productRepository;
         private readonly IBookRepository _bookRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
 
         public StoresController(IMallRepository mallRepository, IStoreRepository storeRepository, IProductRepository productRepository,
-            IBookRepository bookRepository)
+            IBookRepository bookRepository, ICategoryRepository categoryRepository)
         {
             _mallRepository = mallRepository;
             _storeRepository = storeRepository;
             _productRepository = productRepository;
             _bookRepository = bookRepository;
+            _categoryRepository = categoryRepository;
         }
 
 
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchStringStore, string searchStringProduct)
         {
             _bookRepository.CheckBooksForExpiration();
             var stores = _storeRepository.GetAll();
-            if (!string.IsNullOrEmpty(searchString))
+            var storesToDisplay = new List<Store>();
+            if (!string.IsNullOrEmpty(searchStringStore))
             {
-                stores = stores.Where(st => st.Name.ToLower().Contains(searchString.ToLower())).ToList().AsReadOnly();
+                storesToDisplay.AddRange(stores.Where(st => st.Name.ToLower().Contains(searchStringStore.ToLower())).ToList());
             }
-            return View(stores);
+
+            if (!string.IsNullOrEmpty(searchStringProduct))
+            {
+                if (string.IsNullOrEmpty(searchStringStore))
+                {
+                    storesToDisplay = stores.ToList();
+                }
+                var storesToIterate = new List<Store>(storesToDisplay);
+                foreach (var store in storesToIterate)
+                {
+                    bool success = false;
+                    foreach (var category in store.Categories)
+                    {
+                        foreach (var product in category.Products)
+                        {
+                            if (product.Name.ToLower().Contains(searchStringProduct.ToLower()))
+                            {
+                                success = true;
+                                break;
+                            }
+                            else
+                            {
+                                success = false;
+                            }
+                        }
+
+                        if (success)
+                        {
+                            break;
+                        }
+                    }
+                    if (!success) storesToDisplay.Remove(store);
+                }
+            }
+
+            if (string.IsNullOrEmpty(searchStringStore) && string.IsNullOrEmpty(searchStringProduct))
+            {
+                storesToDisplay = stores.ToList();
+            }
+
+            return View(storesToDisplay);
         }
 
         [HttpGet]
@@ -172,6 +215,7 @@ namespace ChainStore.Controllers
             if (storeToDel.Categories.Count != 0)
             {
                 var productsToRemove = new List<Product>();
+                var categoriesToRemoveFromStore = new List<Category>();
                 foreach (var category in storeToDel.Categories)
                 {
                     productsToRemove.AddRange(category.Products
@@ -179,11 +223,17 @@ namespace ChainStore.Controllers
                             pr.CategoryId.Equals(category.CategoryId) &&
                             !pr.ProductStatus.Equals(ProductStatus.Purchased))
                         .ToList());
+                    categoriesToRemoveFromStore.Add(category);
                 }
 
                 foreach (var product in productsToRemove)
                 {
                     _productRepository.DeleteOne(product.ProductId);
+                }
+
+                foreach (var category in categoriesToRemoveFromStore)
+                {
+                    _categoryRepository.DeleteCategoryFromStore(category, storeToDel.StoreId);
                 }
             }
 

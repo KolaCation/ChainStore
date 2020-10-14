@@ -16,11 +16,13 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
     {
         private readonly MyDbContext _context;
         private readonly ProductMapper _productMapper;
+        private readonly StoreMapper _storeMapper;
 
         public SqlProductRepository(MyDbContext context)
         {
             _context = context;
             _productMapper = new ProductMapper();
+            _storeMapper = new StoreMapper(context);
         }
 
         public void AddOne(Product item)
@@ -76,6 +78,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             if (exists)
             {
                 var productDbModel = _context.Products.Find(id);
+                var storeProdRel =
+                    _context.StoreProductRelation.First(e =>
+                        e.ProductDbModelId.Equals(productDbModel.ProductDbModelId));
+                DeleteProductFromStore(_productMapper.DbToDomain(productDbModel), storeProdRel.StoreDbModelId);
                 var enState = _context.Products.Remove(productDbModel);
                 enState.State = EntityState.Deleted;
                 _context.SaveChanges();
@@ -86,6 +92,50 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Products.Any(item => item.ProductDbModelId.Equals(id));
+        }
+
+        public Store GetStoreOfSpecificProduct(Guid productId)
+        {
+            CustomValidator.ValidateId(productId);
+            var res = _context.StoreProductRelation.FirstOrDefault(e => e.ProductDbModelId.Equals(productId));
+            if(res != null)
+            {
+                var storeDbModelId = res.StoreDbModelId;
+                var storeDbModel = _context.Stores.Find(storeDbModelId);
+                return _storeMapper.DbToDomain(storeDbModel);
+            }
+            return null;
+        }
+
+        public void AddProductToStore(Product product, Guid storeId)
+        {
+            CustomValidator.ValidateObject(product);
+            CustomValidator.ValidateId(storeId);
+            var storeProdRel = new StoreProductDbModel(storeId, product.ProductId);
+            if (!Exists(product.ProductId))
+            {
+                AddOne(product);
+            }
+            if (!_context.StoreProductRelation
+                .Any(e => e.ProductDbModelId.Equals(storeProdRel.ProductDbModelId) && e.StoreDbModelId.Equals(storeProdRel.StoreDbModelId)))
+            {
+                _context.StoreProductRelation.Add(storeProdRel);
+                _context.SaveChanges();
+            }
+        }
+
+        public void DeleteProductFromStore(Product product, Guid storeId)
+        {
+            CustomValidator.ValidateObject(product);
+            CustomValidator.ValidateId(storeId);
+            if (_context.StoreProductRelation
+                .Any(e => e.ProductDbModelId.Equals(product.ProductId) && e.StoreDbModelId.Equals(storeId)))
+            {
+                var storeProdToDel = _context.StoreProductRelation.First(e =>
+                    e.ProductDbModelId.Equals(product.ProductId) && e.StoreDbModelId.Equals(storeId));
+                _context.StoreProductRelation.Remove(storeProdToDel);
+                _context.SaveChanges();
+            }
         }
     }
 }

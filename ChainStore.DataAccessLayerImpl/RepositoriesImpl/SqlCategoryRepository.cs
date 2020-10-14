@@ -29,8 +29,8 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             var exists = Exists(item.CategoryId);
             if (!exists)
             {
-                var hasSameName = _context.Categories.Any(cat => cat.CategoryName.Equals(item.CategoryName) && cat.StoreDbModelId.Equals(item.StoreId));
-                if(hasSameName) return;
+                var hasSameName = _context.Categories.Any(cat => cat.Name.ToLower().Equals(item.Name.ToLower()));
+                if (hasSameName) return;
                 var enState = _context.Categories.Add(_categoryMapper.DomainToDb(item));
                 enState.State = EntityState.Added;
                 _context.SaveChanges();
@@ -44,7 +44,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             if (exists)
             {
                 var categoryDbModel = _context.Categories.Find(id);
-                _context.Entry(categoryDbModel).Collection(cat=>cat.ProductDbModels).Load();
                 return _categoryMapper.DbToDomain(categoryDbModel);
             }
             else
@@ -56,10 +55,6 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public IReadOnlyCollection<Category> GetAll()
         {
             var categoryDbModelList = _context.Categories.ToList();
-            foreach (var categoryDbModel in categoryDbModelList)
-            {
-                _context.Entry(categoryDbModel).Collection(cat=>cat.ProductDbModels).Load();
-            }
             var categoryList = (from categoryDbModel in categoryDbModelList select _categoryMapper.DbToDomain(categoryDbModel)).ToList();
             return categoryList.AsReadOnly();
         }
@@ -70,7 +65,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             var exists = Exists(item.CategoryId);
             if (exists)
             {
-                var hasSameName = _context.Categories.Any(cat => cat.CategoryName.Equals(item.CategoryName) && cat.StoreDbModelId.Equals(item.StoreId));
+                var hasSameName = _context.Categories.Any(cat => cat.Name.ToLower().Equals(item.Name.ToLower()));
                 if (hasSameName) return;
                 DetachService.Detach<CategoryDbModel>(_context, item.CategoryId);
                 var enState = _context.Categories.Update(_categoryMapper.DomainToDb(item));
@@ -96,6 +91,33 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateId(id);
             return _context.Categories.Any(item => item.CategoryDbModelId.Equals(id));
+        }
+
+        public void AddCategoryToStore(Category category, Guid storeId)
+        {
+            CustomValidator.ValidateObject(category);
+            CustomValidator.ValidateId(storeId);
+            var storeCatRel = new StoreCategoryDbModel(storeId, category.CategoryId);
+            if (!_context.StoreCategoryRelation
+                .Any(e => e.CategoryDbModelId.Equals(storeCatRel.CategoryDbModelId) && e.StoreDbModelId.Equals(storeCatRel.StoreDbModelId)))
+            {
+                _context.StoreCategoryRelation.Add(storeCatRel);
+                _context.SaveChanges();
+            }
+        }
+
+        public void DeleteCategoryFromStore(Category category, Guid storeId)
+        {
+            CustomValidator.ValidateObject(category);
+            CustomValidator.ValidateId(storeId);
+            if (_context.StoreCategoryRelation
+                .Any(e => e.CategoryDbModelId.Equals(category.CategoryId) && e.StoreDbModelId.Equals(storeId)))
+            {
+               var storeCatRelToDel = _context.StoreCategoryRelation.First(e =>
+                    e.CategoryDbModelId.Equals(category.CategoryId) && e.StoreDbModelId.Equals(storeId));
+                _context.StoreCategoryRelation.Remove(storeCatRelToDel);
+                _context.SaveChanges();
+            }
         }
     }
 }

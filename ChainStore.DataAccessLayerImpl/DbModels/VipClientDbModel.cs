@@ -5,7 +5,7 @@ using ChainStore.Shared.Util;
 
 namespace ChainStore.DataAccessLayerImpl.DbModels
 {
-    internal class VipClientDbModel : ReliableClientDbModel
+    internal sealed class VipClientDbModel : ReliableClientDbModel
     {
         public int DiscountPercent { get; private set; }
         public double Points { get; private set; }

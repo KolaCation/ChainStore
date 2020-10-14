@@ -5,10 +5,11 @@ using System.Text;
 using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChainStore.DataAccessLayerImpl.Mappers
 {
-    internal sealed class CategoryMapper : IMapper<Category, CategoryDbModel>
+    internal sealed class CategoryMapper : ICategoryMapper
     {
         private readonly MyDbContext _context;
         private readonly ProductMapper _productMapper;
@@ -22,21 +23,34 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public CategoryDbModel DomainToDb(Category item)
         {
             CustomValidator.ValidateObject(item);
-            return new CategoryDbModel(item.CategoryId, item.CategoryName, item.StoreId);
+            return new CategoryDbModel(item.CategoryId, item.Name);
         }
 
         public Category DbToDomain(CategoryDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var categoryDbModel = _context.Categories.Find(item.CategoryDbModelId);
-            _context.Entry(categoryDbModel).Collection(cat => cat.ProductDbModels).Load();
-           return new Category
-           (
-               (from productDbModel in categoryDbModel.ProductDbModels select _productMapper.DbToDomain(productDbModel)).ToList(),
-               categoryDbModel.CategoryDbModelId,
-               categoryDbModel.CategoryName,
-               categoryDbModel.StoreDbModelId
-           );
+            var categoryDbModel = _context.Categories.Where(e => e.CategoryDbModelId.Equals(item.CategoryDbModelId))
+                .Include(e => e.ProductDbModels).ThenInclude(e => e.StoreProductRelation).ThenInclude(e => e.StoreDbModel).FirstOrDefault();
+            return new Category
+            (
+                (from productDbModel in categoryDbModel.ProductDbModels select _productMapper.DbToDomain(productDbModel)).ToList(),
+                categoryDbModel.CategoryDbModelId,
+                categoryDbModel.Name
+            );
+        }
+
+        public Category DbToDomainStoreSpecificProducts(CategoryDbModel item, Guid storeId)
+        {
+            CustomValidator.ValidateObject(item);
+            CustomValidator.ValidateId(storeId);
+            var categoryDbModel = _context.Categories.Where(e => e.CategoryDbModelId.Equals(item.CategoryDbModelId))
+                        .Include(e => e.ProductDbModels).ThenInclude(e => e.StoreProductRelation).ThenInclude(e => e.StoreDbModel).FirstOrDefault();
+            return new Category
+            (
+                (from productDbModel in categoryDbModel.GetStoreSpecificProducts(storeId) select _productMapper.DbToDomain(productDbModel)).ToList(),
+                categoryDbModel.CategoryDbModelId,
+                categoryDbModel.Name
+            );
         }
     }
 }

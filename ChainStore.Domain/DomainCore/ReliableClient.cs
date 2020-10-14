@@ -17,14 +17,14 @@ namespace ChainStore.Domain.DomainCore
             CashBackPercent = cashBackPercent;
         }
 
-        public override bool Pay(double sum, bool useCashBack, bool usePoints)
+        public override bool Charge(double sum, bool useCashBack, bool usePoints)
         {
             if (sum < 0) return false;
             if (useCashBack)
             {
                 if (Math.Abs(CashBack) < 1)
                 {
-                    var res = base.Pay(sum, true, false);
+                    var res = base.Charge(sum, true, false);
                     if (!res) return false;
                     CashBack += sum * CashBackPercent / 100;
                     return true;
@@ -34,7 +34,7 @@ namespace ChainStore.Domain.DomainCore
                 {
                     sum -= CashBack;
                     CashBack = 0;
-                    var res = base.Pay(sum, true, false);
+                    var res = base.Charge(sum, true, false);
                     return res;
                 }
 
@@ -47,7 +47,7 @@ namespace ChainStore.Domain.DomainCore
             else
             {
                 
-                var res = base.Pay(sum, false, false);
+                var res = base.Charge(sum, false, false);
                 if (!res) return false;
                 CashBack += sum * CashBackPercent / 100;
                 return true;

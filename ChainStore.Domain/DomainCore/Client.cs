@@ -31,7 +31,7 @@ namespace ChainStore.Domain.DomainCore
             Balance += sum;
         }
 
-        public virtual bool Pay(double sum, bool useCashBack, bool usePoints)
+        public virtual bool Charge(double sum, bool useCashBack, bool usePoints)
         {
             CustomValidator.ValidateNumber(sum, 0, 100_000_000);
             if (Balance < sum) return false;

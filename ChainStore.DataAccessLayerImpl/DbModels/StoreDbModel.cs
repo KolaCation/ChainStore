@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 
 namespace ChainStore.DataAccessLayerImpl.DbModels
@@ -13,8 +16,14 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public Guid? MallDbModelId { get; private set; }
         public MallDbModel MallDbModel { get; private set; }
 
-        private readonly List<CategoryDbModel> _categoryDbModels;
-        public IReadOnlyCollection<CategoryDbModel> CategoryDbModels => _categoryDbModels.AsReadOnly();
+        private readonly List<StoreCategoryDbModel> _storeCategoryRelation;
+        public IReadOnlyCollection<StoreCategoryDbModel> StoreCategoryRelation => _storeCategoryRelation.AsReadOnly();
+
+        private readonly List<StoreProductDbModel> _storeProductRelation;
+        public IReadOnlyCollection<StoreProductDbModel> StoreProductRelation => _storeProductRelation.AsReadOnly();
+
+        private List<CategoryDbModel> _categoryDbModels;
+        public IReadOnlyCollection<CategoryDbModel> CategoryDbModels => GetStoreSpecificCategories();
 
         public double Profit { get; private set; }
 
@@ -30,7 +39,14 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             Location = location;
             MallDbModelId = mallDbModelId;
             Profit = profit;
+            _storeCategoryRelation = new List<StoreCategoryDbModel>();
+            _storeProductRelation = new List<StoreProductDbModel>();
             _categoryDbModels = new List<CategoryDbModel>();
+        }
+
+        private IReadOnlyCollection<CategoryDbModel> GetStoreSpecificCategories()
+        {
+            return (from storeCatRel in _storeCategoryRelation where storeCatRel.StoreDbModelId.Equals(StoreDbModelId) select storeCatRel.CategoryDbModel).ToList().AsReadOnly();
         }
     }
 }

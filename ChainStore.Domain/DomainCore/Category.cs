@@ -7,22 +7,20 @@ namespace ChainStore.Domain.DomainCore
     public sealed class Category
     {
         public Guid CategoryId { get; }
-        public CategoryNames CategoryName { get; }
-        public Guid? StoreId { get; }
+        public string Name { get; }
 
         private readonly List<Product> _products;
         public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
-        public Category(Guid categoryId, CategoryNames categoryName, Guid? storeId)
+        public Category(Guid categoryId, string name)
         {
             CustomValidator.ValidateId(categoryId);
-            CustomValidator.ValidateId(storeId);
+            CustomValidator.ValidateString(name, 2, 40);
             CategoryId = categoryId;
-            CategoryName = categoryName;
-            StoreId = storeId;
+            Name = name;
         }
 
-        public Category(List<Product> products, Guid categoryId, CategoryNames categoryName, Guid? storeId) : this(categoryId, categoryName, storeId)
+        public Category(List<Product> products, Guid categoryId, string name) : this(categoryId, name)
         {
             CustomValidator.ValidateObject(products);
             _products = products;

@@ -53,6 +53,7 @@ namespace ChainStore
             app.UseFileServer();
             app.UseAuthentication();
             app.UseMvc(routes => routes.MapRoute("default", "{controller=Stores}/{action=Index}/{id?}"));
+            MyDbContextSeedData.Initialize(app.ApplicationServices, _config).Wait();
         }
     }
 }
