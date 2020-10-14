@@ -58,7 +58,7 @@ namespace ChainStore.Controllers
             if (client == null) return View("ClientNotFound", productClientViewModel.ClientId);//ClientNotFound
 
             var product = _productRepository.GetOne(productClientViewModel.ProductId);
-            if (product == null) return RedirectToAction("ProductNotFound", productClientViewModel.ProductId);//ProductNotFound
+            if (product == null) return View("ProductNotFound", productClientViewModel.ProductId);//ProductNotFound
 
             var checkForLimit = _bookRepository.GetClientBooks(productClientViewModel.ClientId);
             if (checkForLimit == null) return View("ClientNotFound", productClientViewModel.ClientId);

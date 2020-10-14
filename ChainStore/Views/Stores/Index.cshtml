@@ -1,4 +1,4 @@
-﻿@model IReadOnlyCollection<Store>
+﻿@model List<Store>
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ProductsGroupsViewMaker ProductsGroupsViewMaker
 @inject IMallRepository MallRepository
@@ -9,7 +9,9 @@
 <form asp-controller="Stores" asp-action="Index">
     <div class="d-flex justify-content-center m-2">
         <p class="card-text mr-2">Store Name: </p>
-        <input class="form-control col-2 mr-2" type="text" name="searchString" placeholder="name...">
+        <input class="form-control col-2 mr-2" type="text" name="searchStringStore" placeholder="name...">
+        <p class="card-text mr-2">Product Name: </p>
+        <input class="form-control col-2 mr-2" type="text" name="searchStringProduct" placeholder="name...">
         <input class="btn btn-primary ml-2" type="submit" value="Search" />
     </div>
 </form>

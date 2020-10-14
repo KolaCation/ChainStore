@@ -14,31 +14,16 @@ namespace ChainStore.Controllers
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IBookRepository _bookRepository;
         private readonly IStoreRepository _storeRepository;
         private const string IndexAction = "Index";
         private const string DefaultController = "Stores";
 
         public ProductsController(ICategoryRepository categoryRepository, IProductRepository productRepository,
-            IBookRepository bookRepository, IStoreRepository storeRepository)
+            IStoreRepository storeRepository)
         {
             _categoryRepository = categoryRepository;
             _productRepository = productRepository;
-            _bookRepository = bookRepository;
             _storeRepository = storeRepository;
-        }
-
-        public IActionResult Index(string searchString)
-        {
-            _bookRepository.CheckBooksForExpiration();
-            var products = _productRepository.GetAll();
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                products = products.Where(pr => pr.Name.ToLower().Contains(searchString.ToLower())).ToList()
-                    .AsReadOnly();
-            }
-
-            return View(products);
         }
 
         [HttpGet]
@@ -122,7 +107,7 @@ namespace ChainStore.Controllers
             return RedirectToAction(IndexAction, DefaultController);
         }
 
-        //переделать
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteProduct(Guid? id)
@@ -146,7 +131,8 @@ namespace ChainStore.Controllers
             var store = _productRepository.GetStoreOfSpecificProduct(productToDel.ProductId);
             if (store == null) return View("StoreNotFound", Guid.Empty);
 
-            var categoryWithStoreSpecificProducts = store.Categories.First(e => e.CategoryId.Equals(productToDel.CategoryId));
+            var categoryWithStoreSpecificProducts =
+                store.Categories.First(e => e.CategoryId.Equals(productToDel.CategoryId));
             var storeAndCategorySpecificProducts = categoryWithStoreSpecificProducts.Products.Where(product =>
                     product.Name.Equals(productToDel.Name) && product.ProductStatus.Equals(productToDel.ProductStatus))
                 .ToList();

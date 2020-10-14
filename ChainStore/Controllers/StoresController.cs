@@ -38,15 +38,39 @@ namespace ChainStore.Controllers
         }
 
 
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchStringStore, string searchStringProduct)
         {
             _bookRepository.CheckBooksForExpiration();
             var stores = _storeRepository.GetAll();
-            if (!string.IsNullOrEmpty(searchString))
+            var storesToDisplay = new List<Store>();
+            if (!string.IsNullOrEmpty(searchStringStore))
             {
-                stores = stores.Where(st => st.Name.ToLower().Contains(searchString.ToLower())).ToList().AsReadOnly();
+                storesToDisplay.AddRange(stores.Where(st => st.Name.ToLower().Contains(searchStringStore.ToLower())).ToList().AsReadOnly());
             }
-            return View(stores);
+
+            if (!string.IsNullOrEmpty(searchStringProduct))
+            {
+                foreach (var store in storesToDisplay)
+                {
+                    foreach (var category in store.Categories)
+                    {
+                        foreach (var product in category.Products)
+                        {
+                            if (!product.Name.ToLower().Contains(searchStringProduct.ToLower()))
+                            {
+                                storesToDisplay.Remove(store);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(searchStringStore) && string.IsNullOrEmpty(searchStringProduct))
+            {
+                storesToDisplay = stores.ToList();
+            }
+
+            return View(storesToDisplay);
         }
 
         [HttpGet]
