@@ -10,13 +10,9 @@
   <Class Name="ChainStore.Domain.DomainCore.Category">
     <Position X="5.25" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAAAAAAAAAgAAAAAAEAAAACAAAAAAAIAAAQAAAAQ=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAQAAAAAAAAAAIAAAAAAAAQ=</HashCode>
       <FileName>DomainCore\Category.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="CategoryName" />
-      <Property Name="Store" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Products" />
     </ShowAsCollectionAssociation>
@@ -24,14 +20,14 @@
   <Class Name="ChainStore.Domain.DomainCore.Client">
     <Position X="17.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAggAAgAgAAAQAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAQAgAAAgAgAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>DomainCore\Client.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ChainStore.Domain.DomainCore.Mall">
     <Position X="11.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAgAAAAAAAIABAQAAAAgAAAAAAAAAUAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAIABAQAAAAgAAAAAAAAAQAAAAA=</HashCode>
       <FileName>DomainCore\Mall.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -41,12 +37,11 @@
   <Class Name="ChainStore.Domain.DomainCore.Product">
     <Position X="5.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAAAAAAAAQAAAgAAAAAAAAQAAQQAAAAAAAAAAAAACAA=</HashCode>
+      <HashCode>EAAAAAAAAAAAAgAAAAAAAAQACQQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DomainCore\Product.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="ProductStatus" />
-      <Property Name="Category" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ChainStore.Domain.DomainCore.Purchase">
@@ -59,12 +54,9 @@
   <Class Name="ChainStore.Domain.DomainCore.Store">
     <Position X="8.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAIAAAAgAQAAAAAIAEAQCAAAgEAAAAAAAEUQAAAA=</HashCode>
+      <HashCode>IAAAAAAAAAAAQAAAAAIAEAQCAAAgEAAAAAAAAAAAAAA=</HashCode>
       <FileName>DomainCore\Store.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Mall" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Categories" />
     </ShowAsCollectionAssociation>
@@ -72,29 +64,43 @@
   <Class Name="ChainStore.Domain.DomainCore.ReliableClient">
     <Position X="17.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAggAAAAAAAAAAAAAAAAAAAAAEQAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAEQAAAAAA=</HashCode>
       <FileName>DomainCore\ReliableClient.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ChainStore.Domain.DomainCore.VipClient">
     <Position X="17.75" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
       <FileName>DomainCore\VipClient.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Enum Name="ChainStore.Domain.DomainCore.CategoryNames">
-    <Position X="5.25" Y="9.75" Width="1.5" />
+  <Class Name="ChainStore.Domain.DomainCore.StoreCategoryRelation">
+    <Position X="7" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAgAAAAAAAAAAAAAQAAQQAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
-      <FileName>DomainCore\CategoryNames.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainCore\StoreCategoryRelation.cs</FileName>
     </TypeIdentifier>
-  </Enum>
+  </Class>
+  <Class Name="ChainStore.Domain.DomainCore.StoreProductRelation">
+    <Position X="7.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainCore\StoreProductRelation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Enum Name="ChainStore.Domain.DomainCore.ProductStatus">
     <Position X="5.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAACAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>DomainCore\ProductStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ChainStore.Domain.DomainCore.ClientStatus">
+    <Position X="20" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAgAABAAAAAAAA=</HashCode>
+      <FileName>DomainCore\ClientStatus.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />
