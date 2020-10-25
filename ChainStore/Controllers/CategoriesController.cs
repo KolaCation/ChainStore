@@ -79,12 +79,12 @@ namespace ChainStore.Controllers
             var store = _storeRepository.GetOne(addCategoryToStoreViewModel.StoreId);
             if (store == null) return View("StoreNotFound", addCategoryToStoreViewModel.StoreId);
             var categoryWithThatId = _categoryRepository.GetOne(addCategoryToStoreViewModel.CategoryId);
-            if (store.Categories.Any(category => category.CategoryId.Equals(addCategoryToStoreViewModel.CategoryId)))
+            if (store.Categories.Any(category => category.Id.Equals(addCategoryToStoreViewModel.CategoryId)))
             {
                 ModelState.AddModelError(string.Empty, $"Category '{categoryWithThatId.Name}' already exists");
                 return View(new AddCategoryToStoreViewModel { Store = store });
             }
-            _categoryRepository.AddCategoryToStore(categoryWithThatId, store.StoreId);
+            _categoryRepository.AddCategoryToStore(categoryWithThatId, store.Id);
             return RedirectToAction(IndexAction, DefaultController);
         }
 
@@ -101,7 +101,7 @@ namespace ChainStore.Controllers
             var categoryToDel = _categoryRepository.GetOne(categoryId.Value);
             if (categoryToDel == null) return View("CategoryNotFound", categoryId.Value);//CategoryNotFound
 
-            var delCategoryViewModel = new DeleteCategoryFromStoreViewModel { StoreId = store.StoreId, Category = categoryToDel };
+            var delCategoryViewModel = new DeleteCategoryFromStoreViewModel { StoreId = store.Id, Category = categoryToDel };
             return View(delCategoryViewModel);
         }
 
@@ -115,18 +115,18 @@ namespace ChainStore.Controllers
             var categoryToDelFromStore = _categoryRepository.GetOne(deleteCategoryFromStoreViewModel.CategoryId);
             if (categoryToDelFromStore == null) return View("CategoryNotFound", deleteCategoryFromStoreViewModel.CategoryId);//CategoryNotFound
 
-            var productsInCatToDel = store.Categories.First(e => e.CategoryId.Equals(categoryToDelFromStore.CategoryId)).Products;
+            var productsInCatToDel = store.Categories.First(e => e.Id.Equals(categoryToDelFromStore.Id)).Products;
             if (productsInCatToDel.Count != 0)
             {
                 var productsToDel = productsInCatToDel.ToList();
                 productsToDel.AddRange(productsToDel);
                 foreach (var product in productsToDel)
                 {   //you should not delete category
-                    _productRepository.DeleteOne(product.ProductId);
+                    _productRepository.DeleteOne(product.Id);
                 }
             }
-            var catToDel = new Category(categoryToDelFromStore.CategoryId, categoryToDelFromStore.Name);//?
-            _categoryRepository.DeleteCategoryFromStore(catToDel, store.StoreId);
+            var catToDel = new Category(categoryToDelFromStore.Id, categoryToDelFromStore.Name);//?
+            _categoryRepository.DeleteCategoryFromStore(catToDel, store.Id);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }

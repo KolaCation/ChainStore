@@ -5,19 +5,19 @@ namespace ChainStore.Domain.DomainCore
 {
     public sealed class Product
     {
-        public Guid ProductId { get; }
+        public Guid Id { get; }
         public string Name { get; }
         public double PriceInUAH { get; }
         public ProductStatus ProductStatus { get; private set; }
         public Guid CategoryId { get; }
 
-        public Product(Guid productId, string name, double priceInUAH, ProductStatus productStatus, Guid categoryId)
+        public Product(Guid id, string name, double priceInUAH, ProductStatus productStatus, Guid categoryId)
         {
-            CustomValidator.ValidateId(productId);
+            CustomValidator.ValidateId(id);
             CustomValidator.ValidateId(categoryId);
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateNumber(priceInUAH, 0, 100_000_000);
-            ProductId = productId;
+            Id = id;
             Name = name;
             PriceInUAH = priceInUAH;
             ProductStatus = productStatus;

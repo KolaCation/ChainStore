@@ -22,7 +22,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Purchase item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.PurchaseId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var enState = _context.Purchases.Add(_purchaseMapper.DomainToDb(item));
@@ -47,12 +47,12 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Purchases.Any(item => item.PurchaseDbModelId.Equals(id));
+            return _context.Purchases.Any(item => item.Id.Equals(id));
         }
 
         public List<Purchase> GetClientPurchases(Guid clientId)
         {
-            var purchaseDbModelList = _context.Purchases.Where(p => p.ClientDbModelId.Equals(clientId)).ToList();
+            var purchaseDbModelList = _context.Purchases.Where(p => p.ClientId.Equals(clientId)).ToList();
             var purchaseList = (from purchaseDbModel in purchaseDbModelList select _purchaseMapper.DbToDomain(purchaseDbModel)).ToList();
             return purchaseList;
         }

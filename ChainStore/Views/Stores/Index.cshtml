@@ -26,11 +26,11 @@
         <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-header"><a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.StoreId" style="text-decoration: none">@store.Name</a></h5>
+                    <h5 class="card-header"><a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.Id" style="text-decoration: none">@store.Name</a></h5>
                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                        <a asp-action="EditStore" asp-controller="Stores" asp-route-id="@store.StoreId" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
-                        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@store.StoreId" class="btn btn-danger mb-2 mt-2" style="width:  auto">Remove</a>
+                        <a asp-action="EditStore" asp-controller="Stores" asp-route-id="@store.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
+                        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@store.Id" class="btn btn-danger mb-2 mt-2" style="width:  auto">Remove</a>
                     }
                     @if (store.MallId != null)
                     {
@@ -45,7 +45,7 @@
                     <h6 class="card-text text-left">Categories: </h6>
                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                        <a asp-action="AddCategoryToStore" asp-controller="Categories" asp-route-id="@store.StoreId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Category</a>
+                        <a asp-action="AddCategoryToStore" asp-controller="Categories" asp-route-id="@store.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Category</a>
 
                     }
                     @{ var uniqueAccordionId = "accordion" + storeIndex.ToString(); }
@@ -55,7 +55,7 @@
                             foreach (var category in store.Categories)
                             {
                                 var uniqueCategoryCollapseId = category.Name + categoryIndex.ToString();
-                                <h4 class="card-title mt-2 mb-2" id="@category.CategoryId.ToString()">
+                                <h4 class="card-title mt-2 mb-2" id="@category.Id.ToString()">
                                     <button class="btn btn-info" style="width: 100%" type="button"
                                             data-toggle="collapse"
                                             data-target="#@uniqueCategoryCollapseId"
@@ -66,11 +66,11 @@
                                     </button>
                                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                                     {
-                                        <a asp-action="AddProductToStore" asp-controller="Products" asp-route-storeId="@store.StoreId" asp-route-categoryId="@category.CategoryId" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Product</a>
-                                        <a asp-action="DeleteCategoryFromStore" asp-controller="Categories" asp-route-storeId="@store.StoreId" asp-route-categoryId="@category.CategoryId" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove Category</a>
+                                        <a asp-action="AddProductToStore" asp-controller="Products" asp-route-storeId="@store.Id" asp-route-categoryId="@category.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Product</a>
+                                        <a asp-action="DeleteCategoryFromStore" asp-controller="Categories" asp-route-storeId="@store.Id" asp-route-categoryId="@category.Id" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove Category</a>
                                     }
                                 </h4>
-                                <div id="@uniqueCategoryCollapseId" class="collapse" aria-labelledby="@category.CategoryId.ToString()" data-parent="#@uniqueAccordionId">
+                                <div id="@uniqueCategoryCollapseId" class="collapse" aria-labelledby="@category.Id.ToString()" data-parent="#@uniqueAccordionId">
                                     <ul class="list-group">
                                         @{ var productsGroups = ProductsGroupsViewMaker.MakeProductsGroupsFromCategory(category); }
                                         @if (productsGroups.Count != 0)
@@ -84,13 +84,13 @@
                                                     <div class="row col-12 col-sm-auto col-md-12">
                                                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                                                         {
-                                                            <a asp-action="ReplenishProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().ProductId" class=" col-6 btn btn-primary" style="width: auto">Replenish Product</a>
-                                                            <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id ="@groupOfProducts.First().ProductId" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
+                                                            <a asp-action="ReplenishProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().Id" class=" col-6 btn btn-primary" style="width: auto">Replenish Product</a>
+                                                            <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id ="@groupOfProducts.First().Id" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
                                                         }
                                                         else
                                                         {
-                                                            <a asp-action="PurchaseOperation" asp-controller="Purchase" asp-route-id="@groupOfProducts.First().ProductId" class="col-6 btn btn-primary">Buy</a>
-                                                            <a asp-action="BookOperation" asp-controller="Book" asp-route-id="@groupOfProducts.First().ProductId" class="col-6 btn btn-success">Book</a>
+                                                            <a asp-action="PurchaseOperation" asp-controller="Purchase" asp-route-id="@groupOfProducts.First().Id" class="col-6 btn btn-primary">Buy</a>
+                                                            <a asp-action="BookOperation" asp-controller="Book" asp-route-id="@groupOfProducts.First().Id" class="col-6 btn btn-success">Book</a>
                                                         }
                                                     </div>
                                                 </li>

@@ -4,7 +4,7 @@
     ViewBag.Title = "Delete Product";
 }
 <form asp-controller="Products" asp-action="DeleteProduct" method="post">
-    <input type="hidden" asp-for="ProductId" value="@Model.Product.ProductId" />
+    <input type="hidden" asp-for="ProductId" value="@Model.Product.Id" />
     <input type="hidden" asp-for="CategoryId" value="@Model.Product.CategoryId" />
     @{
         var category = CategoryRepository.GetOne(Model.Product.CategoryId);

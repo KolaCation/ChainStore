@@ -11,7 +11,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public int CashBackPercent { get; protected set; }
         public double CashBack { get; protected set; }
 
-        public ReliableClientDbModel(Guid clientDbModelId, string name, double balance, double cashBack, int cashBackPercent) : base(clientDbModelId, name, balance)
+        public ReliableClientDbModel(Guid id, string name, double balance, double cashBack, int cashBackPercent) : base(id, name, balance)
         {
             CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
             CustomValidator.ValidateNumber(cashBack, 0, 100_000_000);

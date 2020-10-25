@@ -3,7 +3,7 @@
     ViewBag.Title = "Delete Category From Store";
 }
 <form asp-controller="Categories" asp-action="DeleteCategoryFromStore" method="post">
-    <input type="hidden" asp-for="CategoryId" value="@Model.Category.CategoryId" />
+    <input type="hidden" asp-for="CategoryId" value="@Model.Category.Id" />
     <input type="hidden" asp-for="StoreId" value="@Model.StoreId" />
     <h4 class="text-danger card-text mt-3">Delete '@Model.Category.Name'? Warning! All products in this category will be deleted!</h4>
     <a asp-controller="Stores" asp-action="Index" class="btn btn-primary m-1">Back</a>

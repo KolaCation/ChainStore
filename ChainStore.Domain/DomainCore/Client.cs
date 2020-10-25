@@ -5,16 +5,16 @@ namespace ChainStore.Domain.DomainCore
 {
     public class Client
     {
-        public Guid ClientId { get; }
+        public Guid Id { get; }
         public string Name { get; protected set; }
         public double Balance { get; protected set; }
 
-        public Client(Guid clientId, string name, double balance)
+        public Client(Guid id, string name, double balance)
         {
-            CustomValidator.ValidateId(clientId);
+            CustomValidator.ValidateId(id);
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateNumber(balance, 0, 100_000_000);
-            ClientId = clientId;
+            Id = id;
             Name = name;
             Balance = balance;
         }

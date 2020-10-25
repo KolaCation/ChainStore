@@ -25,7 +25,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Mall item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.MallId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var mallWithTheSameNameExists = _context.Malls.Any(m => m.Name.Equals(item.Name) && m.Location.Equals(item.Location));
@@ -82,12 +82,12 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void UpdateOne(Mall item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.MallId);
+            var exists = Exists(item.Id);
             if (exists)
             {
                 var mallWithTheSameNameExists = _context.Malls.Any(m => m.Name.Equals(item.Name) && m.Location.Equals(item.Location));
                 if (mallWithTheSameNameExists) return;
-                DetachService.Detach<MallDbModel>(_context, item.MallId);
+                DetachService.Detach<MallDbModel>(_context, item.Id);
                 var enState = _context.Malls.Update(_mallMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -110,7 +110,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Malls.Any(item => item.MallDbModelId.Equals(id));
+            return _context.Malls.Any(item => item.Id.Equals(id));
         }
     }
 }

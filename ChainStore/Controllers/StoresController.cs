@@ -119,7 +119,7 @@ namespace ChainStore.Controllers
             {
                 var store = new Store(Guid.NewGuid(), storeViewModel.Name, storeViewModel.Location, 0, null);
                 _storeRepository.AddOne(store);
-                return RedirectToAction("StoreDetails", new {id=store.StoreId});
+                return RedirectToAction("StoreDetails", new {id=store.Id});
             }
 
             return View(storeViewModel);
@@ -148,7 +148,7 @@ namespace ChainStore.Controllers
                 if (store == null) return View("StoreNotFound", storeId);
                 if (store.MallId == null)
                 {
-                    var updatedStore = new Store(store.StoreId, store.Name, mall.Location, store.Profit, mall.MallId);
+                    var updatedStore = new Store(store.Id, store.Name, mall.Location, store.Profit, mall.Id);
                     _storeRepository.UpdateOne(updatedStore);
                 }
             }
@@ -165,7 +165,7 @@ namespace ChainStore.Controllers
             if (storeToEdit != null)
             {
                 var editStoreViewModel = new EditStoreViewModel
-                    {Name = storeToEdit.Name, Location = storeToEdit.Location, StoreId = storeToEdit.StoreId};
+                    {Name = storeToEdit.Name, Location = storeToEdit.Location, StoreId = storeToEdit.Id};
                 return View(editStoreViewModel);
             }
 
@@ -186,7 +186,7 @@ namespace ChainStore.Controllers
                    updatedStore = new Store(editStoreViewModel.StoreId, editStoreViewModel.Name, editStoreViewModel.Location, storeToUpdate.Profit, null);
                 }
                 _storeRepository.UpdateOne(updatedStore);
-                return RedirectToAction("StoreDetails", new {id=updatedStore.StoreId});
+                return RedirectToAction("StoreDetails", new {id=updatedStore.Id});
             }
 
             return View(editStoreViewModel);
@@ -220,7 +220,7 @@ namespace ChainStore.Controllers
                 {
                     productsToRemove.AddRange(category.Products
                         .Where(pr =>
-                            pr.CategoryId.Equals(category.CategoryId) &&
+                            pr.CategoryId.Equals(category.Id) &&
                             !pr.ProductStatus.Equals(ProductStatus.Purchased))
                         .ToList());
                     categoriesToRemoveFromStore.Add(category);
@@ -228,16 +228,16 @@ namespace ChainStore.Controllers
 
                 foreach (var product in productsToRemove)
                 {
-                    _productRepository.DeleteOne(product.ProductId);
+                    _productRepository.DeleteOne(product.Id);
                 }
 
                 foreach (var category in categoriesToRemoveFromStore)
                 {
-                    _categoryRepository.DeleteCategoryFromStore(category, storeToDel.StoreId);
+                    _categoryRepository.DeleteCategoryFromStore(category, storeToDel.Id);
                 }
             }
 
-            _storeRepository.DeleteOne(storeToDel.StoreId);
+            _storeRepository.DeleteOne(storeToDel.Id);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }

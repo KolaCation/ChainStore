@@ -8,8 +8,8 @@ namespace ChainStore.Domain.DomainCore
         public int CashBackPercent { get; }
         public double CashBack { get; protected set; }
 
-        public ReliableClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent) 
-            : base(clientId, name, balance)
+        public ReliableClient(Guid id, string name, double balance, double cashBack, int cashBackPercent) 
+            : base(id, name, balance)
         {
             CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
             CustomValidator.ValidateNumber(cashBack, 0, 100_000_000);

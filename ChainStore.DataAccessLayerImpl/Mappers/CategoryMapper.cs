@@ -23,18 +23,18 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public CategoryDbModel DomainToDb(Category item)
         {
             CustomValidator.ValidateObject(item);
-            return new CategoryDbModel(item.CategoryId, item.Name);
+            return new CategoryDbModel(item.Id, item.Name);
         }
 
         public Category DbToDomain(CategoryDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var categoryDbModel = _context.Categories.Where(e => e.CategoryDbModelId.Equals(item.CategoryDbModelId))
+            var categoryDbModel = _context.Categories.Where(e => e.Id.Equals(item.Id))
                 .Include(e => e.ProductDbModels).ThenInclude(e => e.StoreProductRelation).ThenInclude(e => e.StoreDbModel).FirstOrDefault();
             return new Category
             (
                 (from productDbModel in categoryDbModel.ProductDbModels select _productMapper.DbToDomain(productDbModel)).ToList(),
-                categoryDbModel.CategoryDbModelId,
+                categoryDbModel.Id,
                 categoryDbModel.Name
             );
         }
@@ -43,12 +43,12 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         {
             CustomValidator.ValidateObject(item);
             CustomValidator.ValidateId(storeId);
-            var categoryDbModel = _context.Categories.Where(e => e.CategoryDbModelId.Equals(item.CategoryDbModelId))
+            var categoryDbModel = _context.Categories.Where(e => e.Id.Equals(item.Id))
                         .Include(e => e.ProductDbModels).ThenInclude(e => e.StoreProductRelation).ThenInclude(e => e.StoreDbModel).FirstOrDefault();
             return new Category
             (
                 (from productDbModel in categoryDbModel.GetStoreSpecificProducts(storeId) select _productMapper.DbToDomain(productDbModel)).ToList(),
-                categoryDbModel.CategoryDbModelId,
+                categoryDbModel.Id,
                 categoryDbModel.Name
             );
         }

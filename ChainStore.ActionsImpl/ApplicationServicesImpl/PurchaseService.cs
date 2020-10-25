@@ -17,19 +17,17 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IStoreRepository _storeRepository;
         private readonly IBookRepository _bookRepository;
-        private readonly ICategoryRepository _categoryRepository;
         private readonly PropertyGetter _propertyGetter;
 
         public PurchaseService(IClientRepository clientRepository, IProductRepository productRepository,
             IPurchaseRepository purchaseRepository, IStoreRepository storeRepository,
-            IBookRepository bookRepository, ICategoryRepository categoryRepository, IConfiguration configuration)
+            IBookRepository bookRepository, IConfiguration configuration)
         {
             _clientRepository = clientRepository;
             _productRepository = productRepository;
             _purchaseRepository = purchaseRepository;
             _storeRepository = storeRepository;
             _bookRepository = bookRepository;
-            _categoryRepository = categoryRepository;
             _propertyGetter = new PropertyGetter(configuration.GetConnectionString("ChainStoreDBVer2"));
         }
 
@@ -41,11 +39,11 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
             var product = _productRepository.GetOne(productId);
             if (client != null && product != null)
             {
-                var books = _bookRepository.GetClientBooks(client.ClientId);
-                var bookToDel = books.FirstOrDefault(b => b.ProductId.Equals(product.ProductId));
-                if (product.ProductStatus.Equals(ProductStatus.Booked) && bookToDel != null) _bookRepository.DeleteOne(bookToDel.BookId);
-                var priceToCompareWith = product.PriceInUAH - product.PriceInUAH * _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.ClientId) / 100;
-                var clientCashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, client.ClientId);
+                var books = _bookRepository.GetClientBooks(client.Id);
+                var bookToDel = books.FirstOrDefault(b => b.ProductId.Equals(product.Id));
+                if (product.ProductStatus.Equals(ProductStatus.Booked) && bookToDel != null) _bookRepository.DeleteOne(bookToDel.Id);
+                var priceToCompareWith = product.PriceInUAH - product.PriceInUAH * _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.Id) / 100;
+                var clientCashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, client.Id);
                 bool res;
                 if (usePoints)
                 {
@@ -65,11 +63,10 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
                 }
 
                 if (!res) return;
-                var category = _categoryRepository.GetOne(product.CategoryId);
-                var store = _productRepository.GetStoreOfSpecificProduct(product.ProductId);
+                var store = _productRepository.GetStoreOfSpecificProduct(product.Id);
                 store.GetProfit(priceToCompareWith);
                 product.ChangeStatus(ProductStatus.Purchased);
-                var purchase = new Purchase(Guid.NewGuid(), clientId, productId);
+                var purchase = new Purchase(Guid.NewGuid(), clientId, productId, priceToCompareWith);
                 _clientRepository.UpdateOne(client);
                 _storeRepository.UpdateOne(store);
                 _productRepository.UpdateOne(product);

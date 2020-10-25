@@ -11,7 +11,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 {
     internal sealed class CategoryDbModel
     {
-        public Guid CategoryDbModelId { get; private set; }
+        public Guid Id { get; private set; }
         public string Name { get; private set; }
 
         private readonly List<StoreCategoryDbModel> _storeCategoryRelation;
@@ -22,11 +22,11 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 
         public Guid? StoreDbModelId { get; private set; }
 
-        public CategoryDbModel(Guid categoryDbModelId, string name)
+        public CategoryDbModel(Guid id, string name)
         {
-            CustomValidator.ValidateId(categoryDbModelId);
+            CustomValidator.ValidateId(id);
             CustomValidator.ValidateString(name, 2, 40);
-            CategoryDbModelId = categoryDbModelId;
+            Id = id;
             Name = name;
             _productDbModels = new List<ProductDbModel>();
             _storeCategoryRelation = new List<StoreCategoryDbModel>();
@@ -39,7 +39,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
             var storeSpecificProducts = (from pr in _productDbModels
                                          from storeProdRel in pr.StoreProductRelation
                                          where storeProdRel.StoreDbModelId.Equals(storeId)
-                                         && storeProdRel.ProductDbModel.CategoryDbModelId.Equals(CategoryDbModelId)
+                                         && storeProdRel.ProductDbModel.CategoryId.Equals(Id)
                                          select storeProdRel.ProductDbModel).ToList().AsReadOnly();
             return storeSpecificProducts;
         }

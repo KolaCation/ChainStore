@@ -67,7 +67,7 @@ namespace ChainStore.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Books Days Count | Max: 7 Min: 1");
                 return View(new ProductClientViewModel
-                    {ClientId = client.ClientId, Product = product, BookDaysCount = productClientViewModel.BookDaysCount});
+                    {ClientId = client.Id, Product = product, BookDaysCount = productClientViewModel.BookDaysCount});
             }
 
             if (checkForLimit.Count >= 3)
@@ -75,7 +75,7 @@ namespace ChainStore.Controllers
                 ModelState.AddModelError(string.Empty,
                     $"Maximum Limit Of Books: 3 | Your Quantity Of Books: {checkForLimit.Count}");
                 return View(new ProductClientViewModel
-                    {ClientId = client.ClientId, Product = product, BookDaysCount = productClientViewModel.BookDaysCount});
+                    {ClientId = client.Id, Product = product, BookDaysCount = productClientViewModel.BookDaysCount});
             }
 
             _reservationService.HandleOperation(productClientViewModel.ClientId, productClientViewModel.ProductId,

@@ -27,7 +27,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Client item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.ClientId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var enState = _context.Clients.Add(_clientMapper.DomainToDb(item));
@@ -60,10 +60,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void UpdateOne(Client item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.ClientId);
+            var exists = Exists(item.Id);
             if (exists)
             {
-                DetachService.Detach<ClientDbModel>(_context, item.ClientId);
+                DetachService.Detach<ClientDbModel>(_context, item.Id);
                 var enState = _context.Clients.Update(_clientMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -86,16 +86,16 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Clients.Any(item => item.ClientDbModelId.Equals(id));
+            return _context.Clients.Any(item => item.Id.Equals(id));
         }
 
         public void AddReliableClient(ReliableClient client)
         {
             CustomValidator.ValidateObject(client);
-            var exists = Exists(client.ClientId);
+            var exists = Exists(client.Id);
             if (!exists)
             {
-                var enState = _context.ReliableClients.Add(new ReliableClientDbModel(client.ClientId, client.Name, client.Balance, client.CashBack, client.CashBackPercent));
+                var enState = _context.ReliableClients.Add(new ReliableClientDbModel(client.Id, client.Name, client.Balance, client.CashBack, client.CashBackPercent));
                 enState.State = EntityState.Added;
                 _context.SaveChanges();
             }
@@ -104,10 +104,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddVipClient(VipClient client)
         {
             CustomValidator.ValidateObject(client);
-            var exists = Exists(client.ClientId);
+            var exists = Exists(client.Id);
             if (!exists)
             {
-                var enState = _context.VipClients.Add(new VipClientDbModel(client.ClientId, client.Name, client.Balance, client.CashBack, client.CashBackPercent, client.Points));
+                var enState = _context.VipClients.Add(new VipClientDbModel(client.Id, client.Name, client.Balance, client.CashBack, client.CashBackPercent, client.Points));
                 enState.State = EntityState.Added;
                 _context.SaveChanges();
             }

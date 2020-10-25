@@ -57,16 +57,16 @@ namespace ChainStore.Controllers
             {
                 var productClientViewModel = new ProductClientViewModel
                 {
-                    ClientId = client.ClientId,
+                    ClientId = client.Id,
                     Balance = client.Balance,
                     Product = productToBuy,
                     CashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId,
-                        client.ClientId),
+                        client.Id),
                     CashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId,
-                        client.ClientId),
+                        client.Id),
                     DiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId,
-                        client.ClientId),
-                    Points = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, client.ClientId)
+                        client.Id),
+                    Points = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, client.Id)
                 };
                 return View(productClientViewModel);
             }
@@ -83,25 +83,25 @@ namespace ChainStore.Controllers
             if (product == null) return View("ProductNotFound", productClientViewModel.ProductId);
             string message;
             var productDiscount =
-                _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.ClientId);
+                _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, client.Id);
 
             var priceToCompareWith =
                 product.PriceInUAH - product.PriceInUAH * productDiscount / 100;
 
             var clientPoints =
-                _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, client.ClientId);
+                _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, client.Id);
 
             var clientCashBack =
-                _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, client.ClientId);
+                _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, client.Id);
 
             var productClientViewModelToReturnIfNotSucceed = new ProductClientViewModel
             {
-                ClientId = client.ClientId,
+                ClientId = client.Id,
                 Balance = client.Balance,
                 Product = product,
                 CashBack = clientCashBack,
                 CashBackPercent =
-                    _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId, client.ClientId),
+                    _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId, client.Id),
                 DiscountPercent = productDiscount,
                 Points = clientPoints,
                 UseCashBack = productClientViewModel.UseCashBack,

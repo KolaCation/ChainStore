@@ -22,18 +22,18 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public MallDbModel DomainToDb(Mall item)
         {
             CustomValidator.ValidateObject(item);
-            return new MallDbModel(item.MallId, item.Name, item.Location);
+            return new MallDbModel(item.Id, item.Name, item.Location);
         }
 
         public Mall DbToDomain(MallDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            var mallDbModel = _context.Malls.Find(item.MallDbModelId);
+            var mallDbModel = _context.Malls.Find(item.Id);
             _context.Entry(mallDbModel).Collection(st => st.StoreDbModels).Load();
             return new Mall
             (
                 (from storeDbModel in mallDbModel.StoreDbModels select _storeMapper.DbToDomain(storeDbModel)).ToList(),
-                item.MallDbModelId,
+                item.Id,
                 item.Name,
                 item.Location
             );
