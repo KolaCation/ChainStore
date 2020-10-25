@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using ChainStore.Domain.DomainCore;
@@ -10,10 +11,11 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 {
     internal sealed class StoreDbModel
     {
-        public Guid StoreDbModelId { get; private set; }
+        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public string Location { get; private set; }
-        public Guid? MallDbModelId { get; private set; }
+        public Guid? MallId { get; private set; }
+        [ForeignKey(nameof(MallId))]
         public MallDbModel MallDbModel { get; private set; }
 
         private readonly List<StoreCategoryDbModel> _storeCategoryRelation;
@@ -27,17 +29,17 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 
         public double Profit { get; private set; }
 
-        public StoreDbModel(Guid storeDbModelId, string name, string location, Guid? mallDbModelId, double profit)
+        public StoreDbModel(Guid id, string name, string location, Guid? mallId, double profit)
         {
-            CustomValidator.ValidateId(storeDbModelId);
+            CustomValidator.ValidateId(id);
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateString(location, 2, 40);
             CustomValidator.ValidateNumber(profit, 0, double.MaxValue);
-            CustomValidator.ValidateId(mallDbModelId);
-            StoreDbModelId = storeDbModelId;
+            CustomValidator.ValidateId(mallId);
+            Id = id;
             Name = name;
             Location = location;
-            MallDbModelId = mallDbModelId;
+            MallId = mallId;
             Profit = profit;
             _storeCategoryRelation = new List<StoreCategoryDbModel>();
             _storeProductRelation = new List<StoreProductDbModel>();
@@ -46,7 +48,7 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 
         private IReadOnlyCollection<CategoryDbModel> GetStoreSpecificCategories()
         {
-            return (from storeCatRel in _storeCategoryRelation where storeCatRel.StoreDbModelId.Equals(StoreDbModelId) select storeCatRel.CategoryDbModel).ToList().AsReadOnly();
+            return (from storeCatRel in _storeCategoryRelation where storeCatRel.StoreDbModelId.Equals(Id) select storeCatRel.CategoryDbModel).ToList().AsReadOnly();
         }
     }
 }

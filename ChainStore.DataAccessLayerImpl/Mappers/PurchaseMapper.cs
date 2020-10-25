@@ -12,13 +12,13 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
         public PurchaseDbModel DomainToDb(Purchase item)
         {
             CustomValidator.ValidateObject(item);
-            return new PurchaseDbModel(item.PurchaseId, item.ClientId, item.ProductId, item.CreationTime);
+            return new PurchaseDbModel(item.Id, item.ClientId, item.ProductId, item.CreationTime, item.PriceAtPurchaseMoment);
         }
 
         public Purchase DbToDomain(PurchaseDbModel item)
         {
             CustomValidator.ValidateObject(item);
-            return new Purchase(item.PurchaseDbModelId, item.ClientDbModelId, item.ProductDbModelId, item.CreationTime);
+            return new Purchase(item.Id, item.ClientId, item.ProductId, item.CreationTime, item.PriceAtPurchaseMoment);
         }
     }
 }

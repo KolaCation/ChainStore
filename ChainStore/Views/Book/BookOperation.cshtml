@@ -14,7 +14,7 @@
         <div class="card-footer text-center">
             <form method="post" asp-action="BookOperation" asp-controller="Book">
                 <input type="hidden" asp-for="ClientId" value="@Model.ClientId" />
-                <input type="hidden" asp-for="ProductId" value="@Model.Product.ProductId" />
+                <input type="hidden" asp-for="ProductId" value="@Model.Product.Id" />
                 <div class="d-flex flex-row justify-content-between">
                     <label asp-for="BookDaysCount" class="col-form-label">Days Count: </label>
                     <input type="number" asp-for="BookDaysCount" value="1" max="7" min="1" class="form-control col-2" placeholder="days...">

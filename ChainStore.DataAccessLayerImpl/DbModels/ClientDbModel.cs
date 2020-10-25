@@ -8,16 +8,16 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
 {
     internal class ClientDbModel
     {
-        public Guid ClientDbModelId { get; protected set; }
+        public Guid Id { get; protected set; }
         public string Name { get; protected set; }
         public double Balance { get; protected set; }
 
-        public ClientDbModel(Guid clientDbModelId, string name, double balance)
+        public ClientDbModel(Guid id, string name, double balance)
         {
-            CustomValidator.ValidateId(clientDbModelId);
+            CustomValidator.ValidateId(id);
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateNumber(balance, 0, 100_000_000);
-            ClientDbModelId = clientDbModelId;
+            Id = id;
             Name = name;
             Balance = balance;
         }

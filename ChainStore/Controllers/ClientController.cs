@@ -54,7 +54,7 @@ namespace ChainStore.Controllers
             {
                 client.ReplenishBalance(clientDetailsViewModel.ClientBalance);
                 _clientRepository.UpdateOne(client);
-                return RedirectToAction(ClientDetailsPage, new {id = client.ClientId});
+                return RedirectToAction(ClientDetailsPage, new {id = client.Id});
             }
             return View(ClientNotFoundPage, clientDetailsViewModel.ClientId);
         }
@@ -67,7 +67,7 @@ namespace ChainStore.Controllers
             {
                 client.UpdateName(clientDetailsViewModel.ClientName);
                 _clientRepository.UpdateOne(client);
-                return RedirectToAction(ClientDetailsPage, new { id = client.ClientId });
+                return RedirectToAction(ClientDetailsPage, new { id = client.Id });
             }
             return View(ClientNotFoundPage, clientDetailsViewModel.ClientId);
         }

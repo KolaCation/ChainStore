@@ -17,12 +17,12 @@
     }
     <div asp-validation-summary="All" class="text-danger mt-2"></div>
     <form class="mt-2" method="post" asp-action="AddCategoryToStore" asp-controller="Categories">
-        <input type="hidden" asp-for="StoreId" value="@Model.Store.StoreId"/>
+        <input type="hidden" asp-for="StoreId" value="@Model.Store.Id"/>
         <label asp-for="CategoryId">Category Name: </label>
         <select class="form-group" asp-for="CategoryId">
             @foreach (var category in Model.CategoriesOption)
             {
-                <option value="@category.CategoryId">@category.Name</option>
+                <option value="@category.Id">@category.Name</option>
             }
         </select>
         <button type="submit" value="sumbit" class="btn btn-primary ml-2">Add</button>

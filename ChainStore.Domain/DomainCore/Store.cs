@@ -6,7 +6,7 @@ namespace ChainStore.Domain.DomainCore
 {
     public sealed class Store
     {
-        public Guid StoreId { get; }
+        public Guid Id { get; }
         public string Name { get; }
         public string Location { get; }
         public Guid? MallId { get; }
@@ -16,14 +16,14 @@ namespace ChainStore.Domain.DomainCore
 
         public double Profit { get; private set; }
 
-        public Store(Guid storeId, string name, string location, double profit, Guid? mallId)
+        public Store(Guid id, string name, string location, double profit, Guid? mallId)
         {
-            CustomValidator.ValidateId(storeId);
+            CustomValidator.ValidateId(id);
             CustomValidator.ValidateString(name, 2, 40);
             CustomValidator.ValidateString(location, 2, 40);
             CustomValidator.ValidateNumber(profit, 0, double.MaxValue);
             CustomValidator.ValidateId(mallId);
-            StoreId = storeId;
+            Id = id;
             Name = name;
             Location = location;
             Profit = profit;
@@ -31,7 +31,7 @@ namespace ChainStore.Domain.DomainCore
             _categories = new List<Category>();
         }
 
-        public Store(List<Category> categories, Guid storeId, string name, string location, Guid? mallId, double profit) : this(storeId, name, location, profit, mallId)
+        public Store(List<Category> categories, Guid id, string name, string location, Guid? mallId, double profit) : this(id, name, location, profit, mallId)
         {
             CustomValidator.ValidateObject(categories);
             _categories = categories;

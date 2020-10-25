@@ -26,7 +26,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Category item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.CategoryId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var hasSameName = _context.Categories.Any(cat => cat.Name.ToLower().Equals(item.Name.ToLower()));
@@ -62,12 +62,12 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void UpdateOne(Category item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.CategoryId);
+            var exists = Exists(item.Id);
             if (exists)
             {
                 var hasSameName = _context.Categories.Any(cat => cat.Name.ToLower().Equals(item.Name.ToLower()));
                 if (hasSameName) return;
-                DetachService.Detach<CategoryDbModel>(_context, item.CategoryId);
+                DetachService.Detach<CategoryDbModel>(_context, item.Id);
                 var enState = _context.Categories.Update(_categoryMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -90,14 +90,14 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Categories.Any(item => item.CategoryDbModelId.Equals(id));
+            return _context.Categories.Any(item => item.Id.Equals(id));
         }
 
         public void AddCategoryToStore(Category category, Guid storeId)
         {
             CustomValidator.ValidateObject(category);
             CustomValidator.ValidateId(storeId);
-            var storeCatRel = new StoreCategoryDbModel(storeId, category.CategoryId);
+            var storeCatRel = new StoreCategoryDbModel(storeId, category.Id);
             if (!_context.StoreCategoryRelation
                 .Any(e => e.CategoryDbModelId.Equals(storeCatRel.CategoryDbModelId) && e.StoreDbModelId.Equals(storeCatRel.StoreDbModelId)))
             {
@@ -111,10 +111,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             CustomValidator.ValidateObject(category);
             CustomValidator.ValidateId(storeId);
             if (_context.StoreCategoryRelation
-                .Any(e => e.CategoryDbModelId.Equals(category.CategoryId) && e.StoreDbModelId.Equals(storeId)))
+                .Any(e => e.CategoryDbModelId.Equals(category.Id) && e.StoreDbModelId.Equals(storeId)))
             {
                var storeCatRelToDel = _context.StoreCategoryRelation.First(e =>
-                    e.CategoryDbModelId.Equals(category.CategoryId) && e.StoreDbModelId.Equals(storeId));
+                    e.CategoryDbModelId.Equals(category.Id) && e.StoreDbModelId.Equals(storeId));
                 _context.StoreCategoryRelation.Remove(storeCatRelToDel);
                 _context.SaveChanges();
             }

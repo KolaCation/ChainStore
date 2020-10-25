@@ -7,8 +7,8 @@ namespace ChainStore.Domain.DomainCore
         public int DiscountPercent { get; }
         public double Points { get; private set; }
 
-        public VipClient(Guid clientId, string name, double balance, double cashBack, int cashBackPercent, double points) 
-            : base(clientId, name, balance, cashBack, cashBackPercent)
+        public VipClient(Guid id, string name, double balance, double cashBack, int cashBackPercent, double points) 
+            : base(id, name, balance, cashBack, cashBackPercent)
         {
             DiscountPercent = 5;
             Points = points;

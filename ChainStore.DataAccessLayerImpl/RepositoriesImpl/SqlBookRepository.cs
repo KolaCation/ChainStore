@@ -27,7 +27,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public List<Book> GetClientBooks(Guid clientId)
         {
             CustomValidator.ValidateId(clientId);
-            var bookDbModels = _context.Books.Where(b => b.ClientDbModelId.Equals(clientId)).ToList();
+            var bookDbModels = _context.Books.Where(b => b.ClientId.Equals(clientId)).ToList();
             var books = (from bookDbModel in bookDbModels select _bookMapper.DbToDomain(bookDbModel)).ToList();
             return books;
         }
@@ -44,14 +44,14 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 CustomValidator.ValidateObject(productDbModel);
                 var product = _productMapper.DbToDomain(productDbModel);
                 product.ChangeStatus(ProductStatus.OnSale);
-                DetachService.Detach<ProductDbModel>(_context, product.ProductId);
+                DetachService.Detach<ProductDbModel>(_context, product.Id);
                 _context.Products.Update(_productMapper.DomainToDb(product));
                 booksToRemove.Add(book);
             }
 
             foreach (var book in booksToRemove)
             {
-                DetachService.Detach<BookDbModel>(_context, book.BookId);
+                DetachService.Detach<BookDbModel>(_context, book.Id);
                 _context.Books.Remove(_bookMapper.DomainToDb(book));
             }
 
@@ -61,7 +61,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Book item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.BookId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var enState = _context.Books.Add(_bookMapper.DomainToDb(item));
@@ -86,7 +86,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Books.Any(item => item.BookDbModelId.Equals(id));
+            return _context.Books.Any(item => item.Id.Equals(id));
         }
     }
 }

@@ -10,8 +10,8 @@ namespace ChainStore.DataAccessLayerImpl.DbModels
         public int DiscountPercent { get; private set; }
         public double Points { get; private set; }
 
-        public VipClientDbModel(Guid clientDbModelId, string name, double balance, double cashBack, int cashBackPercent, double points)
-            : base(clientDbModelId, name, balance, cashBack, cashBackPercent)
+        public VipClientDbModel(Guid id, string name, double balance, double cashBack, int cashBackPercent, double points)
+            : base(id, name, balance, cashBack, cashBackPercent)
         {
             CustomValidator.ValidateNumber(points, 0, 100_000_000);
             DiscountPercent = 5;

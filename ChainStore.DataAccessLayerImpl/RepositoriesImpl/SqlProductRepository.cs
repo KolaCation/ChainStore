@@ -28,7 +28,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Product item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.ProductId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var enState = _context.Products.Add(_productMapper.DomainToDb(item));
@@ -61,10 +61,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void UpdateOne(Product item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.ProductId);
+            var exists = Exists(item.Id);
             if (exists)
             {
-                DetachService.Detach<ProductDbModel>(_context, item.ProductId);
+                DetachService.Detach<ProductDbModel>(_context, item.Id);
                 var enState = _context.Products.Update(_productMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -80,7 +80,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 var productDbModel = _context.Products.Find(id);
                 var storeProdRel =
                     _context.StoreProductRelation.First(e =>
-                        e.ProductDbModelId.Equals(productDbModel.ProductDbModelId));
+                        e.ProductDbModelId.Equals(productDbModel.Id));
                 DeleteProductFromStore(_productMapper.DbToDomain(productDbModel), storeProdRel.StoreDbModelId);
                 var enState = _context.Products.Remove(productDbModel);
                 enState.State = EntityState.Deleted;
@@ -91,7 +91,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Products.Any(item => item.ProductDbModelId.Equals(id));
+            return _context.Products.Any(item => item.Id.Equals(id));
         }
 
         public Store GetStoreOfSpecificProduct(Guid productId)
@@ -111,8 +111,8 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         {
             CustomValidator.ValidateObject(product);
             CustomValidator.ValidateId(storeId);
-            var storeProdRel = new StoreProductDbModel(storeId, product.ProductId);
-            if (!Exists(product.ProductId))
+            var storeProdRel = new StoreProductDbModel(storeId, product.Id);
+            if (!Exists(product.Id))
             {
                 AddOne(product);
             }
@@ -129,10 +129,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             CustomValidator.ValidateObject(product);
             CustomValidator.ValidateId(storeId);
             if (_context.StoreProductRelation
-                .Any(e => e.ProductDbModelId.Equals(product.ProductId) && e.StoreDbModelId.Equals(storeId)))
+                .Any(e => e.ProductDbModelId.Equals(product.Id) && e.StoreDbModelId.Equals(storeId)))
             {
                 var storeProdToDel = _context.StoreProductRelation.First(e =>
-                    e.ProductDbModelId.Equals(product.ProductId) && e.StoreDbModelId.Equals(storeId));
+                    e.ProductDbModelId.Equals(product.Id) && e.StoreDbModelId.Equals(storeId));
                 _context.StoreProductRelation.Remove(storeProdToDel);
                 _context.SaveChanges();
             }

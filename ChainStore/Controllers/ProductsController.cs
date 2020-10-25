@@ -51,7 +51,7 @@ namespace ChainStore.Controllers
             {
                 var productToReplenish = _productRepository.GetOne(replenishProductsViewModel.ProductId);
                 if (productToReplenish == null) return View("ProductNotFound", replenishProductsViewModel.ProductId);
-                var storeToReplenish = _productRepository.GetStoreOfSpecificProduct(productToReplenish.ProductId);
+                var storeToReplenish = _productRepository.GetStoreOfSpecificProduct(productToReplenish.Id);
                 if (storeToReplenish != null)
                 {
                     for (var i = 1; i <= replenishProductsViewModel.QuantityOfProductsToReplenish; i++)
@@ -59,7 +59,7 @@ namespace ChainStore.Controllers
                         var product = new Product(Guid.NewGuid(), productToReplenish.Name,
                             productToReplenish.PriceInUAH,
                             ProductStatus.OnSale, replenishProductsViewModel.CategoryId);
-                        _productRepository.AddProductToStore(product, storeToReplenish.StoreId);
+                        _productRepository.AddProductToStore(product, storeToReplenish.Id);
                     }
 
                     return RedirectToAction(IndexAction, DefaultController);
@@ -82,7 +82,7 @@ namespace ChainStore.Controllers
             if (category == null) return View("CategoryNotFound", storeId.Value); //CategoryNotFoundPage
 
             var createProductViewModel = new CreateProductViewModel
-                {StoreId = store.StoreId, Category = category, QuantityOfProductsToAdd = 1};
+                {StoreId = store.Id, Category = category, QuantityOfProductsToAdd = 1};
             return View(createProductViewModel);
         }
 
@@ -98,7 +98,7 @@ namespace ChainStore.Controllers
                 {
                     var product = new Product(Guid.NewGuid(), createProductViewModel.Name, createProductViewModel.Price,
                         ProductStatus.OnSale, createProductViewModel.CategoryId);
-                    _productRepository.AddProductToStore(product, store.StoreId);
+                    _productRepository.AddProductToStore(product, store.Id);
                 }
 
                 return RedirectToAction(IndexAction, DefaultController);
@@ -128,11 +128,11 @@ namespace ChainStore.Controllers
             var productToDel = _productRepository.GetOne(deleteProductViewModel.ProductId);
             if (productToDel == null) return View("ProductNotFound", deleteProductViewModel.ProductId);
 
-            var store = _productRepository.GetStoreOfSpecificProduct(productToDel.ProductId);
+            var store = _productRepository.GetStoreOfSpecificProduct(productToDel.Id);
             if (store == null) return View("StoreNotFound", Guid.Empty);
 
             var categoryWithStoreSpecificProducts =
-                store.Categories.First(e => e.CategoryId.Equals(productToDel.CategoryId));
+                store.Categories.First(e => e.Id.Equals(productToDel.CategoryId));
             var storeAndCategorySpecificProducts = categoryWithStoreSpecificProducts.Products.Where(product =>
                     product.Name.Equals(productToDel.Name) && product.ProductStatus.Equals(productToDel.ProductStatus))
                 .ToList();
@@ -141,7 +141,7 @@ namespace ChainStore.Controllers
             {
                 foreach (var product in storeAndCategorySpecificProducts)
                 {
-                    _productRepository.DeleteOne(product.ProductId);
+                    _productRepository.DeleteOne(product.Id);
                 }
             }
 

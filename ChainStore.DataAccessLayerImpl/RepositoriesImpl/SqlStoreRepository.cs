@@ -26,14 +26,14 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void AddOne(Store item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.StoreId);
+            var exists = Exists(item.Id);
             if (!exists)
             {
                 var storeWithTheSameLocationAndNameExists = _context.Stores.Any(st =>
                         st.Location.Equals(item.Location) &&
                         st.Name.Equals(item.Name) &&
-                        !st.StoreDbModelId.Equals(item.StoreId) &&
-                        st.MallDbModelId == null);
+                        !st.Id.Equals(item.Id) &&
+                        st.MallId == null);
                 if (storeWithTheSameLocationAndNameExists) return;
                 var enState = _context.Stores.Add(_storeMapper.DomainToDb(item));
                 enState.State = EntityState.Added;
@@ -67,16 +67,16 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public void UpdateOne(Store item)
         {
             CustomValidator.ValidateObject(item);
-            var exists = Exists(item.StoreId);
+            var exists = Exists(item.Id);
             if (exists)
             {
                 var storeWithTheSameLocationAndNameExists = _context.Stores.Any(st =>
                     st.Location.Equals(item.Location) &&
                     st.Name.Equals(item.Name) &&
-                    !st.StoreDbModelId.Equals(item.StoreId) &&
-                    st.MallDbModelId == null);
+                    !st.Id.Equals(item.Id) &&
+                    st.MallId == null);
                 if (storeWithTheSameLocationAndNameExists) return;
-                DetachService.Detach<StoreDbModel>(_context, item.StoreId);
+                DetachService.Detach<StoreDbModel>(_context, item.Id);
                 var enState = _context.Stores.Update(_storeMapper.DomainToDb(item));
                 enState.State = EntityState.Modified;
                 _context.SaveChanges();
@@ -99,7 +99,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
         public bool Exists(Guid id)
         {
             CustomValidator.ValidateId(id);
-            return _context.Stores.Any(item => item.StoreDbModelId.Equals(id));
+            return _context.Stores.Any(item => item.Id.Equals(id));
         }
     }
 }

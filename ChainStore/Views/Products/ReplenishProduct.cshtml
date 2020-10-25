@@ -9,8 +9,8 @@
         <h6 class="card-title mb-2 mt-2 text-muted">Product: @Model.Product.Name | Category: @Model.Category.Name</h6>
         <div class="card-footer text-center">
             <form method="post" asp-action="ReplenishProduct" asp-controller="Products">
-                <input type="hidden" asp-for="CategoryId" value="@Model.Category.CategoryId"/>
-                <input type="hidden" asp-for="ProductId" value="@Model.Product.ProductId"/>
+                <input type="hidden" asp-for="CategoryId" value="@Model.Category.Id"/>
+                <input type="hidden" asp-for="ProductId" value="@Model.Product.Id"/>
                 <div class="d-flex flex-row justify-content-between">
                     <label asp-for="QuantityOfProductsToReplenish" class="col-form-label">Products Count: </label>
                     <input type="number" asp-for="QuantityOfProductsToReplenish" value="1" max="100" min="1" class="form-control col-2" placeholder="products...">

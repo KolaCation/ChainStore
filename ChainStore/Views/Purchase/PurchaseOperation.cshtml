@@ -55,7 +55,7 @@
                     </div>
                 }
                 <input type="hidden" asp-for="ClientId" value="@Model.ClientId"/>
-                <input type="hidden" asp-for="ProductId" value="@Model.Product.ProductId"/>
+                <input type="hidden" asp-for="ProductId" value="@Model.Product.Id"/>
                 <a asp-action="Index" asp-controller="Stores" class="btn-primary btn">Back</a>
                 <button type="submit" value="sumbit" class="btn btn-primary" style="width: auto">Purchase</button>
             </form>

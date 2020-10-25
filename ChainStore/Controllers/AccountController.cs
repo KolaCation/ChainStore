@@ -49,10 +49,10 @@ namespace ChainStore.Controllers
                 var clientDetails = new Client(Guid.NewGuid(), registerClientViewModel.Name, 0);
                 var client = new ApplicationUser
                 {
-                    Id = clientDetails.ClientId.ToString(),
+                    Id = clientDetails.Id.ToString(),
                     UserName = registerClientViewModel.Email,
                     Email = registerClientViewModel.Email,
-                    ClientDbModelId = clientDetails.ClientId,
+                    ClientDbModelId = clientDetails.Id,
                     CreationTime = DateTimeOffset.Now
                 };
                 _clientRepository.AddOne(clientDetails);

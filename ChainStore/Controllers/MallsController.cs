@@ -65,7 +65,7 @@ namespace ChainStore.Controllers
             {
                 var mall = new Mall(Guid.NewGuid(), mallViewModel.Name, mallViewModel.Location);
                 _mallRepository.AddOne(mall);
-                return RedirectToAction("MallDetails", new {id=mall.MallId});
+                return RedirectToAction("MallDetails", new {id=mall.Id});
             }
 
             return View(mallViewModel);
@@ -80,7 +80,7 @@ namespace ChainStore.Controllers
             if (mallToEdit != null)
             {
                 var editMallViewModel = new EditMallViewModel
-                    {Name = mallToEdit.Name, Location = mallToEdit.Location, MallId = mallToEdit.MallId};
+                    {Name = mallToEdit.Name, Location = mallToEdit.Location, MallId = mallToEdit.Id};
                 return View(editMallViewModel);
             }
 
@@ -100,13 +100,13 @@ namespace ChainStore.Controllers
                 {
                     foreach (var store in mallToUpdate.Stores)
                     {
-                        var updatedStore = new Store(store.StoreId, store.Name, updatedMall.Location, store.Profit, updatedMall.MallId);
+                        var updatedStore = new Store(store.Id, store.Name, updatedMall.Location, store.Profit, updatedMall.Id);
                         _storeRepository.UpdateOne(updatedStore);
                     }
                 }
 
                 _mallRepository.UpdateOne(updatedMall);
-                return RedirectToAction("MallDetails", new {id=updatedMall.MallId});
+                return RedirectToAction("MallDetails", new {id=updatedMall.Id});
             }
 
             return View(editMallViewModel);
@@ -122,7 +122,7 @@ namespace ChainStore.Controllers
             if (mallToDel == null) return View("MallNotFound", id.Value);
 
             var delMallViewModel = new DeleteMallViewModel
-                {MallName = mallToDel.Name, MallLocation = mallToDel.Location, MallId = mallToDel.MallId};
+                {MallName = mallToDel.Name, MallLocation = mallToDel.Location, MallId = mallToDel.Id};
 
             return View(delMallViewModel);
         }
@@ -141,7 +141,7 @@ namespace ChainStore.Controllers
                 return View(deleteMallViewModel);
             }
 
-            _mallRepository.DeleteOne(mallToDel.MallId);
+            _mallRepository.DeleteOne(mallToDel.Id);
             return RedirectToAction(IndexAction, DefaultController);
         }
     }

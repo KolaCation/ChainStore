@@ -36,7 +36,7 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
             if (client != null)
             {
                 double sum = 0;
-                var purchaseList = _purchaseRepository.GetClientPurchases(client.ClientId);
+                var purchaseList = _purchaseRepository.GetClientPurchases(client.Id);
                 if (purchaseList.Count != 0)
                 {
                     var purchasedProducts =
@@ -49,25 +49,25 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 
                 var checkCashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client,
                     nameof(VipClient.CashBackPercent),
-                    EntityNames.ClientId, client.ClientId);
+                    EntityNames.ClientId, client.Id);
                 var checkDiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client,
                     nameof(VipClient.DiscountPercent),
-                    EntityNames.ClientId, client.ClientId);
+                    EntityNames.ClientId, client.Id);
 
                 if (daysInApplication > 60 && checkCashBackPercent == 0)
                 {
-                    _clientRepository.DeleteOne(client.ClientId);
-                    var reliable = new ReliableClient(client.ClientId, client.Name, client.Balance, 0, 5);
+                    _clientRepository.DeleteOne(client.Id);
+                    var reliable = new ReliableClient(client.Id, client.Name, client.Balance, 0, 5);
                     _clientRepository.AddReliableClient(reliable);
                 }
 
                 if (daysInApplication > 60 && sum >= 200_000 && checkDiscountPercent == 0 && checkCashBackPercent != 0)
                 {
                     var currentReliableClient = (ReliableClient)client;
-                    _clientRepository.DeleteOne(currentReliableClient.ClientId);
+                    _clientRepository.DeleteOne(currentReliableClient.Id);
                     var vip = new VipClient
                     (
-                        currentReliableClient.ClientId,
+                        currentReliableClient.Id,
                         currentReliableClient.Name,
                         currentReliableClient.Balance,
                         currentReliableClient.CashBack,
@@ -78,8 +78,8 @@ namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 
                 if (daysInApplication > 60 && sum >= 200_000 && checkDiscountPercent == 0 && checkCashBackPercent == 0)
                 {
-                    _clientRepository.DeleteOne(client.ClientId);
-                    var vip = new VipClient(client.ClientId, client.Name, client.Balance, 0, 10, 0);
+                    _clientRepository.DeleteOne(client.Id);
+                    var vip = new VipClient(client.Id, client.Name, client.Balance, 0, 10, 0);
                     _clientRepository.AddVipClient(vip);
                 }
                 return true;
