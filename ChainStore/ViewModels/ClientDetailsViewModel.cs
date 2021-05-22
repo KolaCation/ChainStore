@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ChainStore.ViewModels.ViewMakers.DetailedInfo;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ChainStore.ViewModels.ViewMakers.DetailedInfo;
 
 namespace ChainStore.ViewModels
 {

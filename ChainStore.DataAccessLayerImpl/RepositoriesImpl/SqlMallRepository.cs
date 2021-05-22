@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using ChainStore.DataAccessLayer.Repositories;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
 {
@@ -29,7 +28,7 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             if (!exists)
             {
                 var mallWithTheSameNameExists = _context.Malls.Any(m => m.Name.Equals(item.Name) && m.Location.Equals(item.Location));
-                if(mallWithTheSameNameExists) return;
+                if (mallWithTheSameNameExists) return;
                 var enState = _context.Malls.Add(_mallMapper.DomainToDb(item));
                 enState.State = EntityState.Added;
                 _context.SaveChanges();
@@ -46,10 +45,10 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
                 _context.Entry(mallDbModel).Collection(m => m.StoreDbModels).Load();
                 foreach (var storeDbModel in mallDbModel.StoreDbModels)
                 {
-                    _context.Entry(storeDbModel).Collection(st=>st.CategoryDbModels).Load();
+                    _context.Entry(storeDbModel).Collection(st => st.CategoryDbModels).Load();
                     foreach (var categoryDbModel in storeDbModel.CategoryDbModels)
                     {
-                        _context.Entry(categoryDbModel).Collection(cat=>cat.ProductDbModels).Load();
+                        _context.Entry(categoryDbModel).Collection(cat => cat.ProductDbModels).Load();
                     }
                 }
                 return _mallMapper.DbToDomain(mallDbModel);

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChainStore.DataAccessLayerImpl.DbModels;
+﻿using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ChainStore.DataAccessLayerImpl.Mappers
 {
@@ -32,7 +28,7 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
 
             if (cashBackPercent != 0 && discountPercent == 0)
             {
-                var reliable = (ReliableClient) item;
+                var reliable = (ReliableClient)item;
                 return new ReliableClientDbModel(reliable.Id, reliable.Name, reliable.Balance, reliable.CashBack, cashBackPercent);
             }
             else
@@ -55,12 +51,12 @@ namespace ChainStore.DataAccessLayerImpl.Mappers
 
             if (cashBackPercent != 0 && discountPercent == 0)
             {
-                var reliable = (ReliableClientDbModel) item;
+                var reliable = (ReliableClientDbModel)item;
                 return new ReliableClient(reliable.Id, reliable.Name, reliable.Balance, reliable.CashBack, cashBackPercent);
             }
             else
             {
-                var vip = (VipClientDbModel) item;
+                var vip = (VipClientDbModel)item;
                 return new VipClient(vip.Id, vip.Name, vip.Balance, vip.CashBack, cashBackPercent, vip.Points);
             }
         }

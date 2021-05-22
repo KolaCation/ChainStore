@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChainStore.DataAccessLayerImpl.DbModels;
+﻿using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 

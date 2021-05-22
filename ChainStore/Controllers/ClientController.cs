@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ChainStore.DataAccessLayer.Repositories;
-using ChainStore.Domain.DomainCore;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.ViewModels;
 using ChainStore.ViewModels.ViewMakers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ChainStore.Controllers
 {
@@ -54,7 +49,7 @@ namespace ChainStore.Controllers
             {
                 client.ReplenishBalance(clientDetailsViewModel.ClientBalance);
                 _clientRepository.UpdateOne(client);
-                return RedirectToAction(ClientDetailsPage, new {id = client.Id});
+                return RedirectToAction(ClientDetailsPage, new { id = client.Id });
             }
             return View(ClientNotFoundPage, clientDetailsViewModel.ClientId);
         }

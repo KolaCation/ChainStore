@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ChainStore.Shared.Util;
+using System;
 using System.Collections.Generic;
-using ChainStore.Shared.Util;
 
 namespace ChainStore.Domain.DomainCore
 {

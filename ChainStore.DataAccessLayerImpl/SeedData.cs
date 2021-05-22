@@ -1,7 +1,7 @@
-﻿using System;
-using ChainStore.DataAccessLayerImpl.DbModels;
+﻿using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.Domain.DomainCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ChainStore.DataAccessLayerImpl
 {

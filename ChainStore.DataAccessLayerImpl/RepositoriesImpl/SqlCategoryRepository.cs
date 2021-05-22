@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using ChainStore.DataAccessLayer.Repositories;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.DbModels;
 using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.DataAccessLayerImpl.Mappers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
 {
@@ -113,8 +112,8 @@ namespace ChainStore.DataAccessLayerImpl.RepositoriesImpl
             if (_context.StoreCategoryRelation
                 .Any(e => e.CategoryDbModelId.Equals(category.Id) && e.StoreDbModelId.Equals(storeId)))
             {
-               var storeCatRelToDel = _context.StoreCategoryRelation.First(e =>
-                    e.CategoryDbModelId.Equals(category.Id) && e.StoreDbModelId.Equals(storeId));
+                var storeCatRelToDel = _context.StoreCategoryRelation.First(e =>
+                     e.CategoryDbModelId.Equals(category.Id) && e.StoreDbModelId.Equals(storeId));
                 _context.StoreCategoryRelation.Remove(storeCatRelToDel);
                 _context.SaveChanges();
             }

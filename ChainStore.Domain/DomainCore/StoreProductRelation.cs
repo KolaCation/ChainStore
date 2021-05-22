@@ -1,7 +1,5 @@
 ﻿using ChainStore.Shared.Util;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ChainStore.Domain.DomainCore
 {

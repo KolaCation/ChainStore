@@ -1,5 +1,4 @@
 ﻿using ChainStore.DataAccessLayerImpl.DbModels;
-using ChainStore.Domain.DomainCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ChainStore.Actions.ApplicationServices;
+﻿using ChainStore.Actions.ApplicationServices;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
 using ChainStore.DataAccessLayerImpl.Helpers;
@@ -13,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Threading.Tasks;
 
 namespace ChainStore.Controllers
 {
@@ -129,7 +127,7 @@ namespace ChainStore.Controllers
                 ModelState.AddModelError(string.Empty, message);
                 return View(productClientViewModelToReturnIfNotSucceed);
             }
-            
+
             _purchaseService.HandleOperation(productClientViewModel.ClientId, productClientViewModel.ProductId,
                 productClientViewModel.UseCashBack, productClientViewModel.UsePoints);
             return RedirectToAction(IndexAction, DefaultController);

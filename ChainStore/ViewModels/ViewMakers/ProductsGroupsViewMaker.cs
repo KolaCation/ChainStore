@@ -1,8 +1,7 @@
-﻿using System;
+﻿using ChainStore.Domain.DomainCore;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using ChainStore.Domain.DomainCore;
 
 namespace ChainStore.ViewModels.ViewMakers
 {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using ChainStore.DataAccessLayerImpl.DbModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Linq;
-using ChainStore.DataAccessLayerImpl.DbModels;
+using System.Threading.Tasks;
 
 namespace ChainStore.DataAccessLayerImpl
 {

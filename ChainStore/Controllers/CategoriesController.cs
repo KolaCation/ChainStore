@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ChainStore.DataAccessLayer.Repositories;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace ChainStore.Controllers
 {
@@ -67,7 +65,7 @@ namespace ChainStore.Controllers
             var addCategoryToStoreViewModel = new AddCategoryToStoreViewModel
             {
                 Store = store,
-                CategoriesOption = categories.ToList()
+                CategoriesOption = categories.Where(cat => !store.Categories.Any(x => x.Id.Equals(cat.Id))).ToList()
             };
             return View(addCategoryToStoreViewModel);
         }
@@ -79,11 +77,6 @@ namespace ChainStore.Controllers
             var store = _storeRepository.GetOne(addCategoryToStoreViewModel.StoreId);
             if (store == null) return View("StoreNotFound", addCategoryToStoreViewModel.StoreId);
             var categoryWithThatId = _categoryRepository.GetOne(addCategoryToStoreViewModel.CategoryId);
-            if (store.Categories.Any(category => category.Id.Equals(addCategoryToStoreViewModel.CategoryId)))
-            {
-                ModelState.AddModelError(string.Empty, $"Category '{categoryWithThatId.Name}' already exists");
-                return View(new AddCategoryToStoreViewModel { Store = store });
-            }
             _categoryRepository.AddCategoryToStore(categoryWithThatId, store.Id);
             return RedirectToAction(IndexAction, DefaultController);
         }

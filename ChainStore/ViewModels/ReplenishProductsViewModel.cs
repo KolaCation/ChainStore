@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ChainStore.Domain.DomainCore;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using ChainStore.Domain.DomainCore;
 
 namespace ChainStore.ViewModels
 {

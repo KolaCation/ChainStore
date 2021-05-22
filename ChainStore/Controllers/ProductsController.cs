@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ChainStore.DataAccessLayer.Repositories;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace ChainStore.Controllers
 {
@@ -37,7 +35,8 @@ namespace ChainStore.Controllers
 
             var categoryProductsViewModel = new ReplenishProductsViewModel
             {
-                Product = product, Category = _categoryRepository.GetOne(product.CategoryId),
+                Product = product,
+                Category = _categoryRepository.GetOne(product.CategoryId),
                 QuantityOfProductsToReplenish = 1
             };
             return View(categoryProductsViewModel);
@@ -82,7 +81,7 @@ namespace ChainStore.Controllers
             if (category == null) return View("CategoryNotFound", storeId.Value); //CategoryNotFoundPage
 
             var createProductViewModel = new CreateProductViewModel
-                {StoreId = store.Id, Category = category, QuantityOfProductsToAdd = 1};
+            { StoreId = store.Id, Category = category, QuantityOfProductsToAdd = 1 };
             return View(createProductViewModel);
         }
 
@@ -117,7 +116,7 @@ namespace ChainStore.Controllers
             var productToDel = _productRepository.GetOne(id.Value);
             if (productToDel == null) return View("ProductNotFound", id.Value);
 
-            var deleteProductViewModel = new DeleteProductViewModel {Product = productToDel};
+            var deleteProductViewModel = new DeleteProductViewModel { Product = productToDel };
             return View(deleteProductViewModel);
         }
 

@@ -1,12 +1,12 @@
-﻿using System;
-using ChainStore.Shared.Util;
+﻿using ChainStore.Shared.Util;
 using Microsoft.Data.SqlClient;
+using System;
 
 namespace ChainStore.DataAccessLayerImpl.Helpers
 {
     public sealed class PropertyGetter
     {
-        public string ConnectionString { get; }           
+        public string ConnectionString { get; }
 
         public PropertyGetter(string connectionString)
         {
@@ -32,7 +32,7 @@ namespace ChainStore.DataAccessLayerImpl.Helpers
                 var dr = cm.ExecuteReader();
                 try
                 {
-                    data = dr.Read() ? (T) dr[propertyName] : default;
+                    data = dr.Read() ? (T)dr[propertyName] : default;
                 }
                 catch (IndexOutOfRangeException)
                 {

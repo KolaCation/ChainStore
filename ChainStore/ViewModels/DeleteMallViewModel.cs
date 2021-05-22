@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChainStore.ViewModels
 {
     public class DeleteMallViewModel
     {
-        public Guid MallId{ get; set; }
+        public Guid MallId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Name must at least 3 letters and not exceed 20 letters")]

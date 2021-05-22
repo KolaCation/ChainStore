@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChainStore.DataAccessLayerImpl.Mappers
+﻿namespace ChainStore.DataAccessLayerImpl.Mappers
 {
     internal interface IMapper<TDomainModel, TDbModel>
     {

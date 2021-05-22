@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ChainStore.Actions.ApplicationServices;
+﻿using ChainStore.Actions.ApplicationServices;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace ChainStore.Controllers
 {
@@ -46,7 +44,7 @@ namespace ChainStore.Controllers
             if (client == null) return View("ClientNotFound");//ClientNotFound
 
             var productClientViewModel = new ProductClientViewModel
-                {ClientId = client.ClientDbModelId, Product = productToBook};
+            { ClientId = client.ClientDbModelId, Product = productToBook };
             return View(productClientViewModel);
         }
 
@@ -67,7 +65,7 @@ namespace ChainStore.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Books Days Count | Max: 7 Min: 1");
                 return View(new ProductClientViewModel
-                    {ClientId = client.Id, Product = product, BookDaysCount = productClientViewModel.BookDaysCount});
+                { ClientId = client.Id, Product = product, BookDaysCount = productClientViewModel.BookDaysCount });
             }
 
             if (checkForLimit.Count >= 3)
@@ -75,7 +73,7 @@ namespace ChainStore.Controllers
                 ModelState.AddModelError(string.Empty,
                     $"Maximum Limit Of Books: 3 | Your Quantity Of Books: {checkForLimit.Count}");
                 return View(new ProductClientViewModel
-                    {ClientId = client.Id, Product = product, BookDaysCount = productClientViewModel.BookDaysCount});
+                { ClientId = client.Id, Product = product, BookDaysCount = productClientViewModel.BookDaysCount });
             }
 
             _reservationService.HandleOperation(productClientViewModel.ClientId, productClientViewModel.ProductId,

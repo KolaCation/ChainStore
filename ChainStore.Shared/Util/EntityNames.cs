@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChainStore.Shared.Util
+﻿namespace ChainStore.Shared.Util
 {
     public static class EntityNames
     {

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using ChainStore.Domain.DomainCore;
+﻿using ChainStore.Domain.DomainCore;
+using System;
 
 namespace ChainStore.DataAccessLayer.Repositories
 {

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using ChainStore.DataAccessLayer.Repositories;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
 using ChainStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace ChainStore.Controllers
 {
@@ -65,7 +62,7 @@ namespace ChainStore.Controllers
             {
                 var mall = new Mall(Guid.NewGuid(), mallViewModel.Name, mallViewModel.Location);
                 _mallRepository.AddOne(mall);
-                return RedirectToAction("MallDetails", new {id=mall.Id});
+                return RedirectToAction("MallDetails", new { id = mall.Id });
             }
 
             return View(mallViewModel);
@@ -80,7 +77,7 @@ namespace ChainStore.Controllers
             if (mallToEdit != null)
             {
                 var editMallViewModel = new EditMallViewModel
-                    {Name = mallToEdit.Name, Location = mallToEdit.Location, MallId = mallToEdit.Id};
+                { Name = mallToEdit.Name, Location = mallToEdit.Location, MallId = mallToEdit.Id };
                 return View(editMallViewModel);
             }
 
@@ -106,7 +103,7 @@ namespace ChainStore.Controllers
                 }
 
                 _mallRepository.UpdateOne(updatedMall);
-                return RedirectToAction("MallDetails", new {id=updatedMall.Id});
+                return RedirectToAction("MallDetails", new { id = updatedMall.Id });
             }
 
             return View(editMallViewModel);
@@ -122,7 +119,7 @@ namespace ChainStore.Controllers
             if (mallToDel == null) return View("MallNotFound", id.Value);
 
             var delMallViewModel = new DeleteMallViewModel
-                {MallName = mallToDel.Name, MallLocation = mallToDel.Location, MallId = mallToDel.Id};
+            { MallName = mallToDel.Name, MallLocation = mallToDel.Location, MallId = mallToDel.Id };
 
             return View(delMallViewModel);
         }

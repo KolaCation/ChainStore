@@ -1,5 +1,5 @@
-﻿using System;
-using ChainStore.Shared.Util;
+﻿using ChainStore.Shared.Util;
+using System;
 
 namespace ChainStore.Domain.DomainCore
 {

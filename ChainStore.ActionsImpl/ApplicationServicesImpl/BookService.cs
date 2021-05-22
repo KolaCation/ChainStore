@@ -1,8 +1,8 @@
-﻿using System;
-using ChainStore.Actions.ApplicationServices;
+﻿using ChainStore.Actions.ApplicationServices;
 using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
+using System;
 
 namespace ChainStore.ActionsImpl.ApplicationServicesImpl
 {

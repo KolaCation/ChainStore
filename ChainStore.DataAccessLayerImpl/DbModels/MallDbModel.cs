@@ -1,8 +1,6 @@
-﻿using System;
+﻿using ChainStore.Shared.Util;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using ChainStore.Shared.Util;
 
 namespace ChainStore.DataAccessLayerImpl.DbModels
 {

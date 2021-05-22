@@ -1,5 +1,5 @@
-﻿using System;
-using ChainStore.Domain.DomainCore;
+﻿using ChainStore.Domain.DomainCore;
+using System;
 
 namespace ChainStore.ViewModels.ViewMakers.DetailedInfo
 {

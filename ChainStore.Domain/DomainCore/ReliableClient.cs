@@ -8,7 +8,7 @@ namespace ChainStore.Domain.DomainCore
         public int CashBackPercent { get; }
         public double CashBack { get; protected set; }
 
-        public ReliableClient(Guid id, string name, double balance, double cashBack, int cashBackPercent) 
+        public ReliableClient(Guid id, string name, double balance, double cashBack, int cashBackPercent)
             : base(id, name, balance)
         {
             CustomValidator.ValidateNumber(cashBackPercent, 0, 10);
@@ -46,7 +46,7 @@ namespace ChainStore.Domain.DomainCore
             }
             else
             {
-                
+
                 var res = base.Charge(sum, false, false);
                 if (!res) return false;
                 CashBack += sum * CashBackPercent / 100;
@@ -58,7 +58,7 @@ namespace ChainStore.Domain.DomainCore
 
         public override void ReplenishBalance(double sum)
         {
-            if(sum < 0) return;
+            if (sum < 0) return;
             CashBack += sum * CashBackPercent / 100;
             base.ReplenishBalance(sum);
         }

@@ -7,7 +7,7 @@ namespace ChainStore.Domain.DomainCore
         public int DiscountPercent { get; }
         public double Points { get; private set; }
 
-        public VipClient(Guid id, string name, double balance, double cashBack, int cashBackPercent, double points) 
+        public VipClient(Guid id, string name, double balance, double cashBack, int cashBackPercent, double points)
             : base(id, name, balance, cashBack, cashBackPercent)
         {
             DiscountPercent = 5;
@@ -29,17 +29,17 @@ namespace ChainStore.Domain.DomainCore
             }
             else if (useCashBack)
             {
-                
+
                 var priceWithDiscount = sum - sum * DiscountPercent / 100;
                 var res = base.Charge(priceWithDiscount, true, false);
                 Points += sum / 1000;
                 if (!res) return false;
-                
+
                 return true;
             }
             else
             {
-                
+
                 var priceWithDiscount = sum - sum * DiscountPercent / 100;
                 var res = base.Charge(priceWithDiscount, false, false);
                 Points += sum / 1000;

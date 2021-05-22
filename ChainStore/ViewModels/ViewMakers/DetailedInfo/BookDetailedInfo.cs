@@ -1,5 +1,5 @@
-﻿using System;
-using ChainStore.Domain.DomainCore;
+﻿using ChainStore.Domain.DomainCore;
+using System;
 
 namespace ChainStore.ViewModels.ViewMakers.DetailedInfo
 {
@@ -9,7 +9,7 @@ namespace ChainStore.ViewModels.ViewMakers.DetailedInfo
         public Guid ClientId { get; private set; }
         public DateTimeOffset BookCreationTime { get; private set; }
         public DateTimeOffset BookExpirationTime { get; private set; }
-        public BookDetailedInfo(Product product,  Guid clientId, DateTimeOffset bookCreationTime,
+        public BookDetailedInfo(Product product, Guid clientId, DateTimeOffset bookCreationTime,
             DateTimeOffset bookExpirationTime)
         {
             Product = product;

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
-using ChainStore.DataAccessLayer.Repositories;
-using ChainStore.DataAccessLayerImpl;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.Domain.DomainCore;
 using ChainStore.ViewModels;
-using ChainStore.ViewModels.ViewMakers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ChainStore.Controllers
 {
@@ -119,7 +112,7 @@ namespace ChainStore.Controllers
             {
                 var store = new Store(Guid.NewGuid(), storeViewModel.Name, storeViewModel.Location, 0, null);
                 _storeRepository.AddOne(store);
-                return RedirectToAction("StoreDetails", new {id=store.Id});
+                return RedirectToAction("StoreDetails", new { id = store.Id });
             }
 
             return View(storeViewModel);
@@ -132,7 +125,7 @@ namespace ChainStore.Controllers
         {
             if (id == null) return RedirectToAction(IndexAction, DefaultController);
             var stores = _storeRepository.GetAll().Where(st => st.MallId == null);
-            var viewModel = new MallStoresViewModel {MallId = id.Value, StoresToAdd = stores};
+            var viewModel = new MallStoresViewModel { MallId = id.Value, StoresToAdd = stores };
             return View(viewModel);
         }
 
@@ -165,7 +158,7 @@ namespace ChainStore.Controllers
             if (storeToEdit != null)
             {
                 var editStoreViewModel = new EditStoreViewModel
-                    {Name = storeToEdit.Name, Location = storeToEdit.Location, StoreId = storeToEdit.Id};
+                { Name = storeToEdit.Name, Location = storeToEdit.Location, StoreId = storeToEdit.Id };
                 return View(editStoreViewModel);
             }
 
@@ -183,10 +176,10 @@ namespace ChainStore.Controllers
                 var updatedStore = new Store(editStoreViewModel.StoreId, editStoreViewModel.Name, editStoreViewModel.Location, storeToUpdate.Profit, storeToUpdate.MallId);
                 if (storeToUpdate.MallId != null && _mallRepository.Exists(storeToUpdate.MallId.Value) && !_mallRepository.GetOne(storeToUpdate.MallId.Value).Location.Equals(editStoreViewModel.Location))
                 {
-                   updatedStore = new Store(editStoreViewModel.StoreId, editStoreViewModel.Name, editStoreViewModel.Location, storeToUpdate.Profit, null);
+                    updatedStore = new Store(editStoreViewModel.StoreId, editStoreViewModel.Name, editStoreViewModel.Location, storeToUpdate.Profit, null);
                 }
                 _storeRepository.UpdateOne(updatedStore);
-                return RedirectToAction("StoreDetails", new {id=updatedStore.Id});
+                return RedirectToAction("StoreDetails", new { id = updatedStore.Id });
             }
 
             return View(editStoreViewModel);
@@ -201,7 +194,7 @@ namespace ChainStore.Controllers
             var storeToDel = _storeRepository.GetOne(id.Value);
             if (storeToDel == null) return View("StoreNotFound", id.Value);
 
-            var delStoreViewModel = new DeleteStoreViewModel {Store = storeToDel};
+            var delStoreViewModel = new DeleteStoreViewModel { Store = storeToDel };
             return View(delStoreViewModel);
         }
 

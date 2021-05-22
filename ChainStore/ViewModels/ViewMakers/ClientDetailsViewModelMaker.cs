@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ChainStore.DataAccessLayer.Repositories;
-using ChainStore.DataAccessLayerImpl;
+﻿using ChainStore.DataAccessLayer.Repositories;
 using ChainStore.DataAccessLayerImpl.Helpers;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using ChainStore.ViewModels.ViewMakers.DetailedInfo;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ChainStore.ViewModels.ViewMakers
 {
@@ -38,26 +37,26 @@ namespace ChainStore.ViewModels.ViewMakers
             if (!exists) return null;
             var body = _clientRepository.GetOne(clientId);
             var purchases = (from product in _productRepository.GetAll()
-                    join purchase in _purchaseRepository.GetClientPurchases(clientId) on product.Id equals purchase.ProductId
-                    select new PurchaseDetailedInfo(product, purchase.ClientId, purchase.CreationTime))
+                             join purchase in _purchaseRepository.GetClientPurchases(clientId) on product.Id equals purchase.ProductId
+                             select new PurchaseDetailedInfo(product, purchase.ClientId, purchase.CreationTime))
                 .ToList();
 
             var books = (from product in _productRepository.GetAll()
-                    join book in _bookRepository.GetClientBooks(clientId) on product.Id equals book.ProductId
-                    select new BookDetailedInfo(product, book.ClientId, book.CreationTime, book.ExpirationTime))
+                         join book in _bookRepository.GetClientBooks(clientId) on product.Id equals book.ProductId
+                         select new BookDetailedInfo(product, book.ClientId, book.CreationTime, book.ExpirationTime))
                 .ToList();
 
-            var client = new List<Client> {body};
-            var clCashBack =  _propertyGetter.GetProperty<double>( EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, body.Id);
+            var client = new List<Client> { body };
+            var clCashBack = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.CashBack), EntityNames.ClientId, body.Id);
             var clCashBackPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.CashBackPercent), EntityNames.ClientId, body.Id);
             var clDiscountPercent = _propertyGetter.GetProperty<int>(EntityNames.Client, nameof(VipClient.DiscountPercent), EntityNames.ClientId, body.Id);
             var clPoints = _propertyGetter.GetProperty<double>(EntityNames.Client, nameof(VipClient.Points), EntityNames.ClientId, body.Id);
 
             var clientDetailedInfo = (from cl in client
-                join purchase in purchases on cl.Id equals purchase.ClientId into purchasesList
-                join book in books on cl.Id equals book.ClientId into booksList
-                select new ClientDetailsViewModel(purchasesList, booksList, cl.Id, cl.Name,
-                    cl.Balance, clCashBack, clCashBackPercent, clDiscountPercent, clPoints)).First();
+                                      join purchase in purchases on cl.Id equals purchase.ClientId into purchasesList
+                                      join book in books on cl.Id equals book.ClientId into booksList
+                                      select new ClientDetailsViewModel(purchasesList, booksList, cl.Id, cl.Name,
+                                          cl.Balance, clCashBack, clCashBackPercent, clDiscountPercent, clPoints)).First();
             return clientDetailedInfo;
         }
     }

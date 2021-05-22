@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ChainStore.Domain.DomainCore;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Threading.Tasks;
-using ChainStore.Domain.DomainCore;
 
 namespace ChainStore.ViewModels
 {
@@ -17,7 +13,7 @@ namespace ChainStore.ViewModels
         public int DiscountPercent { get; set; }
         public Product Product { get; set; }
         public Guid ProductId { get; set; }
-        public bool UseCashBack{ get; set; }
+        public bool UseCashBack { get; set; }
         public bool UsePoints { get; set; }
         public double Points { get; set; }
 

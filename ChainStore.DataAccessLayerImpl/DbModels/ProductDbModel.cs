@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using ChainStore.Domain.DomainCore;
+﻿using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChainStore.DataAccessLayerImpl.DbModels
 {
