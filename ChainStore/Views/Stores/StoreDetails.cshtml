@@ -1,4 +1,6 @@
-﻿@model Store
+﻿@using ChainStore.Domain.Repositories
+@using ChainStore.DataAccessLayer
+@model Store
 @inject ProductsGroupsViewMaker ProductsGroupsViewMaker
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IMallRepository MallRepository
@@ -10,7 +12,7 @@
     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         <a asp-action="EditStore" asp-controller="Stores" asp-route-id="@Model.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
-        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@Model.Id" class="btn btn-danger mb-2 mt-2" style="width:  auto">Remove</a>
+        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@Model.Id" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove</a>
     }
     @if (Model.MallId != null)
     {

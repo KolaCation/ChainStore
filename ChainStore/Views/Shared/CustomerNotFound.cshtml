@@ -1,0 +1,17 @@
+﻿@model Guid
+@{
+    ViewBag.Title = "404 Not found";
+}
+<div class="alert alert-danger mt-1 mb-1">
+    <h4>404 Not Found Error : </h4>
+    <hr/>
+    @if (Model != null)
+    {
+        <h5>Customer with id = @Model cannot be found.</h5>
+    }
+    else
+    {
+        <h5>Customer cannot be found.</h5>
+    }
+
+</div>

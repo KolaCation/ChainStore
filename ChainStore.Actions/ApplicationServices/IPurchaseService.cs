@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace ChainStore.Actions.ApplicationServices
+namespace ChainStore.Actions.ApplicationServices;
+
+public interface IPurchaseService
 {
-    public interface IPurchaseService
-    {
-        void HandleOperation(Guid clientId, Guid productId, bool useCashBack, bool usePoints);
-    }
+    void HandleOperation(Guid customerId, Guid productId, bool useCashBack, bool usePoints);
 }

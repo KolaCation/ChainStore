@@ -1,9 +1,8 @@
-﻿namespace ChainStore.Domain.DomainCore
+﻿namespace ChainStore.Domain.DomainCore;
+
+public enum CustomerStatus
 {
-    public enum ClientStatus
-    {
-        DefaultToVip,
-        DefaultToReliable,
-        ReliableToVip
-    }
+    DefaultToVip,
+    DefaultToReliable,
+    ReliableToVip
 }

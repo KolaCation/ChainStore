@@ -1,9 +1,8 @@
-﻿namespace ChainStore.Views.Categories
+﻿namespace ChainStore.Views.Categories;
+
+public enum CategoryNames
 {
-    public enum CategoryNames
-    {
-        Laptop,
-        Mouse,
-        USB
-    }
+    Laptop,
+    Mouse,
+    USB
 }

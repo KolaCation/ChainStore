@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayerImpl.csproj" />
+    <ProjectReference Include="..\ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>

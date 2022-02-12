@@ -1,4 +1,5 @@
-﻿@model AddCategoryToStoreViewModel
+﻿@using ChainStore.Domain.Repositories
+@model AddCategoryToStoreViewModel
 @inject IMallRepository MallRepository
 @{
     ViewBag.Title = "Add Category";
@@ -16,7 +17,7 @@
         <h6 class="card-title text-center text-muted mt-2 mb-2">@Model.Store.Location</h6>
     }
     <div asp-validation-summary="All" class="text-danger mt-2"></div>
- 
+
     <form class="mt-2" method="post" asp-action="AddCategoryToStore" asp-controller="Categories">
         @if (Model.CategoriesOption.Count != 0)
         {

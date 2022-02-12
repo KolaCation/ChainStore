@@ -17,11 +17,11 @@
       <Property Name="Products" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="ChainStore.Domain.DomainCore.Client">
+  <Class Name="ChainStore.Domain.DomainCore.Customer">
     <Position X="17.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAQAgAAAgAgAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>DomainCore\Client.cs</FileName>
+      <FileName>DomainCore\Customer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ChainStore.Domain.DomainCore.Mall">
@@ -61,18 +61,18 @@
       <Property Name="Categories" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="ChainStore.Domain.DomainCore.ReliableClient">
+  <Class Name="ChainStore.Domain.DomainCore.ReliableCustomer">
     <Position X="17.75" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAEQAAAAAA=</HashCode>
-      <FileName>DomainCore\ReliableClient.cs</FileName>
+      <FileName>DomainCore\ReliableCustomer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ChainStore.Domain.DomainCore.VipClient">
+  <Class Name="ChainStore.Domain.DomainCore.VipCustomer">
     <Position X="17.75" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
-      <FileName>DomainCore\VipClient.cs</FileName>
+      <FileName>DomainCore\VipCustomer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ChainStore.Domain.DomainCore.StoreCategoryRelation">
@@ -96,11 +96,11 @@
       <FileName>DomainCore\ProductStatus.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="ChainStore.Domain.DomainCore.ClientStatus">
+  <Enum Name="ChainStore.Domain.DomainCore.CustomerStatus">
     <Position X="20" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAgAABAAAAAAAA=</HashCode>
-      <FileName>DomainCore\ClientStatus.cs</FileName>
+      <FileName>DomainCore\CustomerStatus.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

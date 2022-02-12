@@ -1,43 +1,42 @@
-﻿using ChainStore.Shared.Util;
-using System;
+﻿using System;
+using ChainStore.Shared.Util;
 
-namespace ChainStore.Domain.DomainCore
+namespace ChainStore.Domain.DomainCore;
+
+public sealed class Book
 {
-    public sealed class Book
+    public Book(Guid id, Guid customerId, Guid productId, int reserveDaysCount)
     {
-        public Guid Id { get; }
-        public Guid ClientId { get; }
-        public Guid ProductId { get; }
-        public DateTimeOffset CreationTime { get; }
-        public DateTimeOffset ExpirationTime { get; }
-        public int ReserveDaysCount { get; }
+        CustomValidator.ValidateNumber(reserveDaysCount, 1, 7);
+        CustomValidator.ValidateId(id);
+        CustomValidator.ValidateId(customerId);
+        CustomValidator.ValidateId(productId);
+        Id = id;
+        CustomerId = customerId;
+        ProductId = productId;
+        CreationTime = DateTimeOffset.UtcNow;
+        ExpirationTime = CreationTime.AddDays(reserveDaysCount);
+        ReserveDaysCount = reserveDaysCount;
+    }
 
-        public Book(Guid id, Guid clientId, Guid productId, int reserveDaysCount)
-        {
-            CustomValidator.ValidateNumber(reserveDaysCount, 1, 7);
-            CustomValidator.ValidateId(id);
-            CustomValidator.ValidateId(clientId);
-            CustomValidator.ValidateId(productId);
-            Id = id;
-            ClientId = clientId;
-            ProductId = productId;
-            CreationTime = DateTimeOffset.UtcNow;
-            ExpirationTime = CreationTime.AddDays(reserveDaysCount);
-            ReserveDaysCount = reserveDaysCount;
-        }
+    public Book(Guid id, Guid customerId, Guid productId, DateTimeOffset creationTime,
+        DateTimeOffset expirationTime, int reserveDaysCount) : this(id, customerId, productId, reserveDaysCount)
+    {
+        CreationTime = creationTime;
+        ExpirationTime = expirationTime;
+    }
 
-        public Book(Guid id, Guid clientId, Guid productId, DateTimeOffset creationTime,
-            DateTimeOffset expirationTime, int reserveDaysCount) : this(id, clientId, productId, reserveDaysCount)
-        {
-            CreationTime = creationTime;
-            ExpirationTime = expirationTime;
-        }
+    public Guid Id { get; }
+    public Guid CustomerId { get; }
+    public Guid ProductId { get; }
+    public DateTimeOffset CreationTime { get; }
+    public DateTimeOffset ExpirationTime { get; }
+    public int ReserveDaysCount { get; }
 
-        public bool IsExpired()
-        {
-            var difference = ExpirationTime - DateTimeOffset.Now;
-            if (difference.Milliseconds > 0) return false;
-            return true;
-        }
+    public bool IsExpired()
+    {
+        var difference = ExpirationTime - DateTimeOffset.Now;
+        if (difference.Milliseconds > 0) return false;
+        return true;
     }
 }

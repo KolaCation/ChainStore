@@ -1,32 +1,32 @@
-﻿@model Mall
+﻿@using ChainStore.DataAccessLayer
+@model Mall
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewBag.Title = "Mall Details";
 }
 
 <div class="mt-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-header">@Model.Name</h5>
-                <h6 class="card-title mb-2 mt-2 text-muted">Mall location: @Model.Location</h6>
-                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                {
-                    <a asp-action="" asp-controller="" asp-route-id="@Model.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
-                    <a asp-action="" asp-controller="" asp-route-id="@Model.Id" class="btn btn-danger mb-2 mt-2" style="width: auto">Delete</a>
-                }
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-header">@Model.Name</h5>
+            <h6 class="card-title mb-2 mt-2 text-muted">Mall location: @Model.Location</h6>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                <a asp-action="" asp-controller="" asp-route-id="@Model.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
+                <a asp-action="" asp-controller="" asp-route-id="@Model.Id" class="btn btn-danger mb-2 mt-2" style="width: auto">Delete</a>
+            }
 
-                <h6 class="card-text text-left">Stores: </h6>
-                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            <h6 class="card-text text-left">Stores: </h6>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                <a asp-action="AddStoreToMall" asp-controller="Stores" asp-route-id="@Model.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Store</a>
+            }
+            <div class="list-group">
+                @foreach (var store in Model.Stores)
                 {
-                    <a asp-action="AddStoreToMall" asp-controller="Stores" asp-route-id="@Model.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Store</a>
+                    <a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.Id" class="list-group-item list-group-item-action">@store.Name</a>
                 }
-                <div class="list-group">
-                    @foreach (var store in Model.Stores)
-                    {
-                        <a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.Id" class="list-group-item list-group-item-action">@store.Name</a>
-                    }
-                </div>
             </div>
         </div>
     </div>
-
+</div>

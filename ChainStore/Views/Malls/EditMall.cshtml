@@ -5,7 +5,7 @@
 
 <form asp-controller="Malls" asp-action="EditMall" method="post" class="mt-3">
     <div asp-validation-summary="All" class="text-danger"></div>
-    <input type="hidden" asp-for="MallId" value="@Model.MallId" />
+    <input type="hidden" asp-for="MallId" value="@Model.MallId"/>
     <div class="form-group row">
         <label asp-for="Name" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
@@ -27,4 +27,3 @@
         </div>
     </div>
 </form>
-

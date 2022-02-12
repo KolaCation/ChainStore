@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ChainStore.Actions\ChainStore.Actions.csproj" />
-    <ProjectReference Include="..\ChainStore.Shared\ChainStore.Shared.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ChainStore.Actions\ChainStore.Actions.csproj" />
+		<ProjectReference Include="..\ChainStore.Shared\ChainStore.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

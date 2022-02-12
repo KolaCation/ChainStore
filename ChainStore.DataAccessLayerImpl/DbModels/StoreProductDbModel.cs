@@ -1,21 +1,20 @@
-﻿using ChainStore.Shared.Util;
-using System;
+﻿using System;
+using ChainStore.Shared.Util;
 
-namespace ChainStore.DataAccessLayerImpl.DbModels
+namespace ChainStore.DataAccessLayer.DbModels;
+
+internal sealed class StoreProductDbModel
 {
-    internal sealed class StoreProductDbModel
+    public StoreProductDbModel(Guid storeDbModelId, Guid productDbModelId)
     {
-        public Guid StoreDbModelId { get; private set; }
-        public StoreDbModel StoreDbModel { get; private set; }
-        public Guid ProductDbModelId { get; private set; }
-        public ProductDbModel ProductDbModel { get; private set; }
-
-        public StoreProductDbModel(Guid storeDbModelId, Guid productDbModelId)
-        {
-            CustomValidator.ValidateId(storeDbModelId);
-            CustomValidator.ValidateId(productDbModelId);
-            StoreDbModelId = storeDbModelId;
-            ProductDbModelId = productDbModelId;
-        }
+        CustomValidator.ValidateId(storeDbModelId);
+        CustomValidator.ValidateId(productDbModelId);
+        StoreDbModelId = storeDbModelId;
+        ProductDbModelId = productDbModelId;
     }
+
+    public Guid StoreDbModelId { get; private set; }
+    public StoreDbModel StoreDbModel { get; private set; }
+    public Guid ProductDbModelId { get; private set; }
+    public ProductDbModel ProductDbModel { get; private set; }
 }

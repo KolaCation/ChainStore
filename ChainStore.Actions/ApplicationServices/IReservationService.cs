@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace ChainStore.Actions.ApplicationServices
+namespace ChainStore.Actions.ApplicationServices;
+
+public interface IReservationService
 {
-    public interface IReservationService
-    {
-        void HandleOperation(Guid clientId, Guid productId, int reserveDaysCount);
-    }
+    void HandleOperation(Guid customerId, Guid productId, int reserveDaysCount);
 }

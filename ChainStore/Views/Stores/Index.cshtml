@@ -1,4 +1,6 @@
-﻿@model List<Store>
+﻿@using ChainStore.Domain.Repositories
+@using ChainStore.DataAccessLayer
+@model List<Store>
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ProductsGroupsViewMaker ProductsGroupsViewMaker
 @inject IMallRepository MallRepository
@@ -12,7 +14,7 @@
         <input class="form-control col-2 mr-2" type="text" name="searchStringStore" placeholder="name...">
         <p class="card-text mr-2">Product Name: </p>
         <input class="form-control col-2 mr-2" type="text" name="searchStringProduct" placeholder="name...">
-        <input class="btn btn-primary ml-2" type="submit" value="Search" />
+        <input class="btn btn-primary ml-2" type="submit" value="Search"/>
     </div>
 </form>
 @{
@@ -22,15 +24,16 @@
 <div class="row justify-content-start m-3">
     @foreach (var store in Model)
     {
-
         <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-header"><a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.Id" style="text-decoration: none">@store.Name</a></h5>
+                    <h5 class="card-header">
+                        <a asp-action="StoreDetails" asp-controller="Stores" asp-route-id="@store.Id" style="text-decoration: none">@store.Name</a>
+                    </h5>
                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         <a asp-action="EditStore" asp-controller="Stores" asp-route-id="@store.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Edit</a>
-                        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@store.Id" class="btn btn-danger mb-2 mt-2" style="width:  auto">Remove</a>
+                        <a asp-action="DeleteStore" asp-controller="Stores" asp-route-id="@store.Id" class="btn btn-danger mb-2 mt-2" style="width: auto">Remove</a>
                     }
                     @if (store.MallId != null)
                     {
@@ -46,15 +49,14 @@
                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         <a asp-action="AddCategoryToStore" asp-controller="Categories" asp-route-id="@store.Id" class="btn btn-primary mb-2 mt-2" style="width: auto">Add Category</a>
-
                     }
-                    @{ var uniqueAccordionId = "accordion" + storeIndex.ToString(); }
+                    @{ var uniqueAccordionId = "accordion" + storeIndex; }
                     <div class="accordion" id="@uniqueAccordionId">
                         @if (store.Categories.Count != 0)
                         {
                             foreach (var category in store.Categories)
                             {
-                                var uniqueCategoryCollapseId = category.Name + categoryIndex.ToString();
+                                var uniqueCategoryCollapseId = category.Name + categoryIndex;
                                 <h4 class="card-title mt-2 mb-2" id="@category.Id.ToString()">
                                     <button class="btn btn-info" style="width: 100%" type="button"
                                             data-toggle="collapse"
@@ -85,7 +87,7 @@
                                                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                                                         {
                                                             <a asp-action="ReplenishProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().Id" class=" col-6 btn btn-primary" style="width: auto">Replenish Product</a>
-                                                            <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id ="@groupOfProducts.First().Id" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
+                                                            <a asp-action="DeleteProduct" asp-controller="Products" asp-route-id="@groupOfProducts.First().Id" class="col-6 btn btn-danger" style="width: auto">Remove Product</a>
                                                         }
                                                         else
                                                         {

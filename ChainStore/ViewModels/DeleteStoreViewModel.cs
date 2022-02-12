@@ -1,15 +1,10 @@
-﻿using ChainStore.Domain.DomainCore;
-using System;
+﻿using System;
+using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.ViewModels
+namespace ChainStore.ViewModels;
+
+public class DeleteStoreViewModel
 {
-    public class DeleteStoreViewModel
-    {
-        public Store Store { get; set; }
-        public Guid StoreId { get; set; }
-
-        public DeleteStoreViewModel()
-        {
-        }
-    }
+    public Store Store { get; set; }
+    public Guid StoreId { get; set; }
 }

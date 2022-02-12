@@ -1,19 +1,18 @@
-﻿using ChainStore.Shared.Util;
-using System;
+﻿using System;
+using ChainStore.Shared.Util;
 
-namespace ChainStore.DataAccessLayerImpl.DbModels
+namespace ChainStore.DataAccessLayer.DbModels;
+
+internal sealed class VipCustomerDbModel : ReliableCustomerDbModel
 {
-    internal sealed class VipClientDbModel : ReliableClientDbModel
+    public VipCustomerDbModel(Guid id, string name, double balance, double cashBack, int cashBackPercent, double points)
+        : base(id, name, balance, cashBack, cashBackPercent)
     {
-        public int DiscountPercent { get; private set; }
-        public double Points { get; private set; }
-
-        public VipClientDbModel(Guid id, string name, double balance, double cashBack, int cashBackPercent, double points)
-            : base(id, name, balance, cashBack, cashBackPercent)
-        {
-            CustomValidator.ValidateNumber(points, 0, 100_000_000);
-            DiscountPercent = 5;
-            Points = points;
-        }
+        CustomValidator.ValidateNumber(points, 0, 100_000_000);
+        DiscountPercent = 5;
+        Points = points;
     }
+
+    public int DiscountPercent { get; private set; }
+    public double Points { get; private set; }
 }

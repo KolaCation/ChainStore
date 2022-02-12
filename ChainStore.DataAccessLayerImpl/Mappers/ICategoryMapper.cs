@@ -1,11 +1,10 @@
-﻿using ChainStore.DataAccessLayerImpl.DbModels;
+﻿using System;
+using ChainStore.DataAccessLayer.DbModels;
 using ChainStore.Domain.DomainCore;
-using System;
 
-namespace ChainStore.DataAccessLayerImpl.Mappers
+namespace ChainStore.DataAccessLayer.Mappers;
+
+internal interface ICategoryMapper : IMapper<Category, CategoryDbModel>
 {
-    internal interface ICategoryMapper : IMapper<Category, CategoryDbModel>
-    {
-        Category DbToDomainStoreSpecificProducts(CategoryDbModel item, Guid storeId);
-    }
+    Category DbToDomainStoreSpecificProducts(CategoryDbModel item, Guid storeId);
 }

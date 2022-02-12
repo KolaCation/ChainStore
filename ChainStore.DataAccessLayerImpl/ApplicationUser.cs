@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 
-namespace ChainStore.DataAccessLayerImpl
+namespace ChainStore.DataAccessLayer;
+
+public class ApplicationUser : IdentityUser
 {
-    public class ApplicationUser : IdentityUser
-    {
-        public Guid ClientDbModelId { get; set; }
-        public DateTimeOffset CreationTime { get; set; }
-    }
+    public Guid CustomerDbModelId { get; set; }
+    public DateTimeOffset CreationTime { get; set; }
 }

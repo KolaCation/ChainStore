@@ -8,8 +8,8 @@
         <h5 class="card-header">@Model.Category.Name</h5>
         <div class="card-footer text-center">
             <form method="post" asp-action="AddProductToStore" asp-controller="Products">
-                <input type="hidden" asp-for="CategoryId" value="@Model.Category.Id" />
-                <input type="hidden" asp-for="StoreId" value="@Model.StoreId" />
+                <input type="hidden" asp-for="CategoryId" value="@Model.Category.Id"/>
+                <input type="hidden" asp-for="StoreId" value="@Model.StoreId"/>
                 <div class="form-group row">
                     <label asp-for="Name" class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">

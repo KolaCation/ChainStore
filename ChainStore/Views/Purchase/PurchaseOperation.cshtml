@@ -1,4 +1,4 @@
-﻿@model ProductClientViewModel
+﻿@model ProductCustomerViewModel
 @{
     ViewBag.Title = "Purchase Operation";
 }
@@ -20,7 +20,7 @@
                     <div>CashBackPercent: @Model.CashBackPercent %</div>
                     <div>Points: @Model.Points</div>
                 }
-                <hr />
+                <hr/>
                 @if (Model.DiscountPercent == 0)
                 {
                     <div>Price: @Model.Product.PriceInUAH UAH</div>
@@ -42,19 +42,19 @@
 
                         @if (Model.DiscountPercent != 0)
                         {
-                        <input asp-for="UseCashBack" type="checkbox" class="form-check-input" style="width: 1.25rem; height: 1.25rem;" />
-                            <label asp-for="@Model.UseCashBack" class="form-check-label" ></label>
-                            <input asp-for="UsePoints" type="checkbox" class="form-check-input ml-1" style="width: 1.25rem; height: 1.25rem;" />
+                            <input asp-for="UseCashBack" type="checkbox" class="form-check-input" style="height: 1.25rem; width: 1.25rem;"/>
+                            <label asp-for="@Model.UseCashBack" class="form-check-label"></label>
+                            <input asp-for="UsePoints" type="checkbox" class="form-check-input ml-1" style="height: 1.25rem; width: 1.25rem;"/>
                             <label asp-for="@Model.UsePoints" class="form-check-label ml-4"></label>
                         }
                         else
                         {
-                            <input asp-for="UseCashBack" type="checkbox" class="form-check-input" style="width: 1.25rem; height: 1.25rem;"/>
+                            <input asp-for="UseCashBack" type="checkbox" class="form-check-input" style="height: 1.25rem; width: 1.25rem;"/>
                             <label asp-for="@Model.UseCashBack" class="form-check-label"></label>
                         }
                     </div>
                 }
-                <input type="hidden" asp-for="ClientId" value="@Model.ClientId"/>
+                <input type="hidden" asp-for="CustomerId" value="@Model.CustomerId"/>
                 <input type="hidden" asp-for="ProductId" value="@Model.Product.Id"/>
                 <a asp-action="Index" asp-controller="Stores" class="btn-primary btn">Back</a>
                 <button type="submit" value="sumbit" class="btn btn-primary" style="width: auto">Purchase</button>
@@ -63,7 +63,9 @@
     </div>
 </div>
 <script>
-    $(document).on('click', 'input[type="checkbox"]', function() {      
-        $('input[type="checkbox"]').not(this).prop('checked', false);      
-    });
+    $(document).on('click',
+        'input[type="checkbox"]',
+        function() {
+            $('input[type="checkbox"]').not(this).prop('checked', false);
+        });
 </script>

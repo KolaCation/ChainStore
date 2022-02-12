@@ -1,31 +1,31 @@
-﻿using ChainStore.Shared.Util;
-using System;
+﻿using System;
+using ChainStore.Shared.Util;
 
-namespace ChainStore.Domain.DomainCore
+namespace ChainStore.Domain.DomainCore;
+
+public sealed class Purchase
 {
-    public sealed class Purchase
+    public Purchase(Guid id, Guid customerId, Guid productId, double priceAtPurchaseMoment)
     {
-        public Guid Id { get; }
-        public Guid ClientId { get; }
-        public Guid ProductId { get; }
-        public DateTimeOffset CreationTime { get; }
-        public double PriceAtPurchaseMoment { get; }
-
-        public Purchase(Guid id, Guid clientId, Guid productId, double priceAtPurchaseMoment)
-        {
-            CustomValidator.ValidateId(id);
-            CustomValidator.ValidateId(clientId);
-            CustomValidator.ValidateId(productId);
-            CustomValidator.ValidateNumber(priceAtPurchaseMoment, 0, 100_000_000);
-            Id = id;
-            ClientId = clientId;
-            ProductId = productId;
-            CreationTime = DateTimeOffset.UtcNow;
-        }
-
-        public Purchase(Guid id, Guid clientId, Guid productId, DateTimeOffset creationTime, double priceAtPurchaseMoment) : this(id, clientId, productId, priceAtPurchaseMoment)
-        {
-            CreationTime = creationTime;
-        }
+        CustomValidator.ValidateId(id);
+        CustomValidator.ValidateId(customerId);
+        CustomValidator.ValidateId(productId);
+        CustomValidator.ValidateNumber(priceAtPurchaseMoment, 0, 100_000_000);
+        Id = id;
+        CustomerId = customerId;
+        ProductId = productId;
+        CreationTime = DateTimeOffset.UtcNow;
     }
+
+    public Purchase(Guid id, Guid customerId, Guid productId, DateTimeOffset creationTime, double priceAtPurchaseMoment)
+        : this(id, customerId, productId, priceAtPurchaseMoment)
+    {
+        CreationTime = creationTime;
+    }
+
+    public Guid Id { get; }
+    public Guid CustomerId { get; }
+    public Guid ProductId { get; }
+    public DateTimeOffset CreationTime { get; }
+    public double PriceAtPurchaseMoment { get; }
 }

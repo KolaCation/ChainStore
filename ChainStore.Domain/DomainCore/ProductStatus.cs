@@ -1,9 +1,8 @@
-﻿namespace ChainStore.Domain.DomainCore
+﻿namespace ChainStore.Domain.DomainCore;
+
+public enum ProductStatus
 {
-    public enum ProductStatus
-    {
-        OnSale,
-        Purchased,
-        Booked
-    }
+    OnSale,
+    Purchased,
+    Booked
 }

@@ -1,8 +1,7 @@
-﻿namespace ChainStore.DataAccessLayerImpl.Mappers
+﻿namespace ChainStore.DataAccessLayer.Mappers;
+
+internal interface IMapper<TDomainModel, TDbModel>
 {
-    internal interface IMapper<TDomainModel, TDbModel>
-    {
-        TDbModel DomainToDb(TDomainModel item);
-        TDomainModel DbToDomain(TDbModel item);
-    }
+    TDbModel DomainToDb(TDomainModel item);
+    TDomainModel DbToDomain(TDbModel item);
 }

@@ -1,8 +1,7 @@
-﻿namespace ChainStore.Shared.Util
+﻿namespace ChainStore.Shared.Util;
+
+public static class EntityNames
 {
-    public static class EntityNames
-    {
-        public const string Client = "Client";
-        public const string ClientId = "Id";
-    }
+    public const string Customer = "Customer";
+    public const string CustomerId = "Id";
 }

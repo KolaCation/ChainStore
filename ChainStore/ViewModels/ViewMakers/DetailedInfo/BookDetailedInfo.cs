@@ -1,21 +1,21 @@
-﻿using ChainStore.Domain.DomainCore;
-using System;
+﻿using System;
+using ChainStore.Domain.DomainCore;
 
-namespace ChainStore.ViewModels.ViewMakers.DetailedInfo
+namespace ChainStore.ViewModels.ViewMakers.DetailedInfo;
+
+public sealed class BookDetailedInfo
 {
-    public sealed class BookDetailedInfo
+    public BookDetailedInfo(Product product, Guid customerId, DateTimeOffset bookCreationTime,
+        DateTimeOffset bookExpirationTime)
     {
-        public Product Product { get; private set; }
-        public Guid ClientId { get; private set; }
-        public DateTimeOffset BookCreationTime { get; private set; }
-        public DateTimeOffset BookExpirationTime { get; private set; }
-        public BookDetailedInfo(Product product, Guid clientId, DateTimeOffset bookCreationTime,
-            DateTimeOffset bookExpirationTime)
-        {
-            Product = product;
-            ClientId = clientId;
-            BookCreationTime = bookCreationTime;
-            BookExpirationTime = bookExpirationTime;
-        }
+        Product = product;
+        CustomerId = customerId;
+        BookCreationTime = bookCreationTime;
+        BookExpirationTime = bookExpirationTime;
     }
+
+    public Product Product { get; }
+    public Guid CustomerId { get; }
+    public DateTimeOffset BookCreationTime { get; }
+    public DateTimeOffset BookExpirationTime { get; }
 }

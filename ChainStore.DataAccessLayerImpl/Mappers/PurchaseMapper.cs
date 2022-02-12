@@ -1,21 +1,21 @@
-﻿using ChainStore.DataAccessLayerImpl.DbModels;
+﻿using ChainStore.DataAccessLayer.DbModels;
 using ChainStore.Domain.DomainCore;
 using ChainStore.Shared.Util;
 
-namespace ChainStore.DataAccessLayerImpl.Mappers
-{
-    internal sealed class PurchaseMapper : IMapper<Purchase, PurchaseDbModel>
-    {
-        public PurchaseDbModel DomainToDb(Purchase item)
-        {
-            CustomValidator.ValidateObject(item);
-            return new PurchaseDbModel(item.Id, item.ClientId, item.ProductId, item.CreationTime, item.PriceAtPurchaseMoment);
-        }
+namespace ChainStore.DataAccessLayer.Mappers;
 
-        public Purchase DbToDomain(PurchaseDbModel item)
-        {
-            CustomValidator.ValidateObject(item);
-            return new Purchase(item.Id, item.ClientId, item.ProductId, item.CreationTime, item.PriceAtPurchaseMoment);
-        }
+internal sealed class PurchaseMapper : IMapper<Purchase, PurchaseDbModel>
+{
+    public PurchaseDbModel DomainToDb(Purchase item)
+    {
+        CustomValidator.ValidateObject(item);
+        return new PurchaseDbModel(item.Id, item.CustomerId, item.ProductId, item.CreationTime,
+            item.PriceAtPurchaseMoment);
+    }
+
+    public Purchase DbToDomain(PurchaseDbModel item)
+    {
+        CustomValidator.ValidateObject(item);
+        return new Purchase(item.Id, item.CustomerId, item.ProductId, item.CreationTime, item.PriceAtPurchaseMoment);
     }
 }
