@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\ChainStore.DataAccessLayer\ChainStore.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>

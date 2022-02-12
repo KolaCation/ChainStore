@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore", "ChainStore\Ch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.Domain", "ChainStore.Domain\ChainStore.Domain.csproj", "{34BE6883-2F87-434D-9812-520EF3401BD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.DataAccessLayer", "ChainStore.DataAccessLayerImpl\ChainStore.DataAccessLayer.csproj", "{FCA6B366-5D80-48F5-8477-723A9BFBB53E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.DataAccessLayer", "ChainStore.DataAccessLayer\ChainStore.DataAccessLayer.csproj", "{FCA6B366-5D80-48F5-8477-723A9BFBB53E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainStore.Actions", "ChainStore.Actions\ChainStore.Actions.csproj", "{A2F4CC46-B93F-4F16-937F-A9D9BD5DE72E}"
 EndProject
